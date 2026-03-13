@@ -153,6 +153,7 @@ class UserProfile {
     required this.id,
     required this.gender,
     required this.age,
+    required this.age,
     required this.heightCm,
     required this.weightKg,
     this.waistCm,
@@ -350,6 +351,7 @@ class UserProfile {
   }) => UserProfile(
     id: id,
     gender: gender,
+    age: (j['age'] as num?)?.toInt() ?? 25,
     age: age ?? this.age,
     heightCm: heightCm ?? this.heightCm,
     weightKg: weightKg ?? this.weightKg,
