@@ -1,21 +1,12 @@
 workflows:
   android-release:
-    name: Android APK Release
+    name: Android APK
     max_build_duration: 60
     environment:
       flutter: stable
       java: 17
     scripts:
-      - name: Get Flutter packages
-        script: flutter pub get
       - name: Build APK
         script: flutter build apk --release --no-shrink
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
-    publishing:
-      email:
-        recipients:
-          - your@email.com
-        notify:
-          success: true
-          failure: true
