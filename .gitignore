@@ -1,0 +1,37 @@
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.iml
+*.log
+
+# Android
+android/.gradle
+android/local.properties
+android/key.properties
+android/app/google-services.json
+*.keystore
+*.jks
+
+# iOS
+ios/.symlinks/
+ios/Flutter/flutter_export_environment.sh
+ios/Podfile.lock
+ios/Pods/
+
+# Environment / Secrets
+.env
+.env.local
+lib/core/api_keys.dart
+
+# RevenueCat keys — if you put them in a separate file
+# lib/core/revenuecat_keys.dart
+
+# macOS/Linux/Windows
+.DS_Store
+Thumbs.db
+*.swp
