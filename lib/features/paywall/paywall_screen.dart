@@ -209,7 +209,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
           elevation: 4, shadowColor: AppColors.barakahGold.withOpacity(0.4),
         ),
         child: _loading
-          ? const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5)),
               SizedBox(width: 12),
               Text(_isAr ? 'جاري المعالجة...' : 'Processing...', style: const TextStyle(fontFamily: 'Cairo', fontSize: 16, color: Colors.white)),

@@ -117,7 +117,19 @@ Rules:
       final raw  = await _callVision(imagePath: imagePath, systemPrompt: system, userPrompt: prompt);
       final clean = raw.replaceAll(RegExp(r'```json|```'), '').trim();
       final json  = jsonDecode(clean) as Map<String, dynamic>;
-      return FoodPhotoResult.fromJson(json);
+      return FoodPhotoResult(
+        foodName: json['foodName'] as String? ?? 'Unknown',
+        foodNameEn: json['foodNameEn'] as String? ?? 'Unknown',
+        kcal: (json['kcal'] as num?)?.toInt() ?? 0,
+        proteinG: (json['proteinG'] as num?)?.toDouble() ?? 0,
+        carbsG: (json['carbsG'] as num?)?.toDouble() ?? 0,
+        fatG: (json['fatG'] as num?)?.toDouble() ?? 0,
+        halalStatus: HalalStatus.unknown,
+        halalExplanation: json['halalNote'] as String? ?? '',
+        halalExplanationEn: json['halalNote'] as String? ?? '',
+        sunnahNote: json['sunnahNote'] as String? ?? '',
+        sunnahNoteEn: json['sunnahNote'] as String? ?? '',
+      );
     } catch (e) {
       // Graceful fallback
       return _fallbackFoodResult(language);
@@ -242,7 +254,7 @@ Request: $prompt
         final data = jsonDecode(resp.body);
         return (data['content'] as List).firstWhere(
           (c) => c != null && c['type'] == 'text',
-          orElse: () => {'type': 'text', 'text': ''}, orElse: () => {'text': ''},
+          orElse: () => {'type': 'text', 'text': ''},
         )['text'] as String;
       }
       throw Exception('${resp.statusCode}');
