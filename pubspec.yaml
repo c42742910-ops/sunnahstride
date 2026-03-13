@@ -17,7 +17,7 @@ dependencies:
   sqflite: ^2.3.2
   path: ^1.9.0
   http: ^1.2.0
-  intl: ^0.20.2
+  intl: any
   fl_chart: ^0.68.0
   image_picker: ^1.0.7
   flutter_local_notifications: ^17.0.0
