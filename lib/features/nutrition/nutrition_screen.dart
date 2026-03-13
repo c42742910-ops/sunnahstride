@@ -291,7 +291,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
     final muted = isDark ? AppColors.darkMuted : AppColors.lightMuted;
     final bg    = isDark ? AppColors.darkCard  : Colors.white;
     String t(String ar, String en) => isAr ? ar : en;
-    return ListView(padding: const EdgeInsets.all(14), children: [ Text(t('وصفات سنية 🌿','Sunnah Recipes 🌿'), style: TextStyle(fontFamily:'Cairo', fontSize: 16, fontWeight: FontWeight.w700,
+    return ListView(padding: EdgeInsets.all(14), children: [ Text(t('وصفات سنية 🌿','Sunnah Recipes 🌿'), style: TextStyle(fontFamily:'Cairo', fontSize: 16, fontWeight: FontWeight.w700,
             color: isDark ? AppColors.darkText : AppColors.lightText)),
       const SizedBox(height: 4), Text(t('مبنية على سنة النبي ﷺ','Based on the Prophet\'s ﷺ Sunnah'), style: TextStyle(fontFamily:'Cairo', fontSize: 11, color: muted)),
       const SizedBox(height: 14),
@@ -358,7 +358,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
     String t(String ar, String en) => isAr ? ar : en;
 
     if (!isPremium) {
-      return Center(child: Padding(padding: const EdgeInsets.all(28), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [ const Text('🤖', style: TextStyle(fontSize: 64)),
+      return Center(child: Padding(padding: EdgeInsets.all(28), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [ const Text('🤖', style: TextStyle(fontSize: 64)),
         const SizedBox(height: 16), Text(t('مخطط الوجبات بالذكاء الاصطناعي','AI Meal Planner'),
             textAlign: TextAlign.center, style: const TextStyle(fontFamily:'Cairo', fontSize: 22, fontWeight: FontWeight.w800)),
         const SizedBox(height: 8), Text(t('يُخصّص خطة وجبات كاملة بناءً على جسمك وأهدافك وتفضيلاتك الحلالية', 'Creates a complete meal plan based on your body, goals & halal preferences'),
