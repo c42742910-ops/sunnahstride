@@ -141,7 +141,7 @@ Rules:
     foodNameEn: 'Mixed Meal',
     kcal: 350, proteinG: 20, carbsG: 40, fatG: 12,
     halalStatus: HalalStatus.unknown,
-    halalNote: lang == 'ar'
+    halalExplanation: lang == 'ar'
       ? 'لم نتمكن من التحليل. يرجى التحقق من مكونات الطعام.'
       : 'Analysis failed. Please verify food ingredients manually.',
     confidence: 0.3,
@@ -191,7 +191,16 @@ IMPORTANT:
       final raw   = await _callVision(imagePath: imagePath, systemPrompt: system, userPrompt: prompt, maxTokens: 1000);
       final clean = raw.replaceAll(RegExp(r'```json|```'), '').trim();
       final json  = jsonDecode(clean) as Map<String, dynamic>;
-      return BodyPhotoResult.fromJson(json, weightKg);
+      return BodyPhotoResult(
+        bodyFatPercent: (json['estimatedBodyFatPct'] as num?)?.toDouble() ?? 20.0,
+        muscleMassKg: (json['estimatedMuscleMassKg'] as num?)?.toDouble() ?? weightKg * 0.4,
+        leanBodyMassKg: weightKg * (1 - ((json['estimatedBodyFatPct'] as num?)?.toDouble() ?? 20.0) / 100),
+        bodyType: json['bodyTypeAr'] as String? ?? 'متوازن',
+        bodyTypeEn: json['bodyType'] as String? ?? 'mesomorph',
+        recommendationsAr: List<String>.from(json['recommendationsAr'] ?? []),
+        recommendationsEn: List<String>.from(json['recommendations'] ?? []),
+        rawAnalysis: '',
+      );
     } catch (e) {
       return _fallbackBodyResult(isMale, weightKg, language);
     }
@@ -200,15 +209,14 @@ IMPORTANT:
   static BodyPhotoResult _fallbackBodyResult(bool isMale, double weightKg, String lang) {
     final bf = isMale ? 18.0 : 28.0;
     return BodyPhotoResult(
-      estimatedBodyFatPct: bf,
-      estimatedMuscleMassKg: weightKg * (1 - bf / 100) * 0.85,
+      bodyFatPercent: bf,
+      muscleMassKg: weightKg * (1 - bf / 100) * 0.85,
+      leanBodyMassKg: weightKg * (1 - bf / 100),
       bodyType: 'mesomorph',
-      bodyTypeAr: 'متوازن',
-      postureNote: 'Analysis unavailable — please retake photo in good lighting',
-      postureNoteAr: 'التحليل غير متاح — يرجى التقاط صورة في إضاءة جيدة',
-      recommendations: ['Increase protein intake', 'Walk 30 min daily', 'Sleep 8 hours'],
+      bodyTypeEn: 'mesomorph',
+      recommendationsEn: ['Increase protein intake', 'Walk 30 min daily', 'Sleep 8 hours'],
       recommendationsAr: ['زِد البروتين اليومي', 'امشِ ٣٠ دقيقة يومياً', 'نم ٨ ساعات'],
-      confidence: 0.0,
+      rawAnalysis: '',
     );
   }
 

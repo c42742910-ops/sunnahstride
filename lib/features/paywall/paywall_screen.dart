@@ -82,7 +82,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
           SizedBox(width: double.infinity, child: ElevatedButton(
             onPressed: () { Navigator.pop(context); Navigator.pop(context); },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.sunnahGreen),
-            child: Text(isAr ? 'رائع! لنبدأ ⭐' : 'Let's go ⭐',
+            child: Text(isAr ? 'رائع! لنبدأ ⭐' : "Let's go ⭐",
               style: const TextStyle(fontFamily: 'Cairo', color: Colors.white, fontWeight: FontWeight.w700)),
           )),
         ]),
