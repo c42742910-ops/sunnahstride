@@ -11,6 +11,22 @@ workflows:
           rm -rf android
           flutter create --platforms=android .
           flutter pub get
+      - name: Fix Dart errors
+        script: |
+          python3 -c "
+f = open('lib/features/paywall/paywall_screen.dart').read()
+f = f.replace(chr(39)+'Congratulations! You'+chr(39)+'re Premium '+chr(11088)+chr(39), chr(34)+'Congratulations! You'+chr(39)+'re Premium '+chr(11088)+chr(34))
+f = f.replace(chr(39)+'Let'+chr(39)+'s go '+chr(11088)+chr(39), chr(34)+'Let'+chr(39)+'s go '+chr(11088)+chr(34))
+open('lib/features/paywall/paywall_screen.dart','w').write(f)
+
+f = open('lib/core/ai_service.dart').read()
+f = f.replace('confidence: 0.3,','')
+f = f.replace('ingredients: [],','')
+f = f.replace('portionSize: chr(39)~300g'+chr(39)+',','')
+f = f.replace('halalNote:','halalExplanation:')
+open('lib/core/ai_service.dart','w').write(f)
+print('patches applied')
+"
       - name: Build APK
         script: flutter build apk --release --no-shrink
     artifacts:
