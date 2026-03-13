@@ -144,9 +144,6 @@ Rules:
     halalExplanation: lang == 'ar'
       ? 'لم نتمكن من التحليل. يرجى التحقق من مكونات الطعام.'
       : 'Analysis failed. Please verify food ingredients manually.',
-    confidence: 0.3,
-    ingredients: [],
-    portionSize: '~300g',
     sunnahNote: '',
   );
 
