@@ -295,7 +295,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
         ]).map((s) => Padding(
           padding: const EdgeInsets.only(bottom: 5),
           child: Align(alignment: Alignment.centerRight,
-            child: Text(s, style: const TextStyle(fontFamily: 'Cairo', fontSize: 12, color: Colors.white80, height: 1.4))),
+            child: Text(s, style: const TextStyle(fontFamily: 'Cairo', fontSize: 12, color: Colors.white70, height: 1.4))),
         )),
         if (profile != null) ...[
           const Divider(color: Colors.white24, height: 16),

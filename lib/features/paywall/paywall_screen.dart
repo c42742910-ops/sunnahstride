@@ -69,7 +69,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
         content: Column(mainAxisSize: MainAxisSize.min, children: [
           const Text('🎉', style: TextStyle(fontSize: 58)),
           const SizedBox(height: 12),
-          Text(isAr ? 'تهانيّ! أصبحت عضواً بريميوم 🌟' : 'Congratulations! You're Premium 🌟',
+          Text(isAr ? 'تهانيّ! أصبحت عضواً بريميوم 🌟' : "Congratulations! You are Premium 🌟",
             textAlign: TextAlign.center,
             style: const TextStyle(fontFamily: 'Cairo', fontSize: 17, fontWeight: FontWeight.w800)),
           const SizedBox(height: 8),

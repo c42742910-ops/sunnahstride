@@ -262,7 +262,7 @@ class _OnboardingState extends ConsumerState<OnboardingScreen>
         Text(
           t( 'سنساعدك على:\n✓ تتبع تغذيتك الحلال\n✓ حساب مقاييس جسمك\n✓ برامج لياقة سنية\n✓ مقالات صحية إسلامية\n\nجميع بياناتك مشفّرة وخاصة تماماً.', 'We will help you:\n✓ Track your halal nutrition\n✓ Calculate body metrics\n✓ Sunnah fitness programs\n✓ Islamic health articles\n\nAll your data is fully encrypted & private.',
           ),
-          textAlign: TextAlign.center, style: const TextStyle(fontFamily:'Cairo', fontSize: 15, color: Colors.white80, height: 1.8),
+          textAlign: TextAlign.center, style: const TextStyle(fontFamily:'Cairo', fontSize: 15, color: Colors.white70, height: 1.8),
         ),
         const SizedBox(height: 48),
         ElevatedButton(
@@ -305,7 +305,7 @@ class _OnboardingState extends ConsumerState<OnboardingScreen>
         ),
         child: Row(children: [
           Text(emoji, style: const TextStyle(fontSize: 36)),
-          const SizedBox(width: 16), Expanded(child: Text(label, style: TextStyle(fontFamily:'Cairo', fontSize: 18, fontWeight: FontWeight.w700, color: sel ? Colors.white : Colors.white80))),
+          const SizedBox(width: 16), Expanded(child: Text(label, style: TextStyle(fontFamily:'Cairo', fontSize: 18, fontWeight: FontWeight.w700, color: sel ? Colors.white : Colors.white70))),
           if (sel) const Icon(Icons.check_circle, color: Colors.white, size: 24),
         ]),
       ),

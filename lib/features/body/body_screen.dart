@@ -59,8 +59,7 @@ class _BodyScreenState extends ConsumerState<BodyScreen> with SingleTickerProvid
           const SizedBox(height: 10),
           Text(
             isAr
-              ? 'ندرة أدخل طولك ووزنك وعمرك
-لحساب مقاييس جسمك بدقة علمية'
+              ? 'أدخل طولك ووزنك وعمرك لحساب مقاييس جسمك'
               : 'Enter your height, weight and age to calculate precise body metrics',
             textAlign: TextAlign.center,
             style: const TextStyle(fontFamily: 'Cairo', fontSize: 13, color: AppColors.lightMuted, height: 1.6)),

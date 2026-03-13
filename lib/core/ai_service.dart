@@ -136,18 +136,15 @@ Rules:
     }
   }
 
-  static FoodPhotoResult _fallbackFoodResult(String lang) => FoodPhotoResult(
-    foodName:   lang == 'ar' ? 'وجبة مختلطة' : 'Mixed Meal',
+    static FoodPhotoResult _fallbackFoodResult(String lang) => FoodPhotoResult(
+    foodName: lang == 'ar' ? 'وجبة مختلطة' : 'Mixed Meal',
     foodNameEn: 'Mixed Meal',
     kcal: 350, proteinG: 20, carbsG: 40, fatG: 12,
     halalStatus: HalalStatus.unknown,
-    halalNote: lang == 'ar'
-      ? 'لم نتمكن من التحليل. يرجى التحقق من مكونات الطعام.'
-      : 'Analysis failed. Please verify food ingredients manually.',
-    confidence: 0.3,
-    ingredients: [],
-    portionSize: '~300g',
+    halalExplanation: lang == 'ar' ? 'التحليل غير متاح' : 'Analysis unavailable',
+    halalExplanationEn: 'Analysis unavailable',
     sunnahNote: '',
+    sunnahNoteEn: '',
   );
 
   // ════════════════════════════════════════════════

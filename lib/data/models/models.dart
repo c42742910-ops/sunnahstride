@@ -67,6 +67,9 @@ class FoodPhotoResult {
   final HalalStatus halalStatus;
   final String   halalExplanation, halalExplanationEn;
   final String?  sunnahNote, sunnahNoteEn;
+  final double   confidence;
+  final String   portionSize;
+  final List<String> ingredients;
   const FoodPhotoResult({
     required this.foodName, required this.foodNameEn,
     required this.kcal,
@@ -74,6 +77,9 @@ class FoodPhotoResult {
     required this.halalStatus,
     required this.halalExplanation, required this.halalExplanationEn,
     this.sunnahNote, this.sunnahNoteEn,
+    this.confidence = 0.0,
+    this.portionSize = '',
+    this.ingredients = const [],
   });
 }
 
@@ -89,6 +95,11 @@ class BodyPhotoResult {
     required this.recommendationsAr, required this.recommendationsEn,
     required this.rawAnalysis,
   });
+  // Compatibility
+  String get halalNote => halalExplanation;
+  List<String> get recommendations => recommendationsEn;
+  String get rawAnalysisAr => rawAnalysis;
+
   factory BodyPhotoResult.fromJson(Map<String, dynamic> j, double weightKg) {
     final bf = (j['estimatedBodyFatPct'] as num?)?.toDouble() ?? 20.0;
     final muscle = (j['estimatedMuscleMassKg'] as num?)?.toDouble() ?? weightKg * 0.4;

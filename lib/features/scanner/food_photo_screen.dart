@@ -193,7 +193,7 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
           textAlign: TextAlign.center, style: const TextStyle(fontFamily:'Cairo', fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white, height: 1.5),
         ),
         const SizedBox(height: 10),
-        Wrap(mainAxisAlignment: WrapAlignment.center, spacing: 10, runSpacing: 6, children: [ _badge('🔥', isAr ? 'سعرات' : 'Calories'), _badge('🥩', isAr ? 'بروتين' : 'Protein'), _badge('🍚', isAr ? 'كربوهيدرات' : 'Carbs'), _badge('✅', isAr ? 'حكم حلال' : 'Halal Check'),
+        Wrap(spacing: 10, runSpacing: 6, children: [ _badge('🔥', isAr ? 'سعرات' : 'Calories'), _badge('🥩', isAr ? 'بروتين' : 'Protein'), _badge('🍚', isAr ? 'كربوهيدرات' : 'Carbs'), _badge('✅', isAr ? 'حكم حلال' : 'Halal Check'),
         ]),
       ]),
     );
@@ -347,7 +347,7 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
       ),
 
       // ── Sunnah note ───────────────────────────────────
-      if (r.sunnahNote.isNotEmpty)
+      if ((r.sunnahNote ?? '').isNotEmpty)
         Container(
           color: bg,
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
@@ -360,7 +360,7 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
             ),
             child: Row(children: [ const Text('📖', style: TextStyle(fontSize: 16)),
               const SizedBox(width: 8),
-              Expanded(child: Text(r.sunnahNote, style: const TextStyle(fontFamily:'Cairo', fontSize: 11, height: 1.5, color: AppColors.lightMuted))),
+              Expanded(child: Text(r.sunnahNote ?? '', style: const TextStyle(fontFamily:'Cairo', fontSize: 11, height: 1.5, color: AppColors.lightMuted))),
             ]),
           ),
         ),

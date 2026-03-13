@@ -273,7 +273,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
                   final p = double.tryParse(_proteinCtrl.text) ?? 0;
                   final c = double.tryParse(_carbsCtrl.text) ?? 0;
                   final f = double.tryParse(_fatCtrl.text) ?? 0;
-                  await ref.read(caloriesProvider.notifier).addEntry(name, kcal, proteinG: p, carbsG: c, fatG: f);
+                  ref.read(caloriesProvider.notifier).addEntry(name, kcal, proteinG: p, carbsG: c, fatG: f);
                   _proteinCtrl.clear(); _carbsCtrl.clear(); _fatCtrl.clear();
                   Navigator.pop(context);
                 }
