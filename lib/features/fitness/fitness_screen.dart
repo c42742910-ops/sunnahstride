@@ -1,12 +1,6 @@
 // fitness_screen.dart — SunnahStride v1.0
 // 23 workouts, category tabs, Ramadan mode, step-by-step player
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../../core/theme.dart';
-import '../../core/providers.dart';
-import '../../data/models/models.dart';
+import 'dart:async'; import'package:flutter/material.dart'; import'package:flutter_riverpod/flutter_riverpod.dart'; import'package:go_router/go_router.dart'; import'../../core/theme.dart'; import'../../core/providers.dart'; import'../../data/models/models.dart';
 
 // ══════════════════════════════════════════════════
 //  FitnessScreen
@@ -18,10 +12,7 @@ class FitnessScreen extends ConsumerStatefulWidget {
 
 class _FitnessState extends ConsumerState<FitnessScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tab;
-  String _filter = 'all';
-
-  static const _cats = ['all','walking','strength','gentle','ramadan','breathing','family'];
+  late TabController _tab; String _filter ='all'; static const _cats = ['all','walking','strength','gentle','ramadan','breathing','family'];
 
   @override void initState() {
     super.initState();
@@ -30,29 +21,23 @@ class _FitnessState extends ConsumerState<FitnessScreen>
   }
   @override void dispose() { _tab.dispose(); super.dispose(); }
 
-  List<Workout> _filtered(String gender, bool isRamadan, bool isPremium) {
-    var list = kWorkouts.where((w) => w.gender == 'both' || w.gender == gender).toList();
+  List<Workout> _filtered(String gender, bool isRamadan, bool isPremium) { var list = kWorkouts.where((w) => w.gender =='both'|| w.gender == gender).toList();
     if (isRamadan) {
       // Put Ramadan workouts first
-      list.sort((a, b) {
-        final aR = a.category == 'ramadan' ? 0 : 1;
-        final bR = b.category == 'ramadan' ? 0 : 1;
+      list.sort((a, b) { final aR = a.category =='ramadan'? 0 : 1; final bR = b.category =='ramadan'? 0 : 1;
         return aR.compareTo(bR);
       });
-    }
-    if (_filter != 'all') list = list.where((w) => w.category == _filter).toList();
+    } if (_filter !='all') list = list.where((w) => w.category == _filter).toList();
     return list;
   }
 
   @override
   Widget build(BuildContext context) {
-    final gender    = ref.watch(genderProvider);
-    final isAr      = ref.watch(languageProvider) == 'ar';
+    final gender    = ref.watch(genderProvider); final isAr      = ref.watch(languageProvider) =='ar';
     final isDark    = ref.watch(themeProvider);
     final isPremium = ref.watch(premiumProvider);
     final isRamadan = ref.watch(ramadanModeProvider);
-    final workoutMin = ref.watch(workoutMinutesProvider);
-    final isSis     = gender == 'sisters';
+    final workoutMin = ref.watch(workoutMinutesProvider); final isSis     = gender =='sisters';
     final barCol    = isSis ? AppColors.barakahGold : AppColors.sunnahGreen;
     final bg        = isDark ? AppColors.darkBg   : AppColors.lightBg;
     final card      = isDark ? AppColors.darkCard : Colors.white;
@@ -62,14 +47,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
 
     String t(String ar, String en) => isAr ? ar : en;
 
-    final catLabels = {
-      'all':       t('الكل', 'All'),
-      'walking':   t('مشي', 'Walk'),
-      'strength':  t('قوة', 'Strength'),
-      'gentle':    t('لطيف', 'Gentle'),
-      'ramadan':   t('رمضان', 'Ramadan'),
-      'breathing': t('تنفس', 'Breathe'),
-      'family':    t('عائلة', 'Family'),
+    final catLabels = { 'all':       t('الكل', 'All'), 'walking':   t('مشي', 'Walk'), 'strength':  t('قوة', 'Strength'), 'gentle':    t('لطيف', 'Gentle'), 'ramadan':   t('رمضان', 'Ramadan'), 'breathing': t('تنفس', 'Breathe'), 'family':    t('عائلة', 'Family'),
     };
 
     return Directionality(
@@ -77,18 +55,14 @@ class _FitnessState extends ConsumerState<FitnessScreen>
       child: Scaffold(
         backgroundColor: bg,
         appBar: AppBar(
-          backgroundColor: barCol,
-          title: Text(t('اللياقة السنية 🏃', 'Sunnah Fitness 🏃')),
+          backgroundColor: barCol, title: Text(t('اللياقة السنية 🏃', 'Sunnah Fitness 🏃')),
           actions: [
             if (workoutMin > 0)
               Padding(
                 padding: const EdgeInsets.only(right: 14),
                 child: Chip(
-                  backgroundColor: Colors.white.withOpacity(0.2),
-                  label: Text('$workoutMin ${t("د","min")}',
-                      style: const TextStyle(fontFamily: 'Cairo',
-                          fontSize: 11, color: Colors.white, fontWeight: FontWeight.w700)),
-                  avatar: const Text('🔥', style: TextStyle(fontSize: 13)),
+                  backgroundColor: Colors.white.withOpacity(0.2), label: Text('$workoutMin ${t("د","min")}', style: const TextStyle(fontFamily:'Cairo',
+                          fontSize: 11, color: Colors.white, fontWeight: FontWeight.w700)), avatar: const Text('🔥', style: TextStyle(fontSize: 13)),
                 ),
               ),
           ],
@@ -97,9 +71,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
             isScrollable: true,
             indicatorColor: Colors.white,
             labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
-            labelStyle: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 11),
-            unselectedLabelStyle: const TextStyle(fontFamily: 'Cairo', fontSize: 11),
+            unselectedLabelColor: Colors.white70, labelStyle: const TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, fontSize: 11), unselectedLabelStyle: const TextStyle(fontFamily:'Cairo', fontSize: 11),
             tabAlignment: TabAlignment.start,
             tabs: _cats.map((c) => Tab(text: catLabels[c] ?? c)).toList(),
           ),
@@ -110,19 +82,11 @@ class _FitnessState extends ConsumerState<FitnessScreen>
             Container(
               color: (isSis ? AppColors.barakahGold : AppColors.darkGreen).withOpacity(0.08),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(children: [
-                Text(isSis ? '🧕' : '🌙', style: const TextStyle(fontSize: 16)),
+              child: Row(children: [ Text(isSis ?'🧕' : '🌙', style: const TextStyle(fontSize: 16)),
                 const SizedBox(width: 8),
                 Expanded(child: Text(
-                  isSis && isRamadan
-                      ? t('وضع الأخوات + رمضان — محتشم وخفيف',
-                          'Sisters + Ramadan — modest & light')
-                      : isRamadan
-                          ? t('وضع رمضان — التمارين الخفيفة أولاً',
-                              'Ramadan mode — light workouts first')
-                          : t('وضع الأخوات — محتشم دائماً',
-                              'Sisters mode — always modest'),
-                  style: TextStyle(fontFamily: 'Cairo', fontSize: 11,
+                  isSis && isRamadan ? t('وضع الأخوات + رمضان — محتشم وخفيف', 'Sisters + Ramadan — modest & light')
+                      : isRamadan ? t('وضع رمضان — التمارين الخفيفة أولاً', 'Ramadan mode — light workouts first') : t('وضع الأخوات — محتشم دائماً', 'Sisters mode — always modest'), style: TextStyle(fontFamily:'Cairo', fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: isSis ? AppColors.barakahGold : AppColors.sunnahGreen),
                 )),
@@ -135,14 +99,10 @@ class _FitnessState extends ConsumerState<FitnessScreen>
             final hour = DateTime.now().hour;
             if (wMin >= 30) return const SizedBox.shrink();
             Workout? rec;
-            if (isRamadan) {
-              rec = kWorkouts.firstWhere((w) => w.category == 'ramadan', orElse: () => kWorkouts.first);
-            } else if (hour >= 5 && hour < 8) {
-              rec = kWorkouts.firstWhere((w) => w.id == 'w6', orElse: () => kWorkouts.first);
-            } else if (hour >= 16 && hour < 20) {
-              rec = kWorkouts.firstWhere((w) => w.category == 'strength' && !w.isPremium, orElse: () => kWorkouts.first);
-            } else if (hour >= 21) {
-              rec = kWorkouts.firstWhere((w) => w.category == 'breathing', orElse: () => kWorkouts.first);
+            if (isRamadan) { rec = kWorkouts.firstWhere((w) => w.category =='ramadan', orElse: () => kWorkouts.first);
+            } else if (hour >= 5 && hour < 8) { rec = kWorkouts.firstWhere((w) => w.id =='w6', orElse: () => kWorkouts.first);
+            } else if (hour >= 16 && hour < 20) { rec = kWorkouts.firstWhere((w) => w.category =='strength'&& !w.isPremium, orElse: () => kWorkouts.first);
+            } else if (hour >= 21) { rec = kWorkouts.firstWhere((w) => w.category =='breathing', orElse: () => kWorkouts.first);
             }
             if (rec == null) return const SizedBox.shrink();
             return GestureDetector(
@@ -163,15 +123,10 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                 child: Row(children: [
                   Text(rec.emoji, style: const TextStyle(fontSize: 28)),
                   const SizedBox(width: 12),
-                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(isAr ? '⚡ موصى به الآن' : '⚡ Recommended Now',
-                        style: TextStyle(fontFamily: 'Cairo', fontSize: 10,
+                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [ Text(isAr ?'⚡ موصى به الآن' : '⚡ Recommended Now', style: TextStyle(fontFamily:'Cairo', fontSize: 10,
                             color: isRamadan ? AppColors.barakahGold : Colors.white70)),
-                    Text(isAr ? rec.titleAr : rec.titleEn,
-                        style: const TextStyle(fontFamily: 'Cairo', fontSize: 13,
-                            fontWeight: FontWeight.w800, color: Colors.white)),
-                    Text('${rec.durationMin} ${isAr ? "دقيقة" : "min"}  •  ${isAr ? rec.level : rec.levelEn}',
-                        style: const TextStyle(fontFamily: 'Cairo', fontSize: 10, color: Colors.white70)),
+                    Text(isAr ? rec.titleAr : rec.titleEn, style: const TextStyle(fontFamily:'Cairo', fontSize: 13,
+                            fontWeight: FontWeight.w800, color: Colors.white)), Text('${rec.durationMin} ${isAr ? "دقيقة" : "min"}  •  ${isAr ? rec.level : rec.levelEn}', style: const TextStyle(fontFamily:'Cairo', fontSize: 10, color: Colors.white70)),
                   ])),
                   const Icon(Icons.play_circle_filled, color: Colors.white, size: 32),
                 ]),
@@ -188,11 +143,8 @@ class _FitnessState extends ConsumerState<FitnessScreen>
               if (list.isEmpty) {
                 return Center(child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('🔍', style: TextStyle(fontSize: 42)),
-                    const SizedBox(height: 12),
-                    Text(t('لا تمارين في هذه الفئة', 'No workouts in this category'),
-                        style: TextStyle(fontFamily: 'Cairo', color: muted)),
+                  children: [ const Text('🔍', style: TextStyle(fontSize: 42)),
+                    const SizedBox(height: 12), Text(t('لا تمارين في هذه الفئة', 'No workouts in this category'), style: TextStyle(fontFamily:'Cairo', color: muted)),
                   ],
                 ));
               }
@@ -207,11 +159,8 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                     border: Border.all(color: barCol.withOpacity(0.2)),
                   ),
                   child: Text(
-                    isAr
-                        ? '«المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف» — مسلم'
-                        : '"The strong believer is better & more beloved to Allah" — Muslim',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontFamily: 'Cairo', fontSize: 12,
+                    isAr ?'«المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف» — مسلم' :'"The strong believer is better & more beloved to Allah" — Muslim',
+                    textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 12,
                         color: barCol, height: 1.6, fontStyle: FontStyle.italic),
                   ),
                 ),
@@ -230,10 +179,8 @@ class _FitnessState extends ConsumerState<FitnessScreen>
 
                     return GestureDetector(
                       onTap: () {
-                        if (locked) {
-                          context.push('/paywall');
-                        } else {
-                          context.push('/workout/${w.id}');
+                        if (locked) { context.push('/paywall');
+                        } else { context.push('/workout/${w.id}');
                         }
                       },
                       child: Container(
@@ -254,8 +201,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                                 const Icon(Icons.lock, size: 16, color: AppColors.barakahGold),
                             ]),
                             const SizedBox(height: 8),
-                            Text(isAr ? w.titleAr : w.titleEn,
-                                style: TextStyle(fontFamily: 'Cairo',
+                            Text(isAr ? w.titleAr : w.titleEn, style: TextStyle(fontFamily:'Cairo',
                                     fontWeight: FontWeight.w700, fontSize: 11,
                                     height: 1.4, color: isDark ? AppColors.darkText : AppColors.lightText),
                                 maxLines: 2, overflow: TextOverflow.ellipsis),
@@ -266,13 +212,10 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                                 decoration: BoxDecoration(
                                     color: lc.withOpacity(0.13),
                                     borderRadius: BorderRadius.circular(20)),
-                                child: Text(isAr ? w.level : w.levelEn,
-                                    style: TextStyle(fontFamily: 'Cairo',
+                                child: Text(isAr ? w.level : w.levelEn, style: TextStyle(fontFamily:'Cairo',
                                         fontSize: 9, fontWeight: FontWeight.w700, color: lc)),
                               ),
-                              const Spacer(),
-                              Text('${w.durationMin}${t("د","m")}',
-                                  style: TextStyle(fontFamily: 'Cairo',
+                              const Spacer(), Text('${w.durationMin}${t("د","m")}', style: TextStyle(fontFamily:'Cairo',
                                       fontSize: 11, color: muted)),
                             ]),
                           ]),
@@ -283,8 +226,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                               decoration: BoxDecoration(
                                 color: AppColors.barakahGold.withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text('⏱', style: TextStyle(fontSize: 9, color: muted)),
+                              ), child: Text('⏱', style: TextStyle(fontSize: 9, color: muted)),
                             ),
                           ),
                         ]),
@@ -296,8 +238,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                 // Premium upsell
                 if (!isPremium) ...[
                   const SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: () => context.push('/paywall'),
+                  GestureDetector( onTap: () => context.push('/paywall'),
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -306,23 +247,14 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(children: [
-                        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(t('🔒 ${kWorkouts.where((w) => w.isPremium).length} خطة متقدمة',
-                              '🔒 ${kWorkouts.where((w) => w.isPremium).length} Advanced Plans'),
-                              style: const TextStyle(fontFamily: 'Cairo',
-                                  fontWeight: FontWeight.w800, fontSize: 14, color: Colors.white)),
-                          Text(t('HIIT • كارديو • تناسق • قوة كاملة',
-                              'HIIT • Cardio • Toning • Full strength'),
-                              style: const TextStyle(fontFamily: 'Cairo',
+                        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [ Text(t('🔒 ${kWorkouts.where((w) => w.isPremium).length} خطة متقدمة', '🔒 ${kWorkouts.where((w) => w.isPremium).length} Advanced Plans'), style: const TextStyle(fontFamily:'Cairo',
+                                  fontWeight: FontWeight.w800, fontSize: 14, color: Colors.white)), Text(t('HIIT • كارديو • تناسق • قوة كاملة', 'HIIT • Cardio • Toning • Full strength'), style: const TextStyle(fontFamily:'Cairo',
                                   fontSize: 11, color: Colors.white70)),
                         ])),
-                        ElevatedButton(
-                          onPressed: () => context.push('/paywall'),
+                        ElevatedButton( onPressed: () => context.push('/paywall'),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.barakahGold,
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8)),
-                          child: Text(t('ترقية', 'Upgrade'),
-                              style: const TextStyle(fontFamily: 'Cairo',
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8)), child: Text(t('ترقية', 'Upgrade'), style: const TextStyle(fontFamily:'Cairo',
                                   fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700)),
                         ),
                       ]),
@@ -338,9 +270,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
     );
   }
 
-  Color _hexColor(String hex) {
-    final h = hex.replaceAll('#', '');
-    return Color(int.parse('FF$h', radix: 16));
+  Color _hexColor(String hex) { final h = hex.replaceAll('#', ''); return Color(int.parse('FF$h', radix: 16));
   }
 }
 
@@ -444,18 +374,13 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
     }
   }
 
-  String _fmt(int secs) {
-    final m = (secs ~/ 60).toString().padLeft(2, '0');
-    final s = (secs % 60).toString().padLeft(2, '0');
-    return '$m:$s';
+  String _fmt(int secs) { final m = (secs ~/ 60).toString().padLeft(2,'0'); final s = (secs % 60).toString().padLeft(2,'0'); return'$m:$s';
   }
 
   @override
   Widget build(BuildContext context) {
-    final w     = _workout;
-    final isAr  = ref.watch(languageProvider) == 'ar';
-    final isDark = ref.watch(themeProvider);
-    if (w == null) return const Scaffold(body: Center(child: Text('Not found')));
+    final w     = _workout; final isAr  = ref.watch(languageProvider) =='ar';
+    final isDark = ref.watch(themeProvider); if (w == null) return const Scaffold(body: Center(child: Text('Not found')));
 
     final bg   = isDark ? AppColors.darkBg   : AppColors.lightBg;
     final card = isDark ? AppColors.darkCard : Colors.white;
@@ -478,8 +403,7 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
             icon: const Icon(Icons.close, color: Colors.white),
             onPressed: () => context.pop(),
           ),
-          title: Text(isAr ? w.titleAr : w.titleEn,
-              style: const TextStyle(fontFamily: 'Cairo', fontSize: 14,
+          title: Text(isAr ? w.titleAr : w.titleEn, style: const TextStyle(fontFamily:'Cairo', fontSize: 14,
                   fontWeight: FontWeight.w700)),
           backgroundColor: AppColors.sunnahGreen,
         ),
@@ -489,11 +413,7 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
           Container(
             margin: const EdgeInsets.only(bottom: 20),
             child: Column(children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(t('التقدم الكلي', 'Overall Progress'),
-                    style: TextStyle(fontFamily: 'Cairo', fontSize: 11, color: muted)),
-                Text('${(_overallProgress * 100).toInt()}%',
-                    style: TextStyle(fontFamily: 'Cairo', fontSize: 11,
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [ Text(t('التقدم الكلي', 'Overall Progress'), style: TextStyle(fontFamily:'Cairo', fontSize: 11, color: muted)), Text('${(_overallProgress * 100).toInt()}%', style: TextStyle(fontFamily:'Cairo', fontSize: 11,
                         fontWeight: FontWeight.w700, color: AppColors.sunnahGreen)),
               ]),
               const SizedBox(height: 6),
@@ -516,22 +436,19 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
               child: Text(
                 key: ValueKey(_stepIndex),
                 isAr ? step.nameAr : step.nameEn,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'Cairo', fontSize: 18,
+                textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 18,
                     fontWeight: FontWeight.w800, color: text, height: 1.3),
               ),
             ),
           if (!_hasSteps)
-            Text(isAr ? w.titleAr : w.titleEn, textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'Cairo', fontSize: 16,
+            Text(isAr ? w.titleAr : w.titleEn, textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 16,
                     fontWeight: FontWeight.w700, color: text)),
 
           // Step instruction
           if (_hasSteps && step?.instructionAr != null && !_done) ...[
             const SizedBox(height: 8),
             Text(isAr ? step!.instructionAr! : (step!.instructionEn ?? step.instructionAr!),
-                textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'Cairo', fontSize: 13,
+                textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 13,
                     color: muted, height: 1.5)),
           ],
 
@@ -561,25 +478,19 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
                 ),
               )),
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              if (_done)
-                const Text('🎉', style: TextStyle(fontSize: 44))
+              if (_done) const Text('🎉', style: TextStyle(fontSize: 44))
               else ...[
                 AnimatedBuilder(
                   animation: _pulse,
                   builder: (_, __) => Transform.scale(
                     scale: _running ? _pulse.value : 1.0,
                     child: Text(
-                      _hasSteps && step?.durationSec == 0
-                          ? '${step?.reps ?? 0}\n${t("مرة","reps")}'
-                          : _fmt(rem.clamp(0, 9999)),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: 'Cairo', fontSize: 36,
+                      _hasSteps && step?.durationSec == 0 ?'${step?.reps ?? 0}\n${t("مرة","reps")}': _fmt(rem.clamp(0, 9999)),
+                      textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 36,
                           fontWeight: FontWeight.w900, color: text, height: 1.1),
                     ),
                   ),
-                ),
-                Text(_hasSteps ? t('للخطوة','for step') : t('متبقي','remaining'),
-                    style: TextStyle(fontFamily: 'Cairo', fontSize: 12, color: muted)),
+                ), Text(_hasSteps ? t('للخطوة','for step') : t('متبقي','remaining'), style: TextStyle(fontFamily:'Cairo', fontSize: 12, color: muted)),
               ],
             ]),
           ])),
@@ -617,10 +528,8 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: AppColors.barakahGold.withOpacity(0.3)),
               ),
-              child: Text(
-                '📖 ${isAr ? w.hadith! : (w.hadithEn ?? w.hadith!)}',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'Cairo', fontSize: 12,
+              child: Text( '📖 ${isAr ? w.hadith! : (w.hadithEn ?? w.hadith!)}',
+                textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 12,
                     color: AppColors.barakahGold, fontStyle: FontStyle.italic, height: 1.6),
               ),
             ),
@@ -636,22 +545,14 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: AppColors.sunnahGreen.withOpacity(0.3)),
               ),
-              child: Column(children: [
-                const Text('🌟', style: TextStyle(fontSize: 52)),
-                const SizedBox(height: 12),
-                Text(t('بارك الله فيك!', 'May Allah bless you!'),
-                    style: const TextStyle(fontFamily: 'Cairo', fontSize: 22,
+              child: Column(children: [ const Text('🌟', style: TextStyle(fontSize: 52)),
+                const SizedBox(height: 12), Text(t('بارك الله فيك!', 'May Allah bless you!'), style: const TextStyle(fontFamily:'Cairo', fontSize: 22,
                         fontWeight: FontWeight.w900, color: AppColors.sunnahGreen)),
-                const SizedBox(height: 6),
-                Text(t('أتممت ${w.durationMin} دقيقة من ${isAr ? w.titleAr : w.titleEn}',
-                    'Completed ${w.durationMin} min of ${isAr ? w.titleAr : w.titleEn}'),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontFamily: 'Cairo', fontSize: 13, color: muted, height: 1.5)),
+                const SizedBox(height: 6), Text(t('أتممت ${w.durationMin} دقيقة من ${isAr ? w.titleAr : w.titleEn}', 'Completed ${w.durationMin} min of ${isAr ? w.titleAr : w.titleEn}'),
+                    textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 13, color: muted, height: 1.5)),
                 const SizedBox(height: 20),
                 SizedBox(width: double.infinity, child: ElevatedButton(
-                  onPressed: () => context.pop(),
-                  child: Text(t('رجوع للتمارين', 'Back to Workouts'),
-                      style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700)),
+                  onPressed: () => context.pop(), child: Text(t('رجوع للتمارين', 'Back to Workouts'), style: const TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700)),
                 )),
               ]),
             ),
@@ -662,9 +563,7 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
                 onPressed: _toggle,
                 style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14)),
-                child: Text(
-                  _running ? t('⏸ إيقاف', '⏸ Pause') : t('▶ ابدأ', '▶ Start'),
-                  style: const TextStyle(fontFamily: 'Cairo',
+                child: Text( _running ? t('⏸ إيقاف', '⏸ Pause') : t('▶ ابدأ', '▶ Start'), style: const TextStyle(fontFamily:'Cairo',
                       fontSize: 16, fontWeight: FontWeight.w700),
                 ),
               )),
@@ -673,17 +572,13 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
                 Expanded(child: OutlinedButton(
                   onPressed: () => setState(() { _nextStep(); }),
                   style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14)),
-                  child: Text(t('⏭ التالي', '⏭ Next'),
-                      style: const TextStyle(fontFamily: 'Cairo', fontSize: 14)),
+                      padding: const EdgeInsets.symmetric(vertical: 14)), child: Text(t('⏭ التالي', '⏭ Next'), style: const TextStyle(fontFamily:'Cairo', fontSize: 14)),
                 ))
               else
                 Expanded(child: OutlinedButton(
                   onPressed: () { _timer?.cancel(); _finish(); setState(() {}); },
                   style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14)),
-                  child: Text(t('✓ أكملت', '✓ Done'),
-                      style: const TextStyle(fontFamily: 'Cairo', fontSize: 14)),
+                      padding: const EdgeInsets.symmetric(vertical: 14)), child: Text(t('✓ أكملت', '✓ Done'), style: const TextStyle(fontFamily:'Cairo', fontSize: 14)),
                 )),
             ]),
           ],

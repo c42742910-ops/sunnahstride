@@ -4,15 +4,7 @@
 //  Front photo → Estimated body fat %, muscle, body type
 // ============================================================
 
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import '../../core/theme.dart';
-import '../../core/providers.dart';
-import '../../core/ai_service.dart';
-import '../../data/models/models.dart';
-import '../../data/models/user_profile.dart';
+import 'dart:io'; import'package:flutter/material.dart'; import'package:flutter_riverpod/flutter_riverpod.dart'; import'package:image_picker/image_picker.dart'; import'../../core/theme.dart'; import'../../core/providers.dart'; import'../../core/ai_service.dart'; import'../../data/models/models.dart'; import'../../data/models/user_profile.dart';
 
 enum BodyAnalysisState { idle, analyzing, done, error }
 
@@ -55,10 +47,8 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
         _result = null;
         _error  = null;
       });
-    } catch (e) {
-      final isAr = ref.read(languageProvider) == 'ar';
-      setState(() {
-        _error = isAr ? 'تعذّر فتح الكاميرا.' : 'Could not open camera.';
+    } catch (e) { final isAr = ref.read(languageProvider) =='ar';
+      setState(() { _error = isAr ?'تعذّر فتح الكاميرا.' : 'Could not open camera.';
         _state = BodyAnalysisState.error;
       });
     }
@@ -84,10 +74,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
       setState(() { _result = result; _state = BodyAnalysisState.done; });
     } catch (e) {
       if (!mounted) return;
-      setState(() {
-        _error = lang == 'ar'
-          ? 'تعذّر التحليل. تحقق من اتصالك بالإنترنت.'
-          : 'Analysis failed. Check your internet connection.';
+      setState(() { _error = lang =='ar' ?'تعذّر التحليل. تحقق من اتصالك بالإنترنت.' :'Analysis failed. Check your internet connection.';
         _state = BodyAnalysisState.error;
       });
     }
@@ -95,8 +82,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
 
   @override
   Widget build(BuildContext context) {
-    final lang      = ref.watch(languageProvider);
-    final isAr      = lang == 'ar';
+    final lang      = ref.watch(languageProvider); final isAr      = lang =='ar';
     final isDark    = ref.watch(themeProvider);
     final isPremium = ref.watch(premiumProvider);
     final profile   = ref.watch(userProfileProvider);
@@ -106,30 +92,21 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
 
     // ── Premium gate ──────────────────────────────
     if (!isPremium) {
-      return Scaffold(
-        appBar: AppBar(title: Text(t('تحليل الجسم بالصورة 💪', 'Body Photo Analysis 💪'))),
+      return Scaffold( appBar: AppBar(title: Text(t('تحليل الجسم بالصورة 💪', 'Body Photo Analysis 💪'))),
         body: Center(child: Padding(padding: const EdgeInsets.all(28), child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('🔒', style: TextStyle(fontSize: 60)),
-            const SizedBox(height: 14),
-            Text(t('ميزة بريميوم حصرية', 'Premium Exclusive Feature'),
-                style: const TextStyle(fontFamily: 'Cairo', fontSize: 22, fontWeight: FontWeight.w800)),
+          children: [ const Text('🔒', style: TextStyle(fontSize: 60)),
+            const SizedBox(height: 14), Text(t('ميزة بريميوم حصرية', 'Premium Exclusive Feature'), style: const TextStyle(fontFamily:'Cairo', fontSize: 22, fontWeight: FontWeight.w800)),
             const SizedBox(height: 8),
             Text(
-              t(
-                'تحليل تركيبة جسمك من صورة واحدة:\n• تقدير نسبة الدهون\n• كتلة العضلات\n• نوع الجسم\n• توصيات شخصية',
-                'Analyze your body composition from one photo:\n• Body fat % estimate\n• Muscle mass\n• Body type\n• Personalized recommendations',
+              t( 'تحليل تركيبة جسمك من صورة واحدة:\n• تقدير نسبة الدهون\n• كتلة العضلات\n• نوع الجسم\n• توصيات شخصية', 'Analyze your body composition from one photo:\n• Body fat % estimate\n• Muscle mass\n• Body type\n• Personalized recommendations',
               ),
-              textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: 'Cairo', fontSize: 13, color: muted, height: 1.7),
+              textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 13, color: muted, height: 1.7),
             ),
             const SizedBox(height: 28),
             SizedBox(width: double.infinity, child: ElevatedButton(
               onPressed: () => Navigator.of(context).pop(),
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.barakahGold, padding: const EdgeInsets.symmetric(vertical: 14)),
-              child: Text(t('🔓 ترقية للبريميوم', '🔓 Upgrade to Premium'),
-                  style: const TextStyle(fontFamily: 'Cairo', fontSize: 16, color: Colors.white, fontWeight: FontWeight.w700)),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.barakahGold, padding: const EdgeInsets.symmetric(vertical: 14)), child: Text(t('🔓 ترقية للبريميوم', '🔓 Upgrade to Premium'), style: const TextStyle(fontFamily:'Cairo', fontSize: 16, color: Colors.white, fontWeight: FontWeight.w700)),
             )),
           ],
         ))),
@@ -139,8 +116,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
     return Directionality(
       textDirection: isAr ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(t('⭐ تحليل الجسم بـ AI', '⭐ AI Body Analysis')),
+        appBar: AppBar( title: Text(t('⭐ تحليل الجسم بـ AI', '⭐ AI Body Analysis')),
           backgroundColor: AppColors.barakahGold,
         ),
         body: ListView(
@@ -158,20 +134,15 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
               const SizedBox(height: 14),
 
               // ── Pick buttons ──────────────────────────
-              Row(children: [
-                Expanded(child: _pickBtn('📷', t('الكاميرا', 'Camera'), AppColors.barakahGold, () => _pick(ImageSource.camera))),
-                const SizedBox(width: 10),
-                Expanded(child: _pickBtn('🖼️', t('المعرض', 'Gallery'), AppColors.waterBlue, () => _pick(ImageSource.gallery))),
+              Row(children: [ Expanded(child: _pickBtn('📷', t('الكاميرا', 'Camera'), AppColors.barakahGold, () => _pick(ImageSource.camera))),
+                const SizedBox(width: 10), Expanded(child: _pickBtn('🖼️', t('المعرض', 'Gallery'), AppColors.waterBlue, () => _pick(ImageSource.gallery))),
               ]),
               const SizedBox(height: 12),
 
               // ── Analyze button ────────────────────────
               if (_image != null && _state != BodyAnalysisState.analyzing)
                 SizedBox(width: double.infinity, child: ElevatedButton.icon(
-                  onPressed: _analyze,
-                  icon: const Text('🤖', style: TextStyle(fontSize: 18)),
-                  label: Text(t('تحليل الجسم 🔍', 'Analyze Body 🔍'),
-                      style: const TextStyle(fontFamily: 'Cairo', fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white)),
+                  onPressed: _analyze, icon: const Text('🤖', style: TextStyle(fontSize: 18)), label: Text(t('تحليل الجسم 🔍', 'Analyze Body 🔍'), style: const TextStyle(fontFamily:'Cairo', fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.barakahGold,
                     padding: const EdgeInsets.symmetric(vertical: 14),
@@ -191,8 +162,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
                     color: AppColors.haramRed.withOpacity(0.08),
                     border: Border.all(color: AppColors.haramRed.withOpacity(0.3)),
                     borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Text(_error!, style: const TextStyle(fontFamily: 'Cairo', color: AppColors.haramRed, fontSize: 12)),
+                  ), child: Text(_error!, style: const TextStyle(fontFamily:'Cairo', color: AppColors.haramRed, fontSize: 12)),
                 ),
 
               // ── Results ───────────────────────────────
@@ -214,26 +184,14 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(18),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 14)]),
-      child: Column(children: [
-        const Text('🔒', style: TextStyle(fontSize: 44)),
+      child: Column(children: [ const Text('🔒', style: TextStyle(fontSize: 44)),
         const SizedBox(height: 12),
-        Text(
-          isAr ? 'قبل المتابعة — موافقة الخصوصية' : 'Before continuing — Privacy Consent',
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontFamily: 'Cairo', fontSize: 17, fontWeight: FontWeight.w800),
+        Text( isAr ?'قبل المتابعة — موافقة الخصوصية' : 'Before continuing — Privacy Consent',
+          textAlign: TextAlign.center, style: const TextStyle(fontFamily:'Cairo', fontSize: 17, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 10),
         Text(
-          isAr
-            ? '• صورتك تُرسل بأمان إلى Claude AI للتحليل فقط\n'
-              '• لا يتم حفظها أو مشاركتها مع أي طرف ثالث\n'
-              '• تُحذف الصورة فور انتهاء التحليل\n'
-              '• هذه الميزة للاستخدام الشخصي فحسب'
-            : '• Your photo is securely sent to Claude AI for analysis only\n'
-              '• It is never saved or shared with any third party\n'
-              '• Photo is deleted immediately after analysis\n'
-              '• This feature is for personal use only',
-          style: TextStyle(fontFamily: 'Cairo', fontSize: 12, color: muted, height: 1.8),
+          isAr ?'• صورتك تُرسل بأمان إلى Claude AI للتحليل فقط\n' '• لا يتم حفظها أو مشاركتها مع أي طرف ثالث\n' '• تُحذف الصورة فور انتهاء التحليل\n' '• هذه الميزة للاستخدام الشخصي فحسب' :'• Your photo is securely sent to Claude AI for analysis only\n' '• It is never saved or shared with any third party\n' '• Photo is deleted immediately after analysis\n' '• This feature is for personal use only', style: TextStyle(fontFamily:'Cairo', fontSize: 12, color: muted, height: 1.8),
         ),
         const SizedBox(height: 16),
         Container(
@@ -243,19 +201,14 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
-            isAr
-              ? '⚠️ تحذير: هذه النتائج تقديرية وليست بديلاً عن فحص طبي متخصص'
-              : '⚠️ Warning: Results are estimates and not a substitute for professional medical assessment',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: AppColors.doubtOrange, height: 1.5),
+            isAr ?'⚠️ تحذير: هذه النتائج تقديرية وليست بديلاً عن فحص طبي متخصص' :'⚠️ Warning: Results are estimates and not a substitute for professional medical assessment',
+            textAlign: TextAlign.center, style: const TextStyle(fontFamily:'Cairo', fontSize: 11, color: AppColors.doubtOrange, height: 1.5),
           ),
         ),
         const SizedBox(height: 18),
         SizedBox(width: double.infinity, child: ElevatedButton(
           onPressed: () => setState(() => _privacyConsented = true),
-          style: ElevatedButton.styleFrom(backgroundColor: AppColors.sunnahGreen, padding: const EdgeInsets.symmetric(vertical: 13)),
-          child: Text(isAr ? '✓ أوافق وأكمل' : '✓ I Agree & Continue',
-              style: const TextStyle(fontFamily: 'Cairo', fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
+          style: ElevatedButton.styleFrom(backgroundColor: AppColors.sunnahGreen, padding: const EdgeInsets.symmetric(vertical: 13)), child: Text(isAr ?'✓ أوافق وأكمل' : '✓ I Agree & Continue', style: const TextStyle(fontFamily:'Cairo', fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700)),
         )),
       ]),
     );
@@ -272,38 +225,21 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
         ),
         borderRadius: BorderRadius.circular(18),
       ),
-      child: Column(children: [
-        const Text('💪', style: TextStyle(fontSize: 44)),
+      child: Column(children: [ const Text('💪', style: TextStyle(fontSize: 44)),
         const SizedBox(height: 8),
-        Text(
-          isAr ? 'كيف تحصل على نتائج دقيقة؟' : 'How to get accurate results?',
-          style: const TextStyle(fontFamily: 'Cairo', fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+        Text( isAr ?'كيف تحصل على نتائج دقيقة؟' : 'How to get accurate results?', style: const TextStyle(fontFamily:'Cairo', fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
         ),
         const SizedBox(height: 10),
-        ...(isAr ? [
-          '🧍 وقف أمام الكاميرا بوضع مستقيم',
-          '💡 إضاءة جيدة ومتساوية من الأمام',
-          '👕 ملابس محتشمة وغير فضفاضة',
-          '📐 تأكد من ظهور جسمك كاملاً',
-          '🤲 يديك على الجانبين',
-        ] : [
-          '🧍 Stand straight facing the camera',
-          '💡 Good, even lighting from the front',
-          '👕 Modest, fitted clothing',
-          '📐 Make sure your full body is visible',
-          '🤲 Arms at your sides',
+        ...(isAr ? [ '🧍 وقف أمام الكاميرا بوضع مستقيم', '💡 إضاءة جيدة ومتساوية من الأمام', '👕 ملابس محتشمة وغير فضفاضة', '📐 تأكد من ظهور جسمك كاملاً', '🤲 يديك على الجانبين',
+        ] : [ '🧍 Stand straight facing the camera', '💡 Good, even lighting from the front', '👕 Modest, fitted clothing', '📐 Make sure your full body is visible', '🤲 Arms at your sides',
         ]).map((s) => Padding(
           padding: const EdgeInsets.only(bottom: 5),
-          child: Align(alignment: Alignment.centerRight,
-            child: Text(s, style: const TextStyle(fontFamily: 'Cairo', fontSize: 12, color: Colors.white80, height: 1.4))),
+          child: Align(alignment: Alignment.centerRight, child: Text(s, style: const TextStyle(fontFamily:'Cairo', fontSize: 12, color: Colors.white80, height: 1.4))),
         )),
         if (profile != null) ...[
           const Divider(color: Colors.white24, height: 16),
           Text(
-            isAr
-              ? 'يستخدم AI بياناتك: ${profile.weightKg}كجم / ${profile.heightCm.toInt()}سم / ${profile.age}سنة'
-              : 'AI uses your data: ${profile.weightKg}kg / ${profile.heightCm.toInt()}cm / ${profile.age}yrs',
-            style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: Colors.white60),
+            isAr ?'يستخدم AI بياناتك: ${profile.weightKg}كجم / ${profile.heightCm.toInt()}سم / ${profile.age}سنة' :'AI uses your data: ${profile.weightKg}kg / ${profile.heightCm.toInt()}cm / ${profile.age}yrs', style: const TextStyle(fontFamily:'Cairo', fontSize: 11, color: Colors.white60),
           ),
         ],
       ]),
@@ -321,8 +257,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
           Image.file(_image!, fit: BoxFit.cover),
           if (_state == BodyAnalysisState.analyzing)
             Container(color: Colors.black54, child: Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
-              AnimatedBuilder(animation: _pulse, builder: (_, __) =>
-                Opacity(opacity: _pulse.value, child: const Text('🤖', style: TextStyle(fontSize: 42)))),
+              AnimatedBuilder(animation: _pulse, builder: (_, __) => Opacity(opacity: _pulse.value, child: const Text('🤖', style: TextStyle(fontSize: 42)))),
               const SizedBox(height: 8),
               const CircularProgressIndicator(color: AppColors.barakahGold, strokeWidth: 3),
             ]))),
@@ -343,8 +278,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
         ),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(emoji, style: const TextStyle(fontSize: 22)),
-          const SizedBox(height: 4),
-          Text(label, style: TextStyle(fontFamily: 'Cairo', fontSize: 12, fontWeight: FontWeight.w700, color: color)),
+          const SizedBox(height: 4), Text(label, style: TextStyle(fontFamily:'Cairo', fontSize: 12, fontWeight: FontWeight.w700, color: color)),
         ]),
       ),
     );
@@ -360,18 +294,12 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)],
       ),
       child: Column(children: [
-        AnimatedBuilder(animation: _pulse, builder: (_, __) =>
-          Opacity(opacity: _pulse.value, child: const Text('🧬', style: TextStyle(fontSize: 42)))),
-        const SizedBox(height: 10),
-        Text(isAr ? 'يحلل Claude AI جسمك…' : 'Claude AI is analyzing your body…',
-            style: const TextStyle(fontFamily: 'Cairo', fontSize: 15, fontWeight: FontWeight.w700)),
+        AnimatedBuilder(animation: _pulse, builder: (_, __) => Opacity(opacity: _pulse.value, child: const Text('🧬', style: TextStyle(fontSize: 42)))),
+        const SizedBox(height: 10), Text(isAr ?'يحلل Claude AI جسمك…' : 'Claude AI is analyzing your body…', style: const TextStyle(fontFamily:'Cairo', fontSize: 15, fontWeight: FontWeight.w700)),
         const SizedBox(height: 4),
         Text(
-          isAr
-            ? 'يُقدّر نسبة الدهون • نوع الجسم • التوصيات'
-            : 'Estimating body fat % • Body type • Recommendations',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontFamily: 'Cairo', fontSize: 11,
+          isAr ?'يُقدّر نسبة الدهون • نوع الجسم • التوصيات' :'Estimating body fat % • Body type • Recommendations',
+          textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 11,
             color: isDark ? AppColors.darkMuted : AppColors.lightMuted, height: 1.5),
         ),
         const SizedBox(height: 14),
@@ -398,18 +326,14 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
         padding: const EdgeInsets.all(18),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           // ── Header ──────────────────────────────────────
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(isAr ? '🧬 نتائج التحليل' : '🧬 Analysis Results',
-                style: const TextStyle(fontFamily: 'Cairo', fontSize: 17, fontWeight: FontWeight.w900)),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [ Text(isAr ?'🧬 نتائج التحليل' : '🧬 Analysis Results', style: const TextStyle(fontFamily:'Cairo', fontSize: 17, fontWeight: FontWeight.w900)),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: confPct > 50 ? AppColors.halalGreen.withOpacity(0.1) : AppColors.doubtOrange.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
-                isAr ? 'دقة: $confPct%' : 'Conf: $confPct%',
-                style: TextStyle(fontFamily: 'Cairo', fontSize: 11, fontWeight: FontWeight.w700,
+              child: Text( isAr ?'دقة: $confPct%' : 'Conf: $confPct%', style: TextStyle(fontFamily:'Cairo', fontSize: 11, fontWeight: FontWeight.w700,
                   color: confPct > 50 ? AppColors.halalGreen : AppColors.doubtOrange),
               ),
             ),
@@ -418,19 +342,14 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
 
           // ── Big metrics ──────────────────────────────────
           Row(children: [
-            _bigMetric(
-              '${r.bodyFatPercent.toStringAsFixed(1)}%',
-              isAr ? 'نسبة الدهون' : 'Body Fat %',
+            _bigMetric( '${r.bodyFatPercent.toStringAsFixed(1)}%', isAr ?'نسبة الدهون' : 'Body Fat %',
               bfColor,
             ),
             const SizedBox(width: 12),
-            _bigMetric(
-              '${r.muscleMassKg.toStringAsFixed(1)} kg',
-              isAr ? 'كتلة العضلات' : 'Muscle Mass',
+            _bigMetric( '${r.muscleMassKg.toStringAsFixed(1)} kg', isAr ?'كتلة العضلات' : 'Muscle Mass',
               AppColors.halalGreen,
             ),
-            const SizedBox(width: 12),
-            _bigMetric(btype, isAr ? 'نوع الجسم' : 'Body Type', AppColors.waterBlue, small: true),
+            const SizedBox(width: 12), _bigMetric(btype, isAr ?'نوع الجسم' : 'Body Type', AppColors.waterBlue, small: true),
           ]),
           const SizedBox(height: 16),
 
@@ -439,9 +358,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
           const SizedBox(height: 16),
 
           // ── Posture note ─────────────────────────────────
-          if (postureN.isNotEmpty) ...[
-            Text(isAr ? '🦴 ملاحظات الوضعية:' : '🦴 Posture Notes:',
-                style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 13)),
+          if (postureN.isNotEmpty) ...[ Text(isAr ?'🦴 ملاحظات الوضعية:' : '🦴 Posture Notes:', style: const TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, fontSize: 13)),
             const SizedBox(height: 6),
             Container(
               padding: const EdgeInsets.all(10),
@@ -449,29 +366,23 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
                 color: AppColors.waterBlue.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Text(postureN,
-                  style: TextStyle(fontFamily: 'Cairo', fontSize: 12, color: muted, height: 1.5)),
+              child: Text(postureN, style: TextStyle(fontFamily:'Cairo', fontSize: 12, color: muted, height: 1.5)),
             ),
             const SizedBox(height: 14),
           ],
 
           // ── Recommendations ───────────────────────────────
-          if (recs.isNotEmpty) ...[
-            Text(isAr ? '💡 توصيات مخصصة لك:' : '💡 Personalized Recommendations:',
-                style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 13)),
+          if (recs.isNotEmpty) ...[ Text(isAr ?'💡 توصيات مخصصة لك:' : '💡 Personalized Recommendations:', style: const TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, fontSize: 13)),
             const SizedBox(height: 8),
             ...recs.asMap().entries.map((e) => Padding(
               padding: const EdgeInsets.only(bottom: 7),
               child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Container(
                   width: 22, height: 22,
-                  decoration: BoxDecoration(color: AppColors.barakahGold.withOpacity(0.15), shape: BoxShape.circle),
-                  child: Center(child: Text('${e.key + 1}',
-                      style: const TextStyle(fontFamily: 'Cairo', fontSize: 10, fontWeight: FontWeight.w900, color: AppColors.barakahGold))),
+                  decoration: BoxDecoration(color: AppColors.barakahGold.withOpacity(0.15), shape: BoxShape.circle), child: Center(child: Text('${e.key + 1}', style: const TextStyle(fontFamily:'Cairo', fontSize: 10, fontWeight: FontWeight.w900, color: AppColors.barakahGold))),
                 ),
                 const SizedBox(width: 8),
-                Expanded(child: Text(e.value,
-                    style: TextStyle(fontFamily: 'Cairo', fontSize: 12, color: muted, height: 1.5))),
+                Expanded(child: Text(e.value, style: TextStyle(fontFamily:'Cairo', fontSize: 12, color: muted, height: 1.5))),
               ]),
             )),
             const SizedBox(height: 14),
@@ -485,14 +396,9 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
                 color: AppColors.sunnahGreen.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Column(children: [
-                Text(isAr ? '📊 مقارنة مع حسابات ملفك' : '📊 Comparison with Profile Calculations',
-                    style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 12, color: AppColors.sunnahGreen)),
+              child: Column(children: [ Text(isAr ?'📊 مقارنة مع حسابات ملفك' : '📊 Comparison with Profile Calculations', style: const TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, fontSize: 12, color: AppColors.sunnahGreen)),
                 const SizedBox(height: 8),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                  _compareRow(isAr ? 'صورة' : 'Photo', '${r.bodyFatPercent.toStringAsFixed(1)}%', AppColors.barakahGold),
-                  const Text('vs', style: TextStyle(fontFamily: 'Cairo', color: AppColors.lightMuted, fontSize: 12)),
-                  _compareRow(isAr ? 'حساب' : 'Calc.', '${profile.bodyFatPercent.toStringAsFixed(1)}%', AppColors.sunnahGreen),
+                Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [ _compareRow(isAr ?'صورة' : 'Photo', '${r.bodyFatPercent.toStringAsFixed(1)}%', AppColors.barakahGold), const Text('vs', style: TextStyle(fontFamily: 'Cairo', color: AppColors.lightMuted, fontSize: 12)), _compareRow(isAr ?'حساب' : 'Calc.', '${profile.bodyFatPercent.toStringAsFixed(1)}%', AppColors.sunnahGreen),
                 ]),
               ]),
             ),
@@ -502,10 +408,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
 
           // ── Disclaimer ────────────────────────────────────
           Text(
-            isAr
-              ? '⚠️ تنبيه: هذه النتائج تقديرية بدقة ٦٠-٧٥٪. لا تستخدمها كبديل للقياسات الطبية أو الاستشارة المتخصصة.'
-              : '⚠️ Disclaimer: These results are estimates with 60-75% accuracy. Do not use as a substitute for medical measurements or professional consultation.',
-            style: TextStyle(fontFamily: 'Cairo', fontSize: 9.5, color: muted, height: 1.6),
+            isAr ?'⚠️ تنبيه: هذه النتائج تقديرية بدقة ٦٠-٧٥٪. لا تستخدمها كبديل للقياسات الطبية أو الاستشارة المتخصصة.' :'⚠️ Disclaimer: These results are estimates with 60-75% accuracy. Do not use as a substitute for medical measurements or professional consultation.', style: TextStyle(fontFamily:'Cairo', fontSize: 9.5, color: muted, height: 1.6),
           ),
 
           const SizedBox(height: 14),
@@ -513,9 +416,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
           // ── Retry button ──────────────────────────────────
           SizedBox(width: double.infinity, child: OutlinedButton.icon(
             onPressed: () => setState(() { _image = null; _result = null; _state = BodyAnalysisState.idle; }),
-            icon: const Icon(Icons.refresh, size: 16),
-            label: Text(isAr ? 'تحليل صورة جديدة' : 'Analyze New Photo',
-                style: const TextStyle(fontFamily: 'Cairo')),
+            icon: const Icon(Icons.refresh, size: 16), label: Text(isAr ?'تحليل صورة جديدة' : 'Analyze New Photo', style: const TextStyle(fontFamily:'Cairo')),
             style: OutlinedButton.styleFrom(foregroundColor: AppColors.barakahGold, side: const BorderSide(color: AppColors.barakahGold)),
           )),
         ]),
@@ -532,11 +433,9 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
         border: Border.all(color: color.withOpacity(0.25)),
       ),
       child: Column(children: [
-        Text(value, textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'Cairo', fontSize: small ? 14 : 18, fontWeight: FontWeight.w900, color: color, height: 1.1)),
+        Text(value, textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: small ? 14 : 18, fontWeight: FontWeight.w900, color: color, height: 1.1)),
         const SizedBox(height: 3),
-        Text(label, textAlign: TextAlign.center,
-            style: const TextStyle(fontFamily: 'Cairo', fontSize: 9, color: AppColors.lightMuted)),
+        Text(label, textAlign: TextAlign.center, style: const TextStyle(fontFamily:'Cairo', fontSize: 9, color: AppColors.lightMuted)),
       ]),
     ));
   }
@@ -549,19 +448,12 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
     final bfCol = bf < (isMale ? 14 : 21) ? AppColors.halalGreen
         : bf < (isMale ? 25 : 32) ? AppColors.doubtOrange
         : AppColors.haramRed;
-    final catAr = isMale
-      ? (bf < 6 ? 'أساسي' : bf < 14 ? 'رياضي' : bf < 18 ? 'لياقة' : bf < 25 ? 'متوسط' : 'مرتفع')
-      : (bf < 14 ? 'أساسي' : bf < 21 ? 'رياضية' : bf < 25 ? 'لياقة' : bf < 32 ? 'متوسط' : 'مرتفع');
-    final catEn = isMale
-      ? (bf < 6 ? 'Essential' : bf < 14 ? 'Athletic' : bf < 18 ? 'Fitness' : bf < 25 ? 'Average' : 'Obese')
-      : (bf < 14 ? 'Essential' : bf < 21 ? 'Athletic' : bf < 25 ? 'Fitness' : bf < 32 ? 'Average' : 'Obese');
+    final catAr = isMale ? (bf < 6 ?'أساسي' : bf < 14 ? 'رياضي' : bf < 18 ? 'لياقة' : bf < 25 ? 'متوسط' : 'مرتفع') : (bf < 14 ?'أساسي' : bf < 21 ? 'رياضية' : bf < 25 ? 'لياقة' : bf < 32 ? 'متوسط' : 'مرتفع');
+    final catEn = isMale ? (bf < 6 ?'Essential' : bf < 14 ? 'Athletic' : bf < 18 ? 'Fitness' : bf < 25 ? 'Average' : 'Obese') : (bf < 14 ?'Essential' : bf < 21 ? 'Athletic' : bf < 25 ? 'Fitness' : bf < 32 ? 'Average' : 'Obese');
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(isAr ? 'مقياس الدهون:' : 'Fat Scale:',
-            style: const TextStyle(fontFamily: 'Cairo', fontSize: 12, fontWeight: FontWeight.w700)),
-        Text(isAr ? catAr : catEn,
-            style: TextStyle(fontFamily: 'Cairo', fontSize: 12, fontWeight: FontWeight.w700, color: bfCol)),
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [ Text(isAr ?'مقياس الدهون:' : 'Fat Scale:', style: const TextStyle(fontFamily:'Cairo', fontSize: 12, fontWeight: FontWeight.w700)),
+        Text(isAr ? catAr : catEn, style: TextStyle(fontFamily:'Cairo', fontSize: 12, fontWeight: FontWeight.w700, color: bfCol)),
       ]),
       const SizedBox(height: 6),
       Stack(children: [
@@ -583,9 +475,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
   }
 
   Widget _compareRow(String label, String value, Color color) {
-    return Column(children: [
-      Text(value, style: TextStyle(fontFamily: 'Cairo', fontSize: 15, fontWeight: FontWeight.w900, color: color)),
-      Text(label, style: const TextStyle(fontFamily: 'Cairo', fontSize: 10, color: AppColors.lightMuted)),
+    return Column(children: [ Text(value, style: TextStyle(fontFamily:'Cairo', fontSize: 15, fontWeight: FontWeight.w900, color: color)), Text(label, style: const TextStyle(fontFamily:'Cairo', fontSize: 10, color: AppColors.lightMuted)),
     ]);
   }
 }

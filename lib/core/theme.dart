@@ -31,8 +31,7 @@ class AppColors {
 class AppTheme {
   static ThemeData get lightTheme => ThemeData(
     useMaterial3: true,
-    brightness: Brightness.light,
-    fontFamily: 'Cairo',
+    brightness: Brightness.light, fontFamily:'Cairo',
     colorScheme: ColorScheme.light(
       primary: AppColors.sunnahGreen,
       secondary: AppColors.barakahGold,
@@ -48,8 +47,7 @@ class AppTheme {
       foregroundColor: Colors.white,
       elevation: 0,
       centerTitle: false,
-      titleTextStyle: TextStyle(
-        fontFamily: 'Cairo',
+      titleTextStyle: TextStyle( fontFamily:'Cairo',
         fontSize: 18,
         fontWeight: FontWeight.w700,
         color: Colors.white,
@@ -60,17 +58,14 @@ class AppTheme {
       selectedItemColor: AppColors.sunnahGreen,
       unselectedItemColor: AppColors.lightMuted,
       type: BottomNavigationBarType.fixed,
-      elevation: 0,
-      selectedLabelStyle: TextStyle(fontFamily: 'Cairo', fontSize: 10, fontWeight: FontWeight.w700),
-      unselectedLabelStyle: TextStyle(fontFamily: 'Cairo', fontSize: 10),
+      elevation: 0, selectedLabelStyle: TextStyle(fontFamily:'Cairo', fontSize: 10, fontWeight: FontWeight.w700), unselectedLabelStyle: TextStyle(fontFamily:'Cairo', fontSize: 10),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.sunnahGreen,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        textStyle: const TextStyle(fontFamily: 'Cairo', fontSize: 16, fontWeight: FontWeight.w700),
+        padding: const EdgeInsets.symmetric(vertical: 14), textStyle: const TextStyle(fontFamily:'Cairo', fontSize: 16, fontWeight: FontWeight.w700),
         elevation: 4,
         shadowColor: Color(0x550A6B4A),
       ),
@@ -89,23 +84,16 @@ class AppTheme {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.sunnahGreen, width: 2),
-      ),
-      hintStyle: const TextStyle(fontFamily: 'Cairo', color: AppColors.lightMuted),
+      ), hintStyle: const TextStyle(fontFamily:'Cairo', color: AppColors.lightMuted),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     ),
-    textTheme: const TextTheme(
-      headlineLarge: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w900, color: AppColors.lightText),
-      headlineMedium: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, color: AppColors.lightText),
-      titleLarge: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, color: AppColors.lightText),
-      bodyLarge: TextStyle(fontFamily: 'Cairo', color: AppColors.lightText),
-      bodyMedium: TextStyle(fontFamily: 'Cairo', color: AppColors.lightMuted),
+    textTheme: const TextTheme( headlineLarge: TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w900, color: AppColors.lightText), headlineMedium: TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, color: AppColors.lightText), titleLarge: TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, color: AppColors.lightText), bodyLarge: TextStyle(fontFamily:'Cairo', color: AppColors.lightText), bodyMedium: TextStyle(fontFamily:'Cairo', color: AppColors.lightMuted),
     ),
   );
 
   static ThemeData get darkTheme => ThemeData(
     useMaterial3: true,
-    brightness: Brightness.dark,
-    fontFamily: 'Cairo',
+    brightness: Brightness.dark, fontFamily:'Cairo',
     colorScheme: ColorScheme.dark(
       primary: AppColors.sunnahGreen,
       secondary: AppColors.barakahGold,
@@ -121,8 +109,7 @@ class AppTheme {
       foregroundColor: Colors.white,
       elevation: 0,
       centerTitle: false,
-      titleTextStyle: TextStyle(
-        fontFamily: 'Cairo',
+      titleTextStyle: TextStyle( fontFamily:'Cairo',
         fontSize: 18,
         fontWeight: FontWeight.w700,
         color: Colors.white,
@@ -133,17 +120,14 @@ class AppTheme {
       selectedItemColor: AppColors.sunnahGreen,
       unselectedItemColor: AppColors.darkMuted,
       type: BottomNavigationBarType.fixed,
-      elevation: 0,
-      selectedLabelStyle: TextStyle(fontFamily: 'Cairo', fontSize: 10, fontWeight: FontWeight.w700),
-      unselectedLabelStyle: TextStyle(fontFamily: 'Cairo', fontSize: 10),
+      elevation: 0, selectedLabelStyle: TextStyle(fontFamily:'Cairo', fontSize: 10, fontWeight: FontWeight.w700), unselectedLabelStyle: TextStyle(fontFamily:'Cairo', fontSize: 10),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.sunnahGreen,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        textStyle: const TextStyle(fontFamily: 'Cairo', fontSize: 16, fontWeight: FontWeight.w700),
+        padding: const EdgeInsets.symmetric(vertical: 14), textStyle: const TextStyle(fontFamily:'Cairo', fontSize: 16, fontWeight: FontWeight.w700),
         elevation: 4,
         shadowColor: Color(0x550A6B4A),
       ),
@@ -162,16 +146,10 @@ class AppTheme {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.sunnahGreen, width: 2),
-      ),
-      hintStyle: const TextStyle(fontFamily: 'Cairo', color: AppColors.darkMuted),
+      ), hintStyle: const TextStyle(fontFamily:'Cairo', color: AppColors.darkMuted),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     ),
-    textTheme: const TextTheme(
-      headlineLarge: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w900, color: AppColors.darkText),
-      headlineMedium: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, color: AppColors.darkText),
-      titleLarge: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, color: AppColors.darkText),
-      bodyLarge: TextStyle(fontFamily: 'Cairo', color: AppColors.darkText),
-      bodyMedium: TextStyle(fontFamily: 'Cairo', color: AppColors.darkMuted),
+    textTheme: const TextTheme( headlineLarge: TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w900, color: AppColors.darkText), headlineMedium: TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, color: AppColors.darkText), titleLarge: TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, color: AppColors.darkText), bodyLarge: TextStyle(fontFamily:'Cairo', color: AppColors.darkText), bodyMedium: TextStyle(fontFamily:'Cairo', color: AppColors.darkMuted),
     ),
     dividerColor: AppColors.darkBorder,
   );

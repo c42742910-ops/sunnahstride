@@ -6,8 +6,7 @@ class NotificationService {
   static final _plugin = FlutterLocalNotificationsPlugin();
   static bool _ready = false;
 
-  static Future<void> init() async {
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+  static Future<void> init() async { const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const ios = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
@@ -28,12 +27,9 @@ class NotificationService {
         ?.requestNotificationsPermission();
   }
 
-  static const _channel = AndroidNotificationDetails(
-    'sunnahstride_main', 'SunnahStride',
-    channelDescription: 'SunnahStride reminders',
+  static const _channel = AndroidNotificationDetails( 'sunnahstride_main', 'SunnahStride', channelDescription:'SunnahStride reminders',
     importance: Importance.high,
-    priority: Priority.high,
-    icon: '@mipmap/ic_launcher',
+    priority: Priority.high, icon:'@mipmap/ic_launcher',
   );
 
   // ── Instant notification ─────────────────────────────────
@@ -44,11 +40,8 @@ class NotificationService {
 
   // ── Water reminder (every 2h) ─────────────────────────────
   static Future<void> scheduleWaterReminder({bool isAr = true}) async {
-    if (!_ready) return;
-    final title = isAr ? '💧 وقت الماء!' : '💧 Time to hydrate!';
-    final body  = isAr
-        ? 'اشرب كوبًا من الماء الآن — السنة في الشرب بثلاث جرعات'
-        : 'Drink a glass of water — Sunnah says drink in 3 sips';
+    if (!_ready) return; final title = isAr ?'💧 وقت الماء!' : '💧 Time to hydrate!';
+    final body  = isAr ?'اشرب كوبًا من الماء الآن — السنة في الشرب بثلاث جرعات' :'Drink a glass of water — Sunnah says drink in 3 sips';
     // Schedule for next 8 hours, every 2 hours
     for (int h = 2; h <= 8; h += 2) {
       await _plugin.show(100 + h, title, body, NotificationDetails(android: _channel));
@@ -59,11 +52,8 @@ class NotificationService {
   static Future<void> showWorkoutReminder({bool isAr = true}) async {
     if (!_ready) return;
     await show(
-      200,
-      isAr ? '🏃 وقت التمرين!' : '🏃 Time to work out!',
-      isAr
-          ? 'المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف — مسلم'
-          : '"The strong believer is better & more beloved to Allah" — Muslim',
+      200, isAr ?'🏃 وقت التمرين!' : '🏃 Time to work out!',
+      isAr ?'المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف — مسلم' :'"The strong believer is better & more beloved to Allah" — Muslim',
     );
   }
 
@@ -71,11 +61,8 @@ class NotificationService {
   static Future<void> showMealReminder({bool isAr = true}) async {
     if (!_ready) return;
     await show(
-      300,
-      isAr ? '🌿 تذكير الوجبة' : '🌿 Meal reminder',
-      isAr
-          ? 'لا تنسَ تسجيل وجبتك وتحقق من الحلال'
-          : 'Don\'t forget to log your meal and check halal status',
+      300, isAr ?'🌿 تذكير الوجبة' : '🌿 Meal reminder',
+      isAr ?'لا تنسَ تسجيل وجبتك وتحقق من الحلال' :'Don\'t forget to log your meal and check halal status',
     );
   }
 
@@ -83,11 +70,8 @@ class NotificationService {
   static Future<void> showFastingTip({bool isAr = true}) async {
     if (!_ready) return;
     await show(
-      400,
-      isAr ? '🌙 نصيحة رمضان' : '🌙 Ramadan tip',
-      isAr
-          ? 'تسحّر ولو بشربة ماء — بركة السحور'
-          : 'Have suhoor even if just water — the blessing of suhoor',
+      400, isAr ?'🌙 نصيحة رمضان' : '🌙 Ramadan tip',
+      isAr ?'تسحّر ولو بشربة ماء — بركة السحور' :'Have suhoor even if just water — the blessing of suhoor',
     );
   }
 
