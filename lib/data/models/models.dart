@@ -35,15 +35,26 @@ enum HalalStatus { halal, doubtful, haram, unknown }
 extension HalalStatusExt on HalalStatus {
   String get label {
     switch (this) {
-      case HalalStatus.halal:    return 'حلال ✓'; case HalalStatus.doubtful: return'مشبوه ⚠️'; case HalalStatus.haram:    return'حرام ✕'; case HalalStatus.unknown:  return'غير معروف ?';
+      case HalalStatus.halal:    return 'حلال ✓';
+      case HalalStatus.doubtful: return 'مشبوه ⚠️';
+      case HalalStatus.haram:    return 'حرام ✕';
+      case HalalStatus.unknown:  return 'غير معروف ?';
     }
   }
   String get labelEn {
-    switch (this) { case HalalStatus.halal:    return'Halal ✓'; case HalalStatus.doubtful: return'Doubtful ⚠️'; case HalalStatus.haram:    return'Haram ✕'; case HalalStatus.unknown:  return'Unknown ?';
+    switch (this) {
+      case HalalStatus.halal:    return 'Halal ✓';
+      case HalalStatus.doubtful: return 'Doubtful ⚠️';
+      case HalalStatus.haram:    return 'Haram ✕';
+      case HalalStatus.unknown:  return 'Unknown ?';
     }
   }
   String get emoji {
-    switch (this) { case HalalStatus.halal:    return'✅'; case HalalStatus.doubtful: return'⚠️'; case HalalStatus.haram:    return'❌'; case HalalStatus.unknown:  return'❓';
+    switch (this) {
+      case HalalStatus.halal:    return '✅';
+      case HalalStatus.doubtful: return '⚠️';
+      case HalalStatus.haram:    return '❌';
+      case HalalStatus.unknown:  return '❓';
     }
   }
 }
@@ -78,6 +89,20 @@ class BodyPhotoResult {
     required this.recommendationsAr, required this.recommendationsEn,
     required this.rawAnalysis,
   });
+  factory BodyPhotoResult.fromJson(Map<String, dynamic> j, double weightKg) {
+    final bf = (j['estimatedBodyFatPct'] as num?)?.toDouble() ?? 20.0;
+    final muscle = (j['estimatedMuscleMassKg'] as num?)?.toDouble() ?? weightKg * 0.4;
+    return BodyPhotoResult(
+      bodyFatPercent: bf,
+      muscleMassKg: muscle,
+      leanBodyMassKg: weightKg * (1 - bf / 100),
+      bodyType: j['bodyTypeAr'] as String? ?? 'متوازن',
+      bodyTypeEn: j['bodyType'] as String? ?? 'mesomorph',
+      recommendationsAr: List<String>.from(j['recommendationsAr'] ?? []),
+      recommendationsEn: List<String>.from(j['recommendations'] ?? []),
+      rawAnalysis: j.toString(),
+    );
+  }
 }
 
 // ── Workout Exercise Step ────────────────────────
@@ -107,7 +132,9 @@ class Workout {
     required this.titleAr, required this.titleEn,
     required this.descAr, required this.descEn,
     required this.durationMin,
-    required this.level, required this.levelEn, this.levelColor ='#00A86B', this.gender = 'both', this.category ='general',
+    required this.level, required this.levelEn,
+    this.levelColor = '#00A86B', this.gender = 'both',
+    this.category = 'general',
     this.hadith, this.hadithEn,
     this.steps = const [],
     this.isPremium = false,
@@ -116,102 +143,372 @@ class Workout {
 
 // ── 24 Full Workouts ─────────────────────────────
 const kWorkouts = [
-  Workout( id:'w1', emoji: '🚶', gender: 'both', category: 'walking', isPremium: false, titleAr:'مشي الرسول ﷺ قبل المغرب', titleEn: 'Prophet\'s Evening Walk', descAr:'تمرين خفيف مستوحى من هدي النبي ﷺ', descEn:'Light walk inspired by the Prophet\'s ﷺ guidance', durationMin: 20, level:'مبتدئ', levelEn: 'Beginner', hadith:'كان النبي ﷺ يمشي بخطى متوسطة — البخاري', hadithEn:'The Prophet ﷺ walked at a moderate pace — Al-Bukhari',
-    steps: [ WorkoutStep(nameAr:'إحماء خفيف', nameEn: 'Warm-up', durationSec: 120, instructionAr: 'ابدأ بالمشي ببطء مع التنفس العميق', instructionEn: 'Start walking slowly with deep breathing'), WorkoutStep(nameAr:'مشي معتدل', nameEn: 'Moderate walk', durationSec: 600, instructionAr: 'امش بخطى منتظمة متوسطة السرعة', instructionEn: 'Walk at a steady moderate pace'), WorkoutStep(nameAr:'مشي سريع', nameEn: 'Brisk walk', durationSec: 300, instructionAr: 'زِد سرعتك قليلاً وتنفس بعمق', instructionEn: 'Increase your pace slightly'), WorkoutStep(nameAr:'تهدئة', nameEn: 'Cool down', durationSec: 180, instructionAr: 'عُد للمشي البطيء والتنفس العميق', instructionEn: 'Return to slow walking'),
+  Workout(
+    id: 'w1', emoji: '🚶', gender: 'both', category: 'walking', isPremium: false,
+    titleAr: 'مشي الرسول ﷺ قبل المغرب', titleEn: 'Prophet\'s Evening Walk',
+    descAr: 'تمرين خفيف مستوحى من هدي النبي ﷺ',
+    descEn: 'Light walk inspired by the Prophet\'s ﷺ guidance',
+    durationMin: 20, level: 'مبتدئ', levelEn: 'Beginner',
+    hadith: 'كان النبي ﷺ يمشي بخطى متوسطة — البخاري',
+    hadithEn: 'The Prophet ﷺ walked at a moderate pace — Al-Bukhari',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء خفيف', nameEn: 'Warm-up', durationSec: 120, instructionAr: 'ابدأ بالمشي ببطء مع التنفس العميق', instructionEn: 'Start walking slowly with deep breathing'),
+      WorkoutStep(nameAr: 'مشي معتدل', nameEn: 'Moderate walk', durationSec: 600, instructionAr: 'امش بخطى منتظمة متوسطة السرعة', instructionEn: 'Walk at a steady moderate pace'),
+      WorkoutStep(nameAr: 'مشي سريع', nameEn: 'Brisk walk', durationSec: 300, instructionAr: 'زِد سرعتك قليلاً وتنفس بعمق', instructionEn: 'Increase your pace slightly'),
+      WorkoutStep(nameAr: 'تهدئة', nameEn: 'Cool down', durationSec: 180, instructionAr: 'عُد للمشي البطيء والتنفس العميق', instructionEn: 'Return to slow walking'),
     ],
   ),
-  Workout( id:'w6', emoji: '🌅', gender: 'both', category: 'walking', isPremium: false, titleAr:'مشي الفجر السني', titleEn: 'Fajr Morning Walk', descAr:'استقبل الصبح بخطوات مباركة', descEn:'Start your blessed morning with movement', durationMin: 15, level:'مبتدئ', levelEn: 'Beginner', hadith:'بارك اللهم لأمتي في بكورها — الترمذي', hadithEn:'O Allah bless my nation in its early mornings — Al-Tirmidhi',
-    steps: [ WorkoutStep(nameAr:'إطالة خفيفة', nameEn: 'Light stretch', durationSec: 120, instructionAr: 'مُد ذراعيك للأمام والخلف', instructionEn: 'Stretch arms forward and back'), WorkoutStep(nameAr:'مشي الفجر', nameEn: 'Fajr walk', durationSec: 600, instructionAr: 'امش في الهواء الطلق مع ذكر الله', instructionEn: 'Walk in fresh air while remembering Allah'), WorkoutStep(nameAr:'تنفس عميق', nameEn: 'Deep breathing', durationSec: 180, instructionAr: 'شهيق ٤ ثواني، زفير ٤ ثواني — ٥ مرات', instructionEn: 'Inhale 4s, exhale 4s — repeat 5 times'),
+  Workout(
+    id: 'w6', emoji: '🌅', gender: 'both', category: 'walking', isPremium: false,
+    titleAr: 'مشي الفجر السني', titleEn: 'Fajr Morning Walk',
+    descAr: 'استقبل الصبح بخطوات مباركة',
+    descEn: 'Start your blessed morning with movement',
+    durationMin: 15, level: 'مبتدئ', levelEn: 'Beginner',
+    hadith: 'بارك اللهم لأمتي في بكورها — الترمذي',
+    hadithEn: 'O Allah bless my nation in its early mornings — Al-Tirmidhi',
+    steps: [
+      WorkoutStep(nameAr: 'إطالة خفيفة', nameEn: 'Light stretch', durationSec: 120, instructionAr: 'مُد ذراعيك للأمام والخلف', instructionEn: 'Stretch arms forward and back'),
+      WorkoutStep(nameAr: 'مشي الفجر', nameEn: 'Fajr walk', durationSec: 600, instructionAr: 'امش في الهواء الطلق مع ذكر الله', instructionEn: 'Walk in fresh air while remembering Allah'),
+      WorkoutStep(nameAr: 'تنفس عميق', nameEn: 'Deep breathing', durationSec: 180, instructionAr: 'شهيق ٤ ثواني، زفير ٤ ثواني — ٥ مرات', instructionEn: 'Inhale 4s, exhale 4s — repeat 5 times'),
     ],
   ),
-  Workout( id:'w10', emoji: '👨‍👩‍👧', gender: 'both', category: 'walking', isPremium: false, titleAr:'مشي المساء مع العائلة', titleEn: 'Family Evening Walk', descAr:'صِحة وصِلة رحم في خطوة واحدة', descEn:'Health and family bonding in one step', durationMin: 25, level:'مبتدئ', levelEn: 'Beginner',
-    steps: [ WorkoutStep(nameAr:'انطلاق', nameEn: 'Start', durationSec: 300, instructionAr: 'ابدأ المشي مع عائلتك بخطى مريحة', instructionEn: 'Start walking with your family'), WorkoutStep(nameAr:'منتصف الطريق', nameEn: 'Mid walk', durationSec: 900, instructionAr: 'حافظ على إيقاع منتظم', instructionEn: 'Maintain steady rhythm'), WorkoutStep(nameAr:'عودة', nameEn: 'Return', durationSec: 300, instructionAr: 'أبطئ تدريجياً', instructionEn: 'Slow down gradually'),
+  Workout(
+    id: 'w10', emoji: '👨‍👩‍👧', gender: 'both', category: 'walking', isPremium: false,
+    titleAr: 'مشي المساء مع العائلة', titleEn: 'Family Evening Walk',
+    descAr: 'صِحة وصِلة رحم في خطوة واحدة',
+    descEn: 'Health and family bonding in one step',
+    durationMin: 25, level: 'مبتدئ', levelEn: 'Beginner',
+    steps: [
+      WorkoutStep(nameAr: 'انطلاق', nameEn: 'Start', durationSec: 300, instructionAr: 'ابدأ المشي مع عائلتك بخطى مريحة', instructionEn: 'Start walking with your family'),
+      WorkoutStep(nameAr: 'منتصف الطريق', nameEn: 'Mid walk', durationSec: 900, instructionAr: 'حافظ على إيقاع منتظم', instructionEn: 'Maintain steady rhythm'),
+      WorkoutStep(nameAr: 'عودة', nameEn: 'Return', durationSec: 300, instructionAr: 'أبطئ تدريجياً', instructionEn: 'Slow down gradually'),
     ],
   ),
-  Workout( id:'w2', emoji: '💪', gender: 'brothers', category: 'strength', isPremium: false, titleAr:'تمارين قوة أساسية للإخوة', titleEn: 'Basic Strength — Brothers', descAr:'بناء القوة الأساسية بلا أجهزة', descEn:'Build core strength with no equipment', durationMin: 15, level:'مبتدئ', levelEn: 'Beginner', hadith:'المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف — مسلم', hadithEn:'The strong believer is more beloved to Allah — Muslim',
-    steps: [ WorkoutStep(nameAr:'إحماء', nameEn: 'Warm-up', durationSec: 120), WorkoutStep(nameAr:'ضغط', nameEn: 'Push-ups', reps: 10, instructionAr: 'ضغط كامل مع إبقاء الظهر مستقيماً', instructionEn: 'Full push-up with straight back'), WorkoutStep(nameAr:'قرفصاء', nameEn: 'Squats', reps: 15, instructionAr: 'انزل حتى تصبح ركبتاك زاوية 90 درجة', instructionEn: 'Lower until knees reach 90 degrees'), WorkoutStep(nameAr:'لوح', nameEn: 'Plank', durationSec: 30), WorkoutStep(nameAr:'دفع للأعلى', nameEn: 'Tricep Dips', reps: 10, instructionAr: 'استخدم كرسياً', instructionEn: 'Use a chair'), WorkoutStep(nameAr:'تهدئة', nameEn: 'Cool down', durationSec: 120),
+  Workout(
+    id: 'w2', emoji: '💪', gender: 'brothers', category: 'strength', isPremium: false,
+    titleAr: 'تمارين قوة أساسية للإخوة', titleEn: 'Basic Strength — Brothers',
+    descAr: 'بناء القوة الأساسية بلا أجهزة',
+    descEn: 'Build core strength with no equipment',
+    durationMin: 15, level: 'مبتدئ', levelEn: 'Beginner',
+    hadith: 'المؤمن القوي خير وأحب إلى الله من المؤمن الضعيف — مسلم',
+    hadithEn: 'The strong believer is more beloved to Allah — Muslim',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء', nameEn: 'Warm-up', durationSec: 120),
+      WorkoutStep(nameAr: 'ضغط', nameEn: 'Push-ups', reps: 10, instructionAr: 'ضغط كامل مع إبقاء الظهر مستقيماً', instructionEn: 'Full push-up with straight back'),
+      WorkoutStep(nameAr: 'قرفصاء', nameEn: 'Squats', reps: 15, instructionAr: 'انزل حتى تصبح ركبتاك زاوية 90 درجة', instructionEn: 'Lower until knees reach 90 degrees'),
+      WorkoutStep(nameAr: 'لوح', nameEn: 'Plank', durationSec: 30),
+      WorkoutStep(nameAr: 'دفع للأعلى', nameEn: 'Tricep Dips', reps: 10, instructionAr: 'استخدم كرسياً', instructionEn: 'Use a chair'),
+      WorkoutStep(nameAr: 'تهدئة', nameEn: 'Cool down', durationSec: 120),
     ],
   ),
-  Workout( id:'w8', emoji: '🏋️', gender: 'brothers', category: 'strength', isPremium: false, titleAr:'تقوية الظهر والبطن', titleEn: 'Back & Core Strength', descAr:'يُصلح الوضعية ويُقوّي العمود الفقري', descEn:'Fixes posture and strengthens spine', durationMin: 18, level:'متوسط', levelEn: 'Intermediate', levelColor: '#0A6B4A',
-    steps: [ WorkoutStep(nameAr:'دوران الورك', nameEn: 'Hip circles', durationSec: 60), WorkoutStep(nameAr:'جسر الأرداف', nameEn: 'Glute bridge', reps: 15), WorkoutStep(nameAr:'سباحة على الأرض', nameEn: 'Superman', reps: 12), WorkoutStep(nameAr:'لوح جانبي', nameEn: 'Side plank', durationSec: 30, instructionAr: 'كل جانب', instructionEn: 'Each side'), WorkoutStep(nameAr:'تمرين الطيار', nameEn: 'Bird dog', reps: 10), WorkoutStep(nameAr:'إطالة الظهر', nameEn: 'Cat-cow stretch', durationSec: 60),
+  Workout(
+    id: 'w8', emoji: '🏋️', gender: 'brothers', category: 'strength', isPremium: false,
+    titleAr: 'تقوية الظهر والبطن', titleEn: 'Back & Core Strength',
+    descAr: 'يُصلح الوضعية ويُقوّي العمود الفقري',
+    descEn: 'Fixes posture and strengthens spine',
+    durationMin: 18, level: 'متوسط', levelEn: 'Intermediate', levelColor: '#0A6B4A',
+    steps: [
+      WorkoutStep(nameAr: 'دوران الورك', nameEn: 'Hip circles', durationSec: 60),
+      WorkoutStep(nameAr: 'جسر الأرداف', nameEn: 'Glute bridge', reps: 15),
+      WorkoutStep(nameAr: 'سباحة على الأرض', nameEn: 'Superman', reps: 12),
+      WorkoutStep(nameAr: 'لوح جانبي', nameEn: 'Side plank', durationSec: 30, instructionAr: 'كل جانب', instructionEn: 'Each side'),
+      WorkoutStep(nameAr: 'تمرين الطيار', nameEn: 'Bird dog', reps: 10),
+      WorkoutStep(nameAr: 'إطالة الظهر', nameEn: 'Cat-cow stretch', durationSec: 60),
     ],
   ),
-  Workout( id:'w11', emoji: '🔥', gender: 'brothers', category: 'strength', isPremium: true, titleAr:'تمرين HIIT الإسلامي', titleEn: 'Islamic HIIT', descAr:'تدريب متقطع عالي الكثافة', descEn:'High-intensity interval training', durationMin: 20, level:'متقدم', levelEn: 'Advanced', levelColor: '#C62828',
-    steps: [ WorkoutStep(nameAr:'إحماء', nameEn: 'Warm-up', durationSec: 120), WorkoutStep(nameAr:'قفز القرفصاء', nameEn: 'Jump squats', durationSec: 40), WorkoutStep(nameAr:'راحة', nameEn: 'Rest', durationSec: 20), WorkoutStep(nameAr:'برباوي', nameEn: 'Burpees', durationSec: 40), WorkoutStep(nameAr:'راحة', nameEn: 'Rest', durationSec: 20), WorkoutStep(nameAr:'تسلق الجبل', nameEn: 'Mountain climbers', durationSec: 40), WorkoutStep(nameAr:'راحة', nameEn: 'Rest', durationSec: 20), WorkoutStep(nameAr:'قفز النجمة', nameEn: 'Jumping jacks', durationSec: 40), WorkoutStep(nameAr:'تهدئة', nameEn: 'Cool down', durationSec: 180),
+  Workout(
+    id: 'w11', emoji: '🔥', gender: 'brothers', category: 'strength', isPremium: true,
+    titleAr: 'تمرين HIIT الإسلامي', titleEn: 'Islamic HIIT',
+    descAr: 'تدريب متقطع عالي الكثافة',
+    descEn: 'High-intensity interval training',
+    durationMin: 20, level: 'متقدم', levelEn: 'Advanced', levelColor: '#C62828',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء', nameEn: 'Warm-up', durationSec: 120),
+      WorkoutStep(nameAr: 'قفز القرفصاء', nameEn: 'Jump squats', durationSec: 40),
+      WorkoutStep(nameAr: 'راحة', nameEn: 'Rest', durationSec: 20),
+      WorkoutStep(nameAr: 'برباوي', nameEn: 'Burpees', durationSec: 40),
+      WorkoutStep(nameAr: 'راحة', nameEn: 'Rest', durationSec: 20),
+      WorkoutStep(nameAr: 'تسلق الجبل', nameEn: 'Mountain climbers', durationSec: 40),
+      WorkoutStep(nameAr: 'راحة', nameEn: 'Rest', durationSec: 20),
+      WorkoutStep(nameAr: 'قفز النجمة', nameEn: 'Jumping jacks', durationSec: 40),
+      WorkoutStep(nameAr: 'تهدئة', nameEn: 'Cool down', durationSec: 180),
     ],
   ),
-  Workout( id:'w3', emoji: '🧘', gender: 'sisters', category: 'gentle', isPremium: false, titleAr:'تمارين لطيفة للأخوات', titleEn: 'Gentle Exercises — Sisters', descAr:'تمارين محتشمة لطيفة', descEn:'Modest gentle exercises', durationMin: 12, level:'مبتدئ', levelEn: 'Beginner', hadith:'إن لجسدك عليك حقاً — البخاري', hadithEn:'Your body has a right over you — Al-Bukhari',
-    steps: [ WorkoutStep(nameAr:'إحماء', nameEn: 'Warm-up', durationSec: 120), WorkoutStep(nameAr:'قرفصاء', nameEn: 'Squats', reps: 12), WorkoutStep(nameAr:'دفع الحائط', nameEn: 'Wall push-ups', reps: 10), WorkoutStep(nameAr:'رفع الساق الجانبي', nameEn: 'Side leg raise', reps: 15, instructionAr: '١٥ لكل ساق', instructionEn: '15 each leg'), WorkoutStep(nameAr:'إطالة', nameEn: 'Stretching', durationSec: 180),
+  Workout(
+    id: 'w3', emoji: '🧘', gender: 'sisters', category: 'gentle', isPremium: false,
+    titleAr: 'تمارين لطيفة للأخوات', titleEn: 'Gentle Exercises — Sisters',
+    descAr: 'تمارين محتشمة لطيفة',
+    descEn: 'Modest gentle exercises',
+    durationMin: 12, level: 'مبتدئ', levelEn: 'Beginner',
+    hadith: 'إن لجسدك عليك حقاً — البخاري',
+    hadithEn: 'Your body has a right over you — Al-Bukhari',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء', nameEn: 'Warm-up', durationSec: 120),
+      WorkoutStep(nameAr: 'قرفصاء', nameEn: 'Squats', reps: 12),
+      WorkoutStep(nameAr: 'دفع الحائط', nameEn: 'Wall push-ups', reps: 10),
+      WorkoutStep(nameAr: 'رفع الساق الجانبي', nameEn: 'Side leg raise', reps: 15, instructionAr: '١٥ لكل ساق', instructionEn: '15 each leg'),
+      WorkoutStep(nameAr: 'إطالة', nameEn: 'Stretching', durationSec: 180),
     ],
   ),
-  Workout( id:'w5', emoji: '🌸', gender: 'sisters', category: 'postnatal', isPremium: false, titleAr:'تعافي ما بعد الولادة', titleEn: 'Postnatal Recovery', descAr:'تمارين آمنة بعد الولادة — استشيري طبيبك أولاً', descEn:'Safe post-birth exercises — consult your doctor first', durationMin: 10, level:'ما بعد الولادة', levelEn: 'Postnatal', levelColor: '#F57C00',
-    steps: [ WorkoutStep(nameAr:'تنفس الحجاب الحاجز', nameEn: 'Diaphragm breathing', durationSec: 180), WorkoutStep(nameAr:'تمارين قاع الحوض', nameEn: 'Pelvic floor', reps: 10, instructionAr: 'شدّي لمدة ٥ ثواني', instructionEn: 'Hold 5 seconds'), WorkoutStep(nameAr:'إطالة لطيفة', nameEn: 'Gentle stretch', durationSec: 240),
+  Workout(
+    id: 'w5', emoji: '🌸', gender: 'sisters', category: 'postnatal', isPremium: false,
+    titleAr: 'تعافي ما بعد الولادة', titleEn: 'Postnatal Recovery',
+    descAr: 'تمارين آمنة بعد الولادة — استشيري طبيبك أولاً',
+    descEn: 'Safe post-birth exercises — consult your doctor first',
+    durationMin: 10, level: 'ما بعد الولادة', levelEn: 'Postnatal', levelColor: '#F57C00',
+    steps: [
+      WorkoutStep(nameAr: 'تنفس الحجاب الحاجز', nameEn: 'Diaphragm breathing', durationSec: 180),
+      WorkoutStep(nameAr: 'تمارين قاع الحوض', nameEn: 'Pelvic floor', reps: 10, instructionAr: 'شدّي لمدة ٥ ثواني', instructionEn: 'Hold 5 seconds'),
+      WorkoutStep(nameAr: 'إطالة لطيفة', nameEn: 'Gentle stretch', durationSec: 240),
     ],
   ),
-  Workout( id:'w9', emoji: '🤸', gender: 'sisters', category: 'gentle', isPremium: false, titleAr:'إطالة وتمدد للأخوات', titleEn: 'Flexibility — Sisters', descAr:'مرونة كاملة للجسم', descEn:'Full body flexibility', durationMin: 15, level:'مبتدئ', levelEn: 'Beginner',
-    steps: [ WorkoutStep(nameAr:'إطالة العنق', nameEn: 'Neck stretch', durationSec: 120), WorkoutStep(nameAr:'إطالة الكتف', nameEn: 'Shoulder stretch', durationSec: 120), WorkoutStep(nameAr:'إطالة الظهر', nameEn: 'Back stretch', durationSec: 180), WorkoutStep(nameAr:'إطالة الفخذ', nameEn: 'Hip flexor', durationSec: 120, instructionAr: '٦٠ ثانية كل جانب', instructionEn: '60s each side'), WorkoutStep(nameAr:'استرخاء نهائي', nameEn: 'Final relaxation', durationSec: 180),
+  Workout(
+    id: 'w9', emoji: '🤸', gender: 'sisters', category: 'gentle', isPremium: false,
+    titleAr: 'إطالة وتمدد للأخوات', titleEn: 'Flexibility — Sisters',
+    descAr: 'مرونة كاملة للجسم',
+    descEn: 'Full body flexibility',
+    durationMin: 15, level: 'مبتدئ', levelEn: 'Beginner',
+    steps: [
+      WorkoutStep(nameAr: 'إطالة العنق', nameEn: 'Neck stretch', durationSec: 120),
+      WorkoutStep(nameAr: 'إطالة الكتف', nameEn: 'Shoulder stretch', durationSec: 120),
+      WorkoutStep(nameAr: 'إطالة الظهر', nameEn: 'Back stretch', durationSec: 180),
+      WorkoutStep(nameAr: 'إطالة الفخذ', nameEn: 'Hip flexor', durationSec: 120, instructionAr: '٦٠ ثانية كل جانب', instructionEn: '60s each side'),
+      WorkoutStep(nameAr: 'استرخاء نهائي', nameEn: 'Final relaxation', durationSec: 180),
     ],
   ),
-  Workout( id:'w4', emoji: '🌙', gender: 'both', category: 'ramadan', isPremium: false, titleAr:'تمرين رمضان الخفيف', titleEn: 'Light Ramadan Workout', descAr:'مصمم خصيصاً للصائم — خفيف وفعّال', descEn:'Specially designed for fasting — light & effective', durationMin: 10, level:'رمضان', levelEn: 'Ramadan', levelColor: '#D4A017', hadith:'الصيام والقرآن يشفعان للعبد — أحمد', hadithEn:'Fasting and Quran intercede for the servant — Ahmad',
-    steps: [ WorkoutStep(nameAr:'تنفس رمضاني', nameEn: 'Ramadan breathing', durationSec: 120), WorkoutStep(nameAr:'إطالة الجسم', nameEn: 'Full body stretch', durationSec: 180), WorkoutStep(nameAr:'مشي خفيف', nameEn: 'Light walk', durationSec: 240), WorkoutStep(nameAr:'قرفصاء خفيفة', nameEn: 'Light squats', reps: 8),
+  Workout(
+    id: 'w4', emoji: '🌙', gender: 'both', category: 'ramadan', isPremium: false,
+    titleAr: 'تمرين رمضان الخفيف', titleEn: 'Light Ramadan Workout',
+    descAr: 'مصمم خصيصاً للصائم — خفيف وفعّال',
+    descEn: 'Specially designed for fasting — light & effective',
+    durationMin: 10, level: 'رمضان', levelEn: 'Ramadan', levelColor: '#D4A017',
+    hadith: 'الصيام والقرآن يشفعان للعبد — أحمد',
+    hadithEn: 'Fasting and Quran intercede for the servant — Ahmad',
+    steps: [
+      WorkoutStep(nameAr: 'تنفس رمضاني', nameEn: 'Ramadan breathing', durationSec: 120),
+      WorkoutStep(nameAr: 'إطالة الجسم', nameEn: 'Full body stretch', durationSec: 180),
+      WorkoutStep(nameAr: 'مشي خفيف', nameEn: 'Light walk', durationSec: 240),
+      WorkoutStep(nameAr: 'قرفصاء خفيفة', nameEn: 'Light squats', reps: 8),
     ],
   ),
-  Workout( id:'w14', emoji: '🤲', gender: 'both', category: 'ramadan', isPremium: false, titleAr:'تمرين بعد الإفطار', titleEn: 'Post-Iftar Workout', descAr:'بعد الإفطار بساعتين — أمثل وقت في رمضان', descEn:'Two hours after iftar — optimal Ramadan workout time', durationMin: 20, level:'رمضان', levelEn: 'Ramadan', levelColor: '#D4A017',
-    steps: [ WorkoutStep(nameAr:'إحماء', nameEn: 'Warm-up', durationSec: 120), WorkoutStep(nameAr:'مشي سريع', nameEn: 'Brisk walk', durationSec: 600), WorkoutStep(nameAr:'ضغط', nameEn: 'Push-ups', reps: 12), WorkoutStep(nameAr:'قرفصاء', nameEn: 'Squats', reps: 15), WorkoutStep(nameAr:'تهدئة', nameEn: 'Cool down', durationSec: 120),
+  Workout(
+    id: 'w14', emoji: '🤲', gender: 'both', category: 'ramadan', isPremium: false,
+    titleAr: 'تمرين بعد الإفطار', titleEn: 'Post-Iftar Workout',
+    descAr: 'بعد الإفطار بساعتين — أمثل وقت في رمضان',
+    descEn: 'Two hours after iftar — optimal Ramadan workout time',
+    durationMin: 20, level: 'رمضان', levelEn: 'Ramadan', levelColor: '#D4A017',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء', nameEn: 'Warm-up', durationSec: 120),
+      WorkoutStep(nameAr: 'مشي سريع', nameEn: 'Brisk walk', durationSec: 600),
+      WorkoutStep(nameAr: 'ضغط', nameEn: 'Push-ups', reps: 12),
+      WorkoutStep(nameAr: 'قرفصاء', nameEn: 'Squats', reps: 15),
+      WorkoutStep(nameAr: 'تهدئة', nameEn: 'Cool down', durationSec: 120),
     ],
   ),
-  Workout( id:'w7', emoji: '🫁', gender: 'both', category: 'breathing', isPremium: false, titleAr:'تمارين التنفس والاسترخاء', titleEn: 'Breathing & Relaxation', descAr:'يُخفف التوتر ويُصفي الذهن', descEn:'Reduces stress and clears mind', durationMin: 8, level:'مبتدئ', levelEn: 'Beginner', hadith:'ألا بذكر الله تطمئن القلوب — الرعد: ٢٨', hadithEn:'Verily in the remembrance of Allah do hearts find rest — Quran 13:28',
-    steps: [ WorkoutStep(nameAr:'تنفس صندوقي', nameEn: 'Box breathing', durationSec: 120, instructionAr: 'شهيق ٤، ثبات ٤، زفير ٤، ثبات ٤', instructionEn: 'Inhale 4, hold 4, exhale 4, hold 4'), WorkoutStep(nameAr:'تنفس البطن', nameEn: 'Belly breathing', durationSec: 120), WorkoutStep(nameAr:'استرخاء العضلات', nameEn: 'Muscle relaxation', durationSec: 180), WorkoutStep(nameAr:'ذكر وتأمل', nameEn: 'Dhikr & reflection', durationSec: 60, instructionAr: 'سبحان الله، الحمد لله، الله أكبر', instructionEn: 'SubhanAllah, Alhamdulillah, Allahu Akbar'),
+  Workout(
+    id: 'w7', emoji: '🫁', gender: 'both', category: 'breathing', isPremium: false,
+    titleAr: 'تمارين التنفس والاسترخاء', titleEn: 'Breathing & Relaxation',
+    descAr: 'يُخفف التوتر ويُصفي الذهن',
+    descEn: 'Reduces stress and clears mind',
+    durationMin: 8, level: 'مبتدئ', levelEn: 'Beginner',
+    hadith: 'ألا بذكر الله تطمئن القلوب — الرعد: ٢٨',
+    hadithEn: 'Verily in the remembrance of Allah do hearts find rest — Quran 13:28',
+    steps: [
+      WorkoutStep(nameAr: 'تنفس صندوقي', nameEn: 'Box breathing', durationSec: 120, instructionAr: 'شهيق ٤، ثبات ٤، زفير ٤، ثبات ٤', instructionEn: 'Inhale 4, hold 4, exhale 4, hold 4'),
+      WorkoutStep(nameAr: 'تنفس البطن', nameEn: 'Belly breathing', durationSec: 120),
+      WorkoutStep(nameAr: 'استرخاء العضلات', nameEn: 'Muscle relaxation', durationSec: 180),
+      WorkoutStep(nameAr: 'ذكر وتأمل', nameEn: 'Dhikr & reflection', durationSec: 60, instructionAr: 'سبحان الله، الحمد لله، الله أكبر', instructionEn: 'SubhanAllah, Alhamdulillah, Allahu Akbar'),
     ],
   ),
-  Workout( id:'w22', emoji: '💤', gender: 'both', category: 'breathing', isPremium: false, titleAr:'نوم أفضل — تمرين قبل النوم', titleEn: 'Better Sleep Routine', descAr:'استعدّ للنوم المثالي — مثبت علمياً', descEn:'Prepare for optimal sleep — proven effective', durationMin: 10, level:'مبتدئ', levelEn: 'Beginner',
-    steps: [ WorkoutStep(nameAr:'إطالة الظهر', nameEn: 'Back stretch', durationSec: 120), WorkoutStep(nameAr:'إطالة الورك', nameEn: 'Hip stretch', durationSec: 120), WorkoutStep(nameAr:'استرخاء تدريجي', nameEn: 'Progressive relaxation', durationSec: 180), WorkoutStep(nameAr:'تنفس النوم', nameEn: 'Sleep breathing', durationSec: 180, instructionAr: 'شهيق ٤ ثواني، زفير ٦ ثواني', instructionEn: 'Inhale 4s, exhale 6s'),
+  Workout(
+    id: 'w22', emoji: '💤', gender: 'both', category: 'breathing', isPremium: false,
+    titleAr: 'نوم أفضل — تمرين قبل النوم', titleEn: 'Better Sleep Routine',
+    descAr: 'استعدّ للنوم المثالي — مثبت علمياً',
+    descEn: 'Prepare for optimal sleep — proven effective',
+    durationMin: 10, level: 'مبتدئ', levelEn: 'Beginner',
+    steps: [
+      WorkoutStep(nameAr: 'إطالة الظهر', nameEn: 'Back stretch', durationSec: 120),
+      WorkoutStep(nameAr: 'إطالة الورك', nameEn: 'Hip stretch', durationSec: 120),
+      WorkoutStep(nameAr: 'استرخاء تدريجي', nameEn: 'Progressive relaxation', durationSec: 180),
+      WorkoutStep(nameAr: 'تنفس النوم', nameEn: 'Sleep breathing', durationSec: 180, instructionAr: 'شهيق ٤ ثواني، زفير ٦ ثواني', instructionEn: 'Inhale 4s, exhale 6s'),
     ],
   ),
-  Workout( id:'w21', emoji: '🕌', gender: 'both', category: 'general', isPremium: false, titleAr:'تمارين بين الصلوات', titleEn: 'Between Prayers Exercises', descAr:'استغلال الأوقات بين الصلوات', descEn:'Use the time between prayers to move', durationMin: 5, level:'مبتدئ', levelEn: 'Beginner',
-    steps: [ WorkoutStep(nameAr:'إطالة خفيفة', nameEn: 'Quick stretch', durationSec: 60), WorkoutStep(nameAr:'قرفصاء', nameEn: 'Squats', reps: 10), WorkoutStep(nameAr:'ضغط سريع', nameEn: 'Quick push-ups', reps: 8), WorkoutStep(nameAr:'تنفس ذكر', nameEn: 'Dhikr breathing', durationSec: 60),
+  Workout(
+    id: 'w21', emoji: '🕌', gender: 'both', category: 'general', isPremium: false,
+    titleAr: 'تمارين بين الصلوات', titleEn: 'Between Prayers Exercises',
+    descAr: 'استغلال الأوقات بين الصلوات',
+    descEn: 'Use the time between prayers to move',
+    durationMin: 5, level: 'مبتدئ', levelEn: 'Beginner',
+    steps: [
+      WorkoutStep(nameAr: 'إطالة خفيفة', nameEn: 'Quick stretch', durationSec: 60),
+      WorkoutStep(nameAr: 'قرفصاء', nameEn: 'Squats', reps: 10),
+      WorkoutStep(nameAr: 'ضغط سريع', nameEn: 'Quick push-ups', reps: 8),
+      WorkoutStep(nameAr: 'تنفس ذكر', nameEn: 'Dhikr breathing', durationSec: 60),
     ],
   ),
-  Workout( id:'w20', emoji: '👧', gender: 'both', category: 'family', isPremium: false, titleAr:'ألعاب نشطة مع الأطفال', titleEn: 'Active Games with Kids', descAr:'تمرين ممتع مع أبنائك', descEn:'Fun exercise with your children', durationMin: 20, level:'مبتدئ', levelEn: 'Beginner',
-    steps: [ WorkoutStep(nameAr:'ركض تتبع', nameEn: 'Tag game', durationSec: 300), WorkoutStep(nameAr:'قفز مع الأطفال', nameEn: 'Jump together', durationSec: 120), WorkoutStep(nameAr:'مشي القرد', nameEn: 'Bear walk', durationSec: 60), WorkoutStep(nameAr:'تهدئة معاً', nameEn: 'Cool down together', durationSec: 180),
+  Workout(
+    id: 'w20', emoji: '👧', gender: 'both', category: 'family', isPremium: false,
+    titleAr: 'ألعاب نشطة مع الأطفال', titleEn: 'Active Games with Kids',
+    descAr: 'تمرين ممتع مع أبنائك',
+    descEn: 'Fun exercise with your children',
+    durationMin: 20, level: 'مبتدئ', levelEn: 'Beginner',
+    steps: [
+      WorkoutStep(nameAr: 'ركض تتبع', nameEn: 'Tag game', durationSec: 300),
+      WorkoutStep(nameAr: 'قفز مع الأطفال', nameEn: 'Jump together', durationSec: 120),
+      WorkoutStep(nameAr: 'مشي القرد', nameEn: 'Bear walk', durationSec: 60),
+      WorkoutStep(nameAr: 'تهدئة معاً', nameEn: 'Cool down together', durationSec: 180),
     ],
   ),
-  Workout( id:'w17', emoji: '🚴', gender: 'both', category: 'cardio', isPremium: true, titleAr:'كارديو متقدم', titleEn: 'Advanced Cardio', descAr:'لياقة قلبية عالية — حرق فعّال', descEn:'High cardiovascular fitness — effective fat burn', durationMin: 30, level:'متقدم', levelEn: 'Advanced', levelColor: '#C62828',
-    steps: [ WorkoutStep(nameAr:'إحماء', nameEn: 'Warm-up', durationSec: 180), WorkoutStep(nameAr:'جري محلي', nameEn: 'Jogging in place', durationSec: 300), WorkoutStep(nameAr:'برباوي', nameEn: 'Burpees', reps: 15), WorkoutStep(nameAr:'راحة', nameEn: 'Rest', durationSec: 60), WorkoutStep(nameAr:'جري محلي', nameEn: 'Jogging in place', durationSec: 300), WorkoutStep(nameAr:'تهدئة', nameEn: 'Cool down', durationSec: 180),
+  Workout(
+    id: 'w17', emoji: '🚴', gender: 'both', category: 'cardio', isPremium: true,
+    titleAr: 'كارديو متقدم', titleEn: 'Advanced Cardio',
+    descAr: 'لياقة قلبية عالية — حرق فعّال',
+    descEn: 'High cardiovascular fitness — effective fat burn',
+    durationMin: 30, level: 'متقدم', levelEn: 'Advanced', levelColor: '#C62828',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء', nameEn: 'Warm-up', durationSec: 180),
+      WorkoutStep(nameAr: 'جري محلي', nameEn: 'Jogging in place', durationSec: 300),
+      WorkoutStep(nameAr: 'برباوي', nameEn: 'Burpees', reps: 15),
+      WorkoutStep(nameAr: 'راحة', nameEn: 'Rest', durationSec: 60),
+      WorkoutStep(nameAr: 'جري محلي', nameEn: 'Jogging in place', durationSec: 300),
+      WorkoutStep(nameAr: 'تهدئة', nameEn: 'Cool down', durationSec: 180),
     ],
   ),
-  Workout( id:'w18', emoji: '🧗', gender: 'brothers', category: 'strength', isPremium: true, titleAr:'تمرين القوة الكاملة', titleEn: 'Full Body Strength', descAr:'تمرين شامل لكل عضلات الجسم', descEn:'Complete workout for all muscle groups', durationMin: 35, level:'متقدم', levelEn: 'Advanced', levelColor: '#C62828',
-    steps: [ WorkoutStep(nameAr:'إحماء ديناميكي', nameEn: 'Dynamic warm-up', durationSec: 180), WorkoutStep(nameAr:'ضغط متعدد الزوايا', nameEn: 'Multi-angle push-ups', reps: 20), WorkoutStep(nameAr:'قرفصاء عميقة', nameEn: 'Deep squats', reps: 20), WorkoutStep(nameAr:'طعنة بخطوة', nameEn: 'Walking lunges', reps: 16), WorkoutStep(nameAr:'لوح', nameEn: 'Plank', durationSec: 60), WorkoutStep(nameAr:'دفع الكتف', nameEn: 'Pike push-ups', reps: 12), WorkoutStep(nameAr:'إطالة', nameEn: 'Stretch', durationSec: 180),
+  Workout(
+    id: 'w18', emoji: '🧗', gender: 'brothers', category: 'strength', isPremium: true,
+    titleAr: 'تمرين القوة الكاملة', titleEn: 'Full Body Strength',
+    descAr: 'تمرين شامل لكل عضلات الجسم',
+    descEn: 'Complete workout for all muscle groups',
+    durationMin: 35, level: 'متقدم', levelEn: 'Advanced', levelColor: '#C62828',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء ديناميكي', nameEn: 'Dynamic warm-up', durationSec: 180),
+      WorkoutStep(nameAr: 'ضغط متعدد الزوايا', nameEn: 'Multi-angle push-ups', reps: 20),
+      WorkoutStep(nameAr: 'قرفصاء عميقة', nameEn: 'Deep squats', reps: 20),
+      WorkoutStep(nameAr: 'طعنة بخطوة', nameEn: 'Walking lunges', reps: 16),
+      WorkoutStep(nameAr: 'لوح', nameEn: 'Plank', durationSec: 60),
+      WorkoutStep(nameAr: 'دفع الكتف', nameEn: 'Pike push-ups', reps: 12),
+      WorkoutStep(nameAr: 'إطالة', nameEn: 'Stretch', durationSec: 180),
     ],
   ),
-  Workout( id:'w19', emoji: '🌟', gender: 'sisters', category: 'strength', isPremium: true, titleAr:'تناسق الأخوات المتقدم', titleEn: 'Sisters Advanced Toning', descAr:'رشاقة وتناسق من الرأس للقدم — محتشم كامل', descEn:'Full body toning head to toe — fully modest', durationMin: 30, level:'متوسط', levelEn: 'Intermediate', levelColor: '#7C4DFF',
-    steps: [ WorkoutStep(nameAr:'إحماء', nameEn: 'Warm-up', durationSec: 120), WorkoutStep(nameAr:'ضغط معدّل', nameEn: 'Modified push-ups', reps: 12), WorkoutStep(nameAr:'رفع الساق الخلفي', nameEn: 'Donkey kicks', reps: 15, instructionAr: 'كل جانب', instructionEn: 'Each side'), WorkoutStep(nameAr:'قرفصاء الحائط', nameEn: 'Wall sit', durationSec: 45), WorkoutStep(nameAr:'جسر الأرداف', nameEn: 'Glute bridge', reps: 15), WorkoutStep(nameAr:'تهدئة', nameEn: 'Cool down', durationSec: 180),
+  Workout(
+    id: 'w19', emoji: '🌟', gender: 'sisters', category: 'strength', isPremium: true,
+    titleAr: 'تناسق الأخوات المتقدم', titleEn: 'Sisters Advanced Toning',
+    descAr: 'رشاقة وتناسق من الرأس للقدم — محتشم كامل',
+    descEn: 'Full body toning head to toe — fully modest',
+    durationMin: 30, level: 'متوسط', levelEn: 'Intermediate', levelColor: '#7C4DFF',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء', nameEn: 'Warm-up', durationSec: 120),
+      WorkoutStep(nameAr: 'ضغط معدّل', nameEn: 'Modified push-ups', reps: 12),
+      WorkoutStep(nameAr: 'رفع الساق الخلفي', nameEn: 'Donkey kicks', reps: 15, instructionAr: 'كل جانب', instructionEn: 'Each side'),
+      WorkoutStep(nameAr: 'قرفصاء الحائط', nameEn: 'Wall sit', durationSec: 45),
+      WorkoutStep(nameAr: 'جسر الأرداف', nameEn: 'Glute bridge', reps: 15),
+      WorkoutStep(nameAr: 'تهدئة', nameEn: 'Cool down', durationSec: 180),
     ],
   ),
-  Workout( id:'w12', emoji: '🦵', gender: 'brothers', category: 'strength', isPremium: true, titleAr:'تمرين الساقين المتكامل', titleEn: 'Complete Leg Day', descAr:'تقوية الساقين بالكامل بلا أجهزة', descEn:'Full leg workout with no equipment', durationMin: 25, level:'متوسط', levelEn: 'Intermediate', levelColor: '#0A6B4A',
-    steps: [ WorkoutStep(nameAr:'إحماء الساق', nameEn: 'Leg warm-up', durationSec: 120), WorkoutStep(nameAr:'قرفصاء واسعة', nameEn: 'Wide squat', reps: 15), WorkoutStep(nameAr:'طعنة أمامية', nameEn: 'Forward lunge', reps: 10, instructionAr: '١٠ لكل ساق', instructionEn: '10 each leg'), WorkoutStep(nameAr:'رفع الكعب', nameEn: 'Calf raises', reps: 20), WorkoutStep(nameAr:'قفز القرفصاء', nameEn: 'Jump squats', reps: 10), WorkoutStep(nameAr:'إطالة الساق', nameEn: 'Leg stretch', durationSec: 120),
+  Workout(
+    id: 'w12', emoji: '🦵', gender: 'brothers', category: 'strength', isPremium: true,
+    titleAr: 'تمرين الساقين المتكامل', titleEn: 'Complete Leg Day',
+    descAr: 'تقوية الساقين بالكامل بلا أجهزة',
+    descEn: 'Full leg workout with no equipment',
+    durationMin: 25, level: 'متوسط', levelEn: 'Intermediate', levelColor: '#0A6B4A',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء الساق', nameEn: 'Leg warm-up', durationSec: 120),
+      WorkoutStep(nameAr: 'قرفصاء واسعة', nameEn: 'Wide squat', reps: 15),
+      WorkoutStep(nameAr: 'طعنة أمامية', nameEn: 'Forward lunge', reps: 10, instructionAr: '١٠ لكل ساق', instructionEn: '10 each leg'),
+      WorkoutStep(nameAr: 'رفع الكعب', nameEn: 'Calf raises', reps: 20),
+      WorkoutStep(nameAr: 'قفز القرفصاء', nameEn: 'Jump squats', reps: 10),
+      WorkoutStep(nameAr: 'إطالة الساق', nameEn: 'Leg stretch', durationSec: 120),
     ],
   ),
-  Workout( id:'w23', emoji: '🌊', gender: 'both', category: 'cardio', isPremium: true, titleAr:'كارديو المنزل ٣٠ دقيقة', titleEn: '30-Min Home Cardio', descAr:'حرق الدهون في المنزل بدون أجهزة', descEn:'Effective fat burning at home with no equipment', durationMin: 30, level:'متوسط', levelEn: 'Intermediate', levelColor: '#0A6B4A',
-    steps: [ WorkoutStep(nameAr:'إحماء', nameEn: 'Warm-up', durationSec: 180), WorkoutStep(nameAr:'مجموعة ١: قفز', nameEn: 'Set 1: Jumping', durationSec: 180), WorkoutStep(nameAr:'راحة', nameEn: 'Rest', durationSec: 30), WorkoutStep(nameAr:'مجموعة ٢: عدو', nameEn: 'Set 2: Sprint in place', durationSec: 180), WorkoutStep(nameAr:'راحة', nameEn: 'Rest', durationSec: 30), WorkoutStep(nameAr:'مجموعة ٣: برباوي', nameEn: 'Set 3: Burpees', durationSec: 180), WorkoutStep(nameAr:'تهدئة', nameEn: 'Cool down', durationSec: 180),
+  Workout(
+    id: 'w23', emoji: '🌊', gender: 'both', category: 'cardio', isPremium: true,
+    titleAr: 'كارديو المنزل ٣٠ دقيقة', titleEn: '30-Min Home Cardio',
+    descAr: 'حرق الدهون في المنزل بدون أجهزة',
+    descEn: 'Effective fat burning at home with no equipment',
+    durationMin: 30, level: 'متوسط', levelEn: 'Intermediate', levelColor: '#0A6B4A',
+    steps: [
+      WorkoutStep(nameAr: 'إحماء', nameEn: 'Warm-up', durationSec: 180),
+      WorkoutStep(nameAr: 'مجموعة ١: قفز', nameEn: 'Set 1: Jumping', durationSec: 180),
+      WorkoutStep(nameAr: 'راحة', nameEn: 'Rest', durationSec: 30),
+      WorkoutStep(nameAr: 'مجموعة ٢: عدو', nameEn: 'Set 2: Sprint in place', durationSec: 180),
+      WorkoutStep(nameAr: 'راحة', nameEn: 'Rest', durationSec: 30),
+      WorkoutStep(nameAr: 'مجموعة ٣: برباوي', nameEn: 'Set 3: Burpees', durationSec: 180),
+      WorkoutStep(nameAr: 'تهدئة', nameEn: 'Cool down', durationSec: 180),
     ],
   ),
-  Workout( id:'w13', emoji: '🧘‍♀️', gender: 'sisters', category: 'strength', isPremium: true, titleAr:'تقوية المنطقة الوسطى للأخوات', titleEn: 'Core Strength — Sisters', descAr:'تمارين البطن والخصر بطريقة محتشمة', descEn:'Core exercises modest and safe', durationMin: 18, level:'متوسط', levelEn: 'Intermediate', levelColor: '#D4A017',
-    steps: [ WorkoutStep(nameAr:'لوح', nameEn: 'Plank', durationSec: 30), WorkoutStep(nameAr:'لفات البطن', nameEn: 'Crunches', reps: 15), WorkoutStep(nameAr:'رفع الساقين', nameEn: 'Leg raises', reps: 10), WorkoutStep(nameAr:'جسر الأرداف', nameEn: 'Glute bridge', reps: 15), WorkoutStep(nameAr:'لوح جانبي', nameEn: 'Side plank', durationSec: 25, instructionAr: 'كل جانب', instructionEn: 'Each side'), WorkoutStep(nameAr:'تهدئة', nameEn: 'Cool down', durationSec: 120),
+  Workout(
+    id: 'w13', emoji: '🧘‍♀️', gender: 'sisters', category: 'strength', isPremium: true,
+    titleAr: 'تقوية المنطقة الوسطى للأخوات', titleEn: 'Core Strength — Sisters',
+    descAr: 'تمارين البطن والخصر بطريقة محتشمة',
+    descEn: 'Core exercises modest and safe',
+    durationMin: 18, level: 'متوسط', levelEn: 'Intermediate', levelColor: '#D4A017',
+    steps: [
+      WorkoutStep(nameAr: 'لوح', nameEn: 'Plank', durationSec: 30),
+      WorkoutStep(nameAr: 'لفات البطن', nameEn: 'Crunches', reps: 15),
+      WorkoutStep(nameAr: 'رفع الساقين', nameEn: 'Leg raises', reps: 10),
+      WorkoutStep(nameAr: 'جسر الأرداف', nameEn: 'Glute bridge', reps: 15),
+      WorkoutStep(nameAr: 'لوح جانبي', nameEn: 'Side plank', durationSec: 25, instructionAr: 'كل جانب', instructionEn: 'Each side'),
+      WorkoutStep(nameAr: 'تهدئة', nameEn: 'Cool down', durationSec: 120),
     ],
   ),
-  Workout( id:'w16', emoji: '🧠', gender: 'both', category: 'breathing', isPremium: false, titleAr:'تمرين الذهن الصافي', titleEn: 'Clear Mind Practice', descAr:'للمذاكرة والعمل — يُحسّن التركيز', descEn:'For studying and work — improves focus', durationMin: 12, level:'مبتدئ', levelEn: 'Beginner',
-    steps: [ WorkoutStep(nameAr:'مشي قصير', nameEn: 'Short walk', durationSec: 180), WorkoutStep(nameAr:'تنفس 4-7-8', nameEn: '4-7-8 breathing', durationSec: 180, instructionAr: 'شهيق ٤، ثبات ٧، زفير ٨', instructionEn: 'Inhale 4, hold 7, exhale 8'), WorkoutStep(nameAr:'استرخاء الوجه', nameEn: 'Face relaxation', durationSec: 120),
+  Workout(
+    id: 'w16', emoji: '🧠', gender: 'both', category: 'breathing', isPremium: false,
+    titleAr: 'تمرين الذهن الصافي', titleEn: 'Clear Mind Practice',
+    descAr: 'للمذاكرة والعمل — يُحسّن التركيز',
+    descEn: 'For studying and work — improves focus',
+    durationMin: 12, level: 'مبتدئ', levelEn: 'Beginner',
+    steps: [
+      WorkoutStep(nameAr: 'مشي قصير', nameEn: 'Short walk', durationSec: 180),
+      WorkoutStep(nameAr: 'تنفس 4-7-8', nameEn: '4-7-8 breathing', durationSec: 180, instructionAr: 'شهيق ٤، ثبات ٧، زفير ٨', instructionEn: 'Inhale 4, hold 7, exhale 8'),
+      WorkoutStep(nameAr: 'استرخاء الوجه', nameEn: 'Face relaxation', durationSec: 120),
     ],
   ),
-  Workout( id:'w15', emoji: '✨', gender: 'both', category: 'ramadan', isPremium: false, titleAr:'تمرين السحور', titleEn: 'Suhoor Workout', descAr:'حرّك جسمك قبل السحور', descEn:'Move before suhoor — boosts metabolism', durationMin: 8, level:'رمضان', levelEn: 'Ramadan', levelColor: '#D4A017',
-    steps: [ WorkoutStep(nameAr:'إطالة الصباح', nameEn: 'Morning stretch', durationSec: 180), WorkoutStep(nameAr:'تنفس عميق', nameEn: 'Deep breathing', durationSec: 120), WorkoutStep(nameAr:'مشي خفيف', nameEn: 'Light walk', durationSec: 180),
+  Workout(
+    id: 'w15', emoji: '✨', gender: 'both', category: 'ramadan', isPremium: false,
+    titleAr: 'تمرين السحور', titleEn: 'Suhoor Workout',
+    descAr: 'حرّك جسمك قبل السحور',
+    descEn: 'Move before suhoor — boosts metabolism',
+    durationMin: 8, level: 'رمضان', levelEn: 'Ramadan', levelColor: '#D4A017',
+    steps: [
+      WorkoutStep(nameAr: 'إطالة الصباح', nameEn: 'Morning stretch', durationSec: 180),
+      WorkoutStep(nameAr: 'تنفس عميق', nameEn: 'Deep breathing', durationSec: 120),
+      WorkoutStep(nameAr: 'مشي خفيف', nameEn: 'Light walk', durationSec: 180),
     ],
   ),
 ];
 
 // ── Daily Hadiths — 30 rotating ─────────────────
-const kDailyHadiths = [ {'ar': 'إن الله طيب لا يقبل إلا طيباً — مسلم',         'en': 'Allah is pure and accepts only what is pure — Muslim'}, {'ar': 'المؤمن القوي خير من المؤمن الضعيف — مسلم',      'en': 'The strong believer is better than the weak — Muslim'}, {'ar': 'إن لجسدك عليك حقاً — البخاري',                  'en': 'Your body has a right over you — Al-Bukhari'}, {'ar': 'الطهور شطر الإيمان — مسلم',                      'en': 'Cleanliness is half of faith — Muslim'}, {'ar': 'بارك الله لأمتي في بكورها — الترمذي',            'en': 'Allah blesses my nation in its early mornings — Al-Tirmidhi'}, {'ar': 'لا ضرر ولا ضرار — ابن ماجه',                    'en': 'Do not cause harm or reciprocate harm — Ibn Majah'}, {'ar': 'أحب الأعمال إلى الله أدومها وإن قل — متفق عليه', 'en': 'The most beloved deeds are the most consistent — Agreed upon'}, {'ar': 'إذا أكل أحدكم فليأكل بيمينه — مسلم',            'en': 'When you eat, eat with your right hand — Muslim'}, {'ar': 'كلوا واشربوا ولا تسرفوا — الأعراف: ٣١',          'en': 'Eat and drink but do not waste — Quran 7:31'}, {'ar': 'نعمتان مغبون فيهما: الصحة والفراغ — البخاري',    'en': 'Two blessings often neglected: health and free time — Bukhari'}, {'ar': 'ما ملأ ابن آدم وعاءً شراً من بطنه — الترمذي',    'en': 'No vessel filled is worse than the belly — Al-Tirmidhi'}, {'ar': 'الصيام جنة — البخاري',                           'en': 'Fasting is a shield — Al-Bukhari'}, {'ar': 'تسحروا فإن في السحور بركة — البخاري',            'en': 'Eat suhoor, there is blessing in it — Al-Bukhari'}, {'ar': 'أفضل الصدقة أن تصدق وأنت صحيح — البخاري',       'en': 'Best charity is when you are healthy — Al-Bukhari'}, {'ar': 'من أصبح منكم آمناً في سربه — الترمذي',           'en': 'He who wakes secure in his household — Al-Tirmidhi'}, {'ar': 'ألا بذكر الله تطمئن القلوب — الرعد: ٢٨',         'en': 'In remembrance of Allah do hearts find rest — 13:28'}, {'ar': 'يسروا ولا تعسروا وبشروا ولا تنفروا — متفق عليه',  'en': 'Make things easy, not difficult — Agreed upon'}, {'ar': 'خير الناس أنفعهم للناس — الطبراني',              'en': 'The best people are those most beneficial — Al-Tabarani'}, {'ar': 'البر حسن الخلق — مسلم',                          'en': 'Righteousness is good character — Muslim'}, {'ar': 'لا تحقرن من المعروف شيئاً — مسلم',               'en': 'Do not belittle any act of kindness — Muslim'}, {'ar': 'السواك مطهرة للفم مرضاة للرب — النسائي',          'en': 'Siwak purifies the mouth and pleases the Lord — Al-Nasa\'i'}, {'ar': 'من لا يشكر الناس لا يشكر الله — الترمذي',        'en': 'Whoever does not thank people does not thank Allah — Tirmidhi'}, {'ar': 'إن الله يحب إذا عمل أحدكم عملاً أن يتقنه — البيهقي', 'en': 'Allah loves when you do work with excellence — Al-Bayhaqi'}, {'ar': 'عليك بالصدق فإن الصدق يهدي إلى البر — البخاري',  'en': 'Be truthful, for truth leads to righteousness — Bukhari'}, {'ar': 'التواضع لا يزيد العبد إلا رفعة — الطبراني',       'en': 'Humility only raises a person\'s rank — Al-Tabarani'}, {'ar': 'من كان يؤمن بالله واليوم الآخر فليقل خيراً أو ليصمت — متفق عليه', 'en': 'Speak good or remain silent — Agreed upon'}, {'ar': 'الدعاء هو العبادة — الترمذي',                    'en': 'Du\'a is the essence of worship — Al-Tirmidhi'}, {'ar': 'ما يزال البلاء بالمؤمن حتى يلقى الله وما عليه خطيئة — الترمذي', 'en': 'Trials continue for the believer until he meets Allah sinless — Tirmidhi'}, {'ar': 'اللهم اجعلنا ممن إذا أُعطي شكر وإذا ابتُلي صبر — أحمد', 'en': 'O Allah make us those who are thankful when given — Ahmad'}, {'ar': 'إن مع العسر يسراً — الشرح: ٦',                   'en': 'With every hardship comes ease — Quran 94:6'},
+const kDailyHadiths = [
+  {'ar': 'إن الله طيب لا يقبل إلا طيباً — مسلم',         'en': 'Allah is pure and accepts only what is pure — Muslim'},
+  {'ar': 'المؤمن القوي خير من المؤمن الضعيف — مسلم',      'en': 'The strong believer is better than the weak — Muslim'},
+  {'ar': 'إن لجسدك عليك حقاً — البخاري',                  'en': 'Your body has a right over you — Al-Bukhari'},
+  {'ar': 'الطهور شطر الإيمان — مسلم',                      'en': 'Cleanliness is half of faith — Muslim'},
+  {'ar': 'بارك الله لأمتي في بكورها — الترمذي',            'en': 'Allah blesses my nation in its early mornings — Al-Tirmidhi'},
+  {'ar': 'لا ضرر ولا ضرار — ابن ماجه',                    'en': 'Do not cause harm or reciprocate harm — Ibn Majah'},
+  {'ar': 'أحب الأعمال إلى الله أدومها وإن قل — متفق عليه', 'en': 'The most beloved deeds are the most consistent — Agreed upon'},
+  {'ar': 'إذا أكل أحدكم فليأكل بيمينه — مسلم',            'en': 'When you eat, eat with your right hand — Muslim'},
+  {'ar': 'كلوا واشربوا ولا تسرفوا — الأعراف: ٣١',          'en': 'Eat and drink but do not waste — Quran 7:31'},
+  {'ar': 'نعمتان مغبون فيهما: الصحة والفراغ — البخاري',    'en': 'Two blessings often neglected: health and free time — Bukhari'},
+  {'ar': 'ما ملأ ابن آدم وعاءً شراً من بطنه — الترمذي',    'en': 'No vessel filled is worse than the belly — Al-Tirmidhi'},
+  {'ar': 'الصيام جنة — البخاري',                           'en': 'Fasting is a shield — Al-Bukhari'},
+  {'ar': 'تسحروا فإن في السحور بركة — البخاري',            'en': 'Eat suhoor, there is blessing in it — Al-Bukhari'},
+  {'ar': 'أفضل الصدقة أن تصدق وأنت صحيح — البخاري',       'en': 'Best charity is when you are healthy — Al-Bukhari'},
+  {'ar': 'من أصبح منكم آمناً في سربه — الترمذي',           'en': 'He who wakes secure in his household — Al-Tirmidhi'},
+  {'ar': 'ألا بذكر الله تطمئن القلوب — الرعد: ٢٨',         'en': 'In remembrance of Allah do hearts find rest — 13:28'},
+  {'ar': 'يسروا ولا تعسروا وبشروا ولا تنفروا — متفق عليه',  'en': 'Make things easy, not difficult — Agreed upon'},
+  {'ar': 'خير الناس أنفعهم للناس — الطبراني',              'en': 'The best people are those most beneficial — Al-Tabarani'},
+  {'ar': 'البر حسن الخلق — مسلم',                          'en': 'Righteousness is good character — Muslim'},
+  {'ar': 'لا تحقرن من المعروف شيئاً — مسلم',               'en': 'Do not belittle any act of kindness — Muslim'},
+  {'ar': 'السواك مطهرة للفم مرضاة للرب — النسائي',          'en': 'Siwak purifies the mouth and pleases the Lord — Al-Nasa\'i'},
+  {'ar': 'من لا يشكر الناس لا يشكر الله — الترمذي',        'en': 'Whoever does not thank people does not thank Allah — Tirmidhi'},
+  {'ar': 'إن الله يحب إذا عمل أحدكم عملاً أن يتقنه — البيهقي', 'en': 'Allah loves when you do work with excellence — Al-Bayhaqi'},
+  {'ar': 'عليك بالصدق فإن الصدق يهدي إلى البر — البخاري',  'en': 'Be truthful, for truth leads to righteousness — Bukhari'},
+  {'ar': 'التواضع لا يزيد العبد إلا رفعة — الطبراني',       'en': 'Humility only raises a person\'s rank — Al-Tabarani'},
+  {'ar': 'من كان يؤمن بالله واليوم الآخر فليقل خيراً أو ليصمت — متفق عليه', 'en': 'Speak good or remain silent — Agreed upon'},
+  {'ar': 'الدعاء هو العبادة — الترمذي',                    'en': 'Du\'a is the essence of worship — Al-Tirmidhi'},
+  {'ar': 'ما يزال البلاء بالمؤمن حتى يلقى الله وما عليه خطيئة — الترمذي', 'en': 'Trials continue for the believer until he meets Allah sinless — Tirmidhi'},
+  {'ar': 'اللهم اجعلنا ممن إذا أُعطي شكر وإذا ابتُلي صبر — أحمد', 'en': 'O Allah make us those who are thankful when given — Ahmad'},
+  {'ar': 'إن مع العسر يسراً — الشرح: ٦',                   'en': 'With every hardship comes ease — Quran 94:6'},
 ];
 
 // ── Recipe ─────────────────────────────────────
@@ -228,13 +525,37 @@ class Recipe {
   });
 }
 
-const kRecipes = [ Recipe(id: 1, nameAr:'شوربة العدس السنية', timeMins: 25, costEGP: 18, kcal: 175,
-    proteinG: 11, carbsG: 28, fatG: 3, sunnahIngredients: ['زيت زيتون', 'كمون'], ingredients: ['عدس أحمر ١ كوب', 'بصلة كبيرة', 'ثوم ٣ فصوص', 'كمون', 'زيت زيتون'], steps: ['أضف العدس والبصل والثوم مع ١ لتر ماء.', 'اغلِ ثم خفف النار ٢٠ دقيقة.', 'اخلط وأضف الكمون وزيت الزيتون.']), Recipe(id: 2, nameAr:'سلطة التمر والجوز', timeMins: 10, costEGP: 35, kcal: 210,
-    proteinG: 4, carbsG: 32, fatG: 9, sunnahIngredients: ['تمر', 'عسل'], ingredients: ['تمر مجفف ٦ حبات', 'جوز مفروم ٢٥ج', 'خس', 'عسل', 'ليمون'], steps: ['قطّع التمر والجوز.', 'اخلط مع الخس.', 'أضف عصير الليمون والعسل.']), Recipe(id: 3, nameAr:'بيض مقلي بزيت الزيتون', timeMins: 8, costEGP: 12, kcal: 165,
-    proteinG: 12, carbsG: 1, fatG: 12, sunnahIngredients: ['زيت زيتون'], ingredients: ['بيضتان', 'زيت زيتون بكر', 'ملح وكمون'], steps: ['سخن زيت الزيتون.', 'أضف البيض واطهُه.', 'رشّ الكمون والملح.']), Recipe(id: 4, nameAr:'عصيدة الشوفان بالتمر والعسل', timeMins: 10, costEGP: 22, kcal: 280,
-    proteinG: 8, carbsG: 52, fatG: 5, sunnahIngredients: ['تمر', 'عسل'], ingredients: ['شوفان ١ كوب', 'حليب ٢٠٠مل', 'تمر ٣ حبات', 'عسل', 'قرفة'], steps: ['اطبخ الشوفان مع الحليب.', 'أضف التمر والقرفة.', 'قدّم وأضف العسل.']), Recipe(id: 5, nameAr:'شراب الحبة السوداء والعسل', timeMins: 3, costEGP: 8, kcal: 90,
-    proteinG: 1, carbsG: 14, fatG: 2, sunnahIngredients: ['حبة سوداء', 'عسل'], ingredients: ['حبة سوداء مطحونة', 'عسل طبيعي', 'ماء فاتر'], steps: ['سخن الماء لدرجة فاترة.', 'أضف الحبة السوداء والعسل.', 'اشربه صباحاً على الريق.']), Recipe(id: 6, nameAr:'دجاج مشوي بالثوم والليمون', timeMins: 35, costEGP: 85, kcal: 285,
-    proteinG: 38, carbsG: 4, fatG: 12, sunnahIngredients: ['زيت زيتون'], ingredients: ['صدر دجاج حلال', 'ثوم', 'ليمون', 'زيت زيتون', 'كمون'], steps: ['تبّل الدجاج بالمكونات.', 'اترك ٣٠ دقيقة.', 'اشوِه ٦-٧ دقائق كل جانب.']),
+const kRecipes = [
+  Recipe(id: 1, nameAr: 'شوربة العدس السنية', timeMins: 25, costEGP: 18, kcal: 175,
+    proteinG: 11, carbsG: 28, fatG: 3,
+    sunnahIngredients: ['زيت زيتون', 'كمون'],
+    ingredients: ['عدس أحمر ١ كوب', 'بصلة كبيرة', 'ثوم ٣ فصوص', 'كمون', 'زيت زيتون'],
+    steps: ['أضف العدس والبصل والثوم مع ١ لتر ماء.', 'اغلِ ثم خفف النار ٢٠ دقيقة.', 'اخلط وأضف الكمون وزيت الزيتون.']),
+  Recipe(id: 2, nameAr: 'سلطة التمر والجوز', timeMins: 10, costEGP: 35, kcal: 210,
+    proteinG: 4, carbsG: 32, fatG: 9,
+    sunnahIngredients: ['تمر', 'عسل'],
+    ingredients: ['تمر مجفف ٦ حبات', 'جوز مفروم ٢٥ج', 'خس', 'عسل', 'ليمون'],
+    steps: ['قطّع التمر والجوز.', 'اخلط مع الخس.', 'أضف عصير الليمون والعسل.']),
+  Recipe(id: 3, nameAr: 'بيض مقلي بزيت الزيتون', timeMins: 8, costEGP: 12, kcal: 165,
+    proteinG: 12, carbsG: 1, fatG: 12,
+    sunnahIngredients: ['زيت زيتون'],
+    ingredients: ['بيضتان', 'زيت زيتون بكر', 'ملح وكمون'],
+    steps: ['سخن زيت الزيتون.', 'أضف البيض واطهُه.', 'رشّ الكمون والملح.']),
+  Recipe(id: 4, nameAr: 'عصيدة الشوفان بالتمر والعسل', timeMins: 10, costEGP: 22, kcal: 280,
+    proteinG: 8, carbsG: 52, fatG: 5,
+    sunnahIngredients: ['تمر', 'عسل'],
+    ingredients: ['شوفان ١ كوب', 'حليب ٢٠٠مل', 'تمر ٣ حبات', 'عسل', 'قرفة'],
+    steps: ['اطبخ الشوفان مع الحليب.', 'أضف التمر والقرفة.', 'قدّم وأضف العسل.']),
+  Recipe(id: 5, nameAr: 'شراب الحبة السوداء والعسل', timeMins: 3, costEGP: 8, kcal: 90,
+    proteinG: 1, carbsG: 14, fatG: 2,
+    sunnahIngredients: ['حبة سوداء', 'عسل'],
+    ingredients: ['حبة سوداء مطحونة', 'عسل طبيعي', 'ماء فاتر'],
+    steps: ['سخن الماء لدرجة فاترة.', 'أضف الحبة السوداء والعسل.', 'اشربه صباحاً على الريق.']),
+  Recipe(id: 6, nameAr: 'دجاج مشوي بالثوم والليمون', timeMins: 35, costEGP: 85, kcal: 285,
+    proteinG: 38, carbsG: 4, fatG: 12,
+    sunnahIngredients: ['زيت زيتون'],
+    ingredients: ['صدر دجاج حلال', 'ثوم', 'ليمون', 'زيت زيتون', 'كمون'],
+    steps: ['تبّل الدجاج بالمكونات.', 'اترك ٣٠ دقيقة.', 'اشوِه ٦-٧ دقائق كل جانب.']),
 ];
 
 // ── Health Article ──────────────────────────────
@@ -247,7 +568,37 @@ class HealthArticle {
   });
 }
 
-const kHealthArticles = [ HealthArticle(id:'h1', icon:'💧', colorValue:0xFF2196F3, title:'الماء — شفاء كل شيء', summary:'احتياج الجسم اليومي وفوائد الإماهة', body:'يتكون جسمك من 60% ماء. كل خلية تحتاج الماء للعمل.\n\nالاحتياج اليومي:\n• رجال: 3.7 لتر\n• نساء: 2.7 لتر\n\nعلامات الجفاف:\n• لون البول داكن\n• صداع وتعب\n\nمن السنة: اشربوا في ثلاث جرعات وسمّوا الله.'), HealthArticle(id:'h2', icon:'😴', colorValue:0xFF7C4DFF, title:'النوم — رحمة ربانية', summary:'كيف يُشفي النوم الجسم والعقل', body:'النوم ليس سلبياً — الجسم يعمل بنشاط:\n\n• إصلاح الخلايا\n• تعزيز الذاكرة\n• تنظيف الدماغ\n• تقوية المناعة\n\nالاحتياج: 7-9 ساعات.\n\nمن السنة: النوم المبكر والاستيقاظ للفجر يوافق الساعة البيولوجية تماماً.'), HealthArticle(id:'h3', icon:'❤️', colorValue:0xFFE53935, title:'صحة القلب — حياة أطول', summary:'أرقام يجب أن تعرفها عن قلبك', body:'الأرقام الصحية:\n• ضغط الدم: أقل من 120/80\n• نبض الراحة: 60-100\n• الكوليسترول: أقل من 200 ملجم/دل\n\nالوقاية:\n• المشي يخفض الضغط 5-8 نقاط\n• الصيام يحسن حساسية الأنسولين'), HealthArticle(id:'h4', icon:'🧠', colorValue:0xFF00ACC1, title:'صحة الدماغ والذاكرة', summary:'غذاء وعادات تقوي عقلك', body:'أطعمة تقوي الدماغ من السنة:\n• العسل: مضاد أكسدة\n• زيت الزيتون: يقلل الالتهاب\n• التمر: يرفع الجلوكوز طبيعياً\n\nعادات مثبتة:\n• النوم الكافي\n• التمرين 30 دقيقة يومياً\n• قراءة القرآن الكريم'), HealthArticle(id:'h5', icon:'🦴', colorValue:0xFFFF7043, title:'العظام والمفاصل', summary:'تقوية الهيكل العظمي', body:'ذروة كثافة العظام في الـ 30!\n\nمصادر الكالسيوم:\n• حليب ومنتجات الألبان\n• السمسم والطحينة\n• الخضروات الورقية\n\nفيتامين D:\nأشعة الشمس 20 دقيقة يومياً.'), HealthArticle(id:'h6', icon:'🫁', colorValue:0xFF4CAF50, title:'الجهاز الهضمي', summary:'صحة الأمعاء = صحة الجسم كله', body:'95% من السيروتونين يُنتج في الأمعاء!\n\nأطعمة تقوي الأمعاء:\n• الألياف: شعير، عدس\n• البروبيوتيك: زبادي طبيعي\n• الزنجبيل والكمون\n\nالصيام المتقطع يُجدد بطانة الأمعاء!'), HealthArticle(id:'h7', icon:'🧘', colorValue:0xFF9C27B0, title:'الصحة النفسية', summary:'كيف تحمي عقلك وروحك', body:'تقنيات علمية مثبتة:\n• التنفس العميق: 4 شهيق، 4 زفير\n• المشي 20 دقيقة يخفض الكورتيزول 21٪\n\nمن الإسلام:\n• الذكر والتسبيح\n• الصلاة: تنفس + حركة + تأمل'), HealthArticle(id:'h8', icon:'⚖️', colorValue:0xFFFF5722, title:'الوزن ومؤشر كتلة الجسم', summary:'احسب وزنك المثالي', body:'BMI = الوزن ÷ الطول²\n\n• أقل من 18.5 = نقص وزن\n• 18.5-24.9 = وزن مثالي ✓\n• 25-29.9 = زيادة وزن\n• 30+ = سمنة\n\nالصيام المتقطع يقلل الوزن 3-8% خلال 8 أسابيع.'), HealthArticle(id:'h9', icon:'💊', colorValue:0xFF009688, title:'المكملات والفيتامينات', summary:'ما تحتاجه فعلاً', body:'الأهم:\n• فيتامين D3: 2000-4000 وحدة\n• أوميجا 3: 1-2 جرام\n• مغنيسيوم: 300-400 ملجم\n\nمن السنة:\n• الحبة السوداء: فيها شفاء\n• العسل الطبيعي: مضاد جرثومي'), HealthArticle(id:'h10', icon:'🩸', colorValue:0xFFF44336, title:'فحوصات سنوية أساسية', summary:'دليل الفحوصات الدورية', body:'الوقاية خير من العلاج!\n\nكل سنة فوق 18:\n✓ صورة دم كاملة CBC\n✓ سكر صيام\n✓ دهنيات الدم\n✓ فيتامين D و B12\n✓ ضغط الدم'),
+const kHealthArticles = [
+  HealthArticle(id:'h1', icon:'💧', colorValue:0xFF2196F3, title:'الماء — شفاء كل شيء',
+    summary:'احتياج الجسم اليومي وفوائد الإماهة',
+    body:'يتكون جسمك من 60% ماء. كل خلية تحتاج الماء للعمل.\n\nالاحتياج اليومي:\n• رجال: 3.7 لتر\n• نساء: 2.7 لتر\n\nعلامات الجفاف:\n• لون البول داكن\n• صداع وتعب\n\nمن السنة: اشربوا في ثلاث جرعات وسمّوا الله.'),
+  HealthArticle(id:'h2', icon:'😴', colorValue:0xFF7C4DFF, title:'النوم — رحمة ربانية',
+    summary:'كيف يُشفي النوم الجسم والعقل',
+    body:'النوم ليس سلبياً — الجسم يعمل بنشاط:\n\n• إصلاح الخلايا\n• تعزيز الذاكرة\n• تنظيف الدماغ\n• تقوية المناعة\n\nالاحتياج: 7-9 ساعات.\n\nمن السنة: النوم المبكر والاستيقاظ للفجر يوافق الساعة البيولوجية تماماً.'),
+  HealthArticle(id:'h3', icon:'❤️', colorValue:0xFFE53935, title:'صحة القلب — حياة أطول',
+    summary:'أرقام يجب أن تعرفها عن قلبك',
+    body:'الأرقام الصحية:\n• ضغط الدم: أقل من 120/80\n• نبض الراحة: 60-100\n• الكوليسترول: أقل من 200 ملجم/دل\n\nالوقاية:\n• المشي يخفض الضغط 5-8 نقاط\n• الصيام يحسن حساسية الأنسولين'),
+  HealthArticle(id:'h4', icon:'🧠', colorValue:0xFF00ACC1, title:'صحة الدماغ والذاكرة',
+    summary:'غذاء وعادات تقوي عقلك',
+    body:'أطعمة تقوي الدماغ من السنة:\n• العسل: مضاد أكسدة\n• زيت الزيتون: يقلل الالتهاب\n• التمر: يرفع الجلوكوز طبيعياً\n\nعادات مثبتة:\n• النوم الكافي\n• التمرين 30 دقيقة يومياً\n• قراءة القرآن الكريم'),
+  HealthArticle(id:'h5', icon:'🦴', colorValue:0xFFFF7043, title:'العظام والمفاصل',
+    summary:'تقوية الهيكل العظمي',
+    body:'ذروة كثافة العظام في الـ 30!\n\nمصادر الكالسيوم:\n• حليب ومنتجات الألبان\n• السمسم والطحينة\n• الخضروات الورقية\n\nفيتامين D:\nأشعة الشمس 20 دقيقة يومياً.'),
+  HealthArticle(id:'h6', icon:'🫁', colorValue:0xFF4CAF50, title:'الجهاز الهضمي',
+    summary:'صحة الأمعاء = صحة الجسم كله',
+    body:'95% من السيروتونين يُنتج في الأمعاء!\n\nأطعمة تقوي الأمعاء:\n• الألياف: شعير، عدس\n• البروبيوتيك: زبادي طبيعي\n• الزنجبيل والكمون\n\nالصيام المتقطع يُجدد بطانة الأمعاء!'),
+  HealthArticle(id:'h7', icon:'🧘', colorValue:0xFF9C27B0, title:'الصحة النفسية',
+    summary:'كيف تحمي عقلك وروحك',
+    body:'تقنيات علمية مثبتة:\n• التنفس العميق: 4 شهيق، 4 زفير\n• المشي 20 دقيقة يخفض الكورتيزول 21٪\n\nمن الإسلام:\n• الذكر والتسبيح\n• الصلاة: تنفس + حركة + تأمل'),
+  HealthArticle(id:'h8', icon:'⚖️', colorValue:0xFFFF5722, title:'الوزن ومؤشر كتلة الجسم',
+    summary:'احسب وزنك المثالي',
+    body:'BMI = الوزن ÷ الطول²\n\n• أقل من 18.5 = نقص وزن\n• 18.5-24.9 = وزن مثالي ✓\n• 25-29.9 = زيادة وزن\n• 30+ = سمنة\n\nالصيام المتقطع يقلل الوزن 3-8% خلال 8 أسابيع.'),
+  HealthArticle(id:'h9', icon:'💊', colorValue:0xFF009688, title:'المكملات والفيتامينات',
+    summary:'ما تحتاجه فعلاً',
+    body:'الأهم:\n• فيتامين D3: 2000-4000 وحدة\n• أوميجا 3: 1-2 جرام\n• مغنيسيوم: 300-400 ملجم\n\nمن السنة:\n• الحبة السوداء: فيها شفاء\n• العسل الطبيعي: مضاد جرثومي'),
+  HealthArticle(id:'h10', icon:'🩸', colorValue:0xFFF44336, title:'فحوصات سنوية أساسية',
+    summary:'دليل الفحوصات الدورية',
+    body:'الوقاية خير من العلاج!\n\nكل سنة فوق 18:\n✓ صورة دم كاملة CBC\n✓ سكر صيام\n✓ دهنيات الدم\n✓ فيتامين D و B12\n✓ ضغط الدم'),
 ];
 
 // ── Quick Food — 50 items with full macros ───────
@@ -263,18 +614,73 @@ class QuickFood {
 }
 
 const kQuickFoods = [
-  // Sunnah foods QuickFood(name:'تمر (١ حبة)',        nameEn: 'Date (1 piece)',         kcal: 23,  proteinG: 0.2, carbsG: 6,   fatG: 0.0), QuickFood(name:'عسل (١ ملعقة)',       nameEn: 'Honey (1 tbsp)',         kcal: 64,  proteinG: 0.1, carbsG: 17,  fatG: 0.0), QuickFood(name:'زيت زيتون (١ ملعقة)', nameEn: 'Olive oil (1 tbsp)',     kcal: 119, proteinG: 0.0, carbsG: 0,   fatG: 14.0), QuickFood(name:'حبة سوداء (١ م.ص)',  nameEn: 'Black seed (1 tsp)',     kcal: 16,  proteinG: 0.8, carbsG: 1,   fatG: 1.0), QuickFood(name:'خل التفاح (١ م.ص)',  nameEn: 'Apple cider vinegar',    kcal: 3,   proteinG: 0.0, carbsG: 1,   fatG: 0.0),
-  // Staples QuickFood(name:'خبز أسمر (شريحة)',   nameEn: 'Whole wheat bread',     kcal: 80,  proteinG: 3,   carbsG: 15,  fatG: 1.0), QuickFood(name:'خبز بلدي (رغيف)',    nameEn: 'Pita bread',             kcal: 165, proteinG: 5,   carbsG: 33,  fatG: 1.0), QuickFood(name:'أرز أبيض (١ كوب)',   nameEn: 'White rice (1 cup)',     kcal: 206, proteinG: 4,   carbsG: 45,  fatG: 0.4), QuickFood(name:'أرز بني (١ كوب)',    nameEn: 'Brown rice (1 cup)',     kcal: 216, proteinG: 5,   carbsG: 45,  fatG: 1.8), QuickFood(name:'عدس مطبوخ (١ كوب)',  nameEn: 'Cooked lentils (1 cup)',kcal: 230, proteinG: 18,  carbsG: 40,  fatG: 1.0), QuickFood(name:'فول مدمس (١ كوب)',   nameEn: 'Fava beans (1 cup)',    kcal: 187, proteinG: 13,  carbsG: 33,  fatG: 1.0), QuickFood(name:'حمص مسلوق (١ كوب)',  nameEn: 'Chickpeas (1 cup)',     kcal: 269, proteinG: 15,  carbsG: 45,  fatG: 4.0),
-  // Protein QuickFood(name:'بيضة مسلوقة',        nameEn: 'Boiled egg',             kcal: 78,  proteinG: 6,   carbsG: 1,   fatG: 5.0), QuickFood(name:'بيض مقلي (٢ بيضة)', nameEn: 'Fried eggs (2)',         kcal: 185, proteinG: 12,  carbsG: 2,   fatG: 14.0), QuickFood(name:'دجاج مشوي (١٠٠ج)',  nameEn: 'Grilled chicken (100g)',kcal: 165, proteinG: 31,  carbsG: 0,   fatG: 4.0), QuickFood(name:'لحم بقر مشوي (١٠٠ج)',nameEn: 'Grilled beef (100g)',  kcal: 215, proteinG: 26,  carbsG: 0,   fatG: 12.0), QuickFood(name:'تونة معلبة (١٠٠ج)', nameEn: 'Canned tuna (100g)',    kcal: 116, proteinG: 26,  carbsG: 0,   fatG: 1.0), QuickFood(name:'سمك مشوي (١٠٠ج)',   nameEn: 'Grilled fish (100g)',   kcal: 130, proteinG: 22,  carbsG: 0,   fatG: 4.0), QuickFood(name:'جبنة بيضاء (٣٠ج)',  nameEn: 'White cheese (30g)',    kcal: 75,  proteinG: 5,   carbsG: 1,   fatG: 6.0), QuickFood(name:'زبادي طبيعي (١ كوب)',nameEn: 'Plain yogurt (1 cup)', kcal: 150, proteinG: 8,   carbsG: 11,  fatG: 8.0),
-  // Dairy QuickFood(name:'حليب كامل (٢٠٠ مل)', nameEn: 'Full milk (200ml)',    kcal: 130, proteinG: 7,   carbsG: 10,  fatG: 7.0), QuickFood(name:'حليب قليل الدسم',    nameEn: 'Low-fat milk (200ml)',  kcal: 90,  proteinG: 7,   carbsG: 10,  fatG: 2.5),
-  // Fruits QuickFood(name:'موز (حبة متوسطة)',   nameEn: 'Banana (medium)',        kcal: 105, proteinG: 1,   carbsG: 27,  fatG: 0.3), QuickFood(name:'تفاح (حبة متوسطة)',  nameEn: 'Apple (medium)',         kcal: 95,  proteinG: 0.5, carbsG: 25,  fatG: 0.3), QuickFood(name:'برتقال (حبة)',        nameEn: 'Orange',                 kcal: 62,  proteinG: 1,   carbsG: 15,  fatG: 0.2), QuickFood(name:'عنب (١ كوب)',        nameEn: 'Grapes (1 cup)',         kcal: 104, proteinG: 1,   carbsG: 27,  fatG: 0.2), QuickFood(name:'بطيخ (٢٠٠ج)',       nameEn: 'Watermelon (200g)',      kcal: 60,  proteinG: 1,   carbsG: 15,  fatG: 0.3), QuickFood(name:'مانجو (١٠٠ج)',      nameEn: 'Mango (100g)',           kcal: 60,  proteinG: 0.8, carbsG: 15,  fatG: 0.4), QuickFood(name:'توت (١ كوب)',        nameEn: 'Berries (1 cup)',        kcal: 84,  proteinG: 1,   carbsG: 21,  fatG: 0.5),
-  // Vegetables QuickFood(name:'طماطم (حبة كبيرة)',  nameEn: 'Tomato (large)',         kcal: 35,  proteinG: 2,   carbsG: 7,   fatG: 0.4), QuickFood(name:'خيار (حبة)',         nameEn: 'Cucumber',               kcal: 16,  proteinG: 1,   carbsG: 4,   fatG: 0.1), QuickFood(name:'سبانخ مطبوخة (١ كوب)',nameEn: 'Cooked spinach (1c)', kcal: 41,  proteinG: 5,   carbsG: 7,   fatG: 0.5), QuickFood(name:'بطاطا مشوية (١٠٠ج)',nameEn: 'Baked potato (100g)',   kcal: 93,  proteinG: 2,   carbsG: 21,  fatG: 0.1), QuickFood(name:'بطاطا حلوة (١٠٠ج)', nameEn: 'Sweet potato (100g)',   kcal: 86,  proteinG: 2,   carbsG: 20,  fatG: 0.1),
-  // Nuts & seeds QuickFood(name:'لوز (٣٠ج)',          nameEn: 'Almonds (30g)',          kcal: 173, proteinG: 6,   carbsG: 6,   fatG: 15.0), QuickFood(name:'جوز (٣٠ج)',          nameEn: 'Walnuts (30g)',          kcal: 196, proteinG: 5,   carbsG: 4,   fatG: 20.0), QuickFood(name:'فستق (٣٠ج)',         nameEn: 'Pistachios (30g)',       kcal: 159, proteinG: 6,   carbsG: 8,   fatG: 13.0), QuickFood(name:'سمسم (٢ م.ك)',       nameEn: 'Sesame seeds (2 tbsp)', kcal: 104, proteinG: 3,   carbsG: 4,   fatG: 9.0),
-  // Grains & cereals QuickFood(name:'شوفان مطبوخ (١ كوب)',nameEn: 'Oatmeal (1 cup)',      kcal: 166, proteinG: 6,   carbsG: 28,  fatG: 4.0), QuickFood(name:'كينوا مطبوخة (١ كوب)',nameEn: 'Cooked quinoa (1c)',  kcal: 222, proteinG: 8,   carbsG: 39,  fatG: 4.0), QuickFood(name:'خبز توست (شريحتان)', nameEn: 'Toast (2 slices)',      kcal: 160, proteinG: 6,   carbsG: 30,  fatG: 2.0),
-  // Beverages QuickFood(name:'عصير برتقال طازج',   nameEn: 'Fresh OJ (200ml)',      kcal: 88,  proteinG: 1,   carbsG: 21,  fatG: 0.4), QuickFood(name:'لبن (٢٠٠ مل)',       nameEn: 'Lassi/Buttermilk',      kcal: 72,  proteinG: 4,   carbsG: 8,   fatG: 2.5), QuickFood(name:'شاي بالحليب',        nameEn: 'Tea with milk',          kcal: 45,  proteinG: 1,   carbsG: 6,   fatG: 1.5),
-  // Sweets (Sunnah) QuickFood(name:'طحينة (١ م.ك)',      nameEn: 'Tahini (1 tbsp)',        kcal: 89,  proteinG: 3,   carbsG: 3,   fatG: 8.0), QuickFood(name:'حلاوة طحينية (٣٠ج)', nameEn: 'Halawa (30g)',          kcal: 159, proteinG: 3,   carbsG: 14,  fatG: 10.0), QuickFood(name:'مربى (١ م.ك)',       nameEn: 'Jam (1 tbsp)',           kcal: 56,  proteinG: 0.1, carbsG: 14,  fatG: 0.0),
-  // Meals QuickFood(name:'شوربة عدس (كوب)',    nameEn: 'Lentil soup (cup)',      kcal: 175, proteinG: 11,  carbsG: 28,  fatG: 3.0), QuickFood(name:'كشري (طبق متوسط)',   nameEn: 'Koshari (medium plate)', kcal: 430, proteinG: 15,  carbsG: 85,  fatG: 5.0), QuickFood(name:'فتة بالدجاج',        nameEn: 'Chicken fattah',         kcal: 520, proteinG: 32,  carbsG: 55,  fatG: 18.0), QuickFood(name:'وجبة خفيفة صحية',   nameEn: 'Healthy snack',          kcal: 150, proteinG: 5,   carbsG: 20,  fatG: 5.0),
+  // Sunnah foods
+  QuickFood(name: 'تمر (١ حبة)',        nameEn: 'Date (1 piece)',         kcal: 23,  proteinG: 0.2, carbsG: 6,   fatG: 0.0),
+  QuickFood(name: 'عسل (١ ملعقة)',       nameEn: 'Honey (1 tbsp)',         kcal: 64,  proteinG: 0.1, carbsG: 17,  fatG: 0.0),
+  QuickFood(name: 'زيت زيتون (١ ملعقة)', nameEn: 'Olive oil (1 tbsp)',     kcal: 119, proteinG: 0.0, carbsG: 0,   fatG: 14.0),
+  QuickFood(name: 'حبة سوداء (١ م.ص)',  nameEn: 'Black seed (1 tsp)',     kcal: 16,  proteinG: 0.8, carbsG: 1,   fatG: 1.0),
+  QuickFood(name: 'خل التفاح (١ م.ص)',  nameEn: 'Apple cider vinegar',    kcal: 3,   proteinG: 0.0, carbsG: 1,   fatG: 0.0),
+  // Staples
+  QuickFood(name: 'خبز أسمر (شريحة)',   nameEn: 'Whole wheat bread',     kcal: 80,  proteinG: 3,   carbsG: 15,  fatG: 1.0),
+  QuickFood(name: 'خبز بلدي (رغيف)',    nameEn: 'Pita bread',             kcal: 165, proteinG: 5,   carbsG: 33,  fatG: 1.0),
+  QuickFood(name: 'أرز أبيض (١ كوب)',   nameEn: 'White rice (1 cup)',     kcal: 206, proteinG: 4,   carbsG: 45,  fatG: 0.4),
+  QuickFood(name: 'أرز بني (١ كوب)',    nameEn: 'Brown rice (1 cup)',     kcal: 216, proteinG: 5,   carbsG: 45,  fatG: 1.8),
+  QuickFood(name: 'عدس مطبوخ (١ كوب)',  nameEn: 'Cooked lentils (1 cup)',kcal: 230, proteinG: 18,  carbsG: 40,  fatG: 1.0),
+  QuickFood(name: 'فول مدمس (١ كوب)',   nameEn: 'Fava beans (1 cup)',    kcal: 187, proteinG: 13,  carbsG: 33,  fatG: 1.0),
+  QuickFood(name: 'حمص مسلوق (١ كوب)',  nameEn: 'Chickpeas (1 cup)',     kcal: 269, proteinG: 15,  carbsG: 45,  fatG: 4.0),
+  // Protein
+  QuickFood(name: 'بيضة مسلوقة',        nameEn: 'Boiled egg',             kcal: 78,  proteinG: 6,   carbsG: 1,   fatG: 5.0),
+  QuickFood(name: 'بيض مقلي (٢ بيضة)', nameEn: 'Fried eggs (2)',         kcal: 185, proteinG: 12,  carbsG: 2,   fatG: 14.0),
+  QuickFood(name: 'دجاج مشوي (١٠٠ج)',  nameEn: 'Grilled chicken (100g)',kcal: 165, proteinG: 31,  carbsG: 0,   fatG: 4.0),
+  QuickFood(name: 'لحم بقر مشوي (١٠٠ج)',nameEn: 'Grilled beef (100g)',  kcal: 215, proteinG: 26,  carbsG: 0,   fatG: 12.0),
+  QuickFood(name: 'تونة معلبة (١٠٠ج)', nameEn: 'Canned tuna (100g)',    kcal: 116, proteinG: 26,  carbsG: 0,   fatG: 1.0),
+  QuickFood(name: 'سمك مشوي (١٠٠ج)',   nameEn: 'Grilled fish (100g)',   kcal: 130, proteinG: 22,  carbsG: 0,   fatG: 4.0),
+  QuickFood(name: 'جبنة بيضاء (٣٠ج)',  nameEn: 'White cheese (30g)',    kcal: 75,  proteinG: 5,   carbsG: 1,   fatG: 6.0),
+  QuickFood(name: 'زبادي طبيعي (١ كوب)',nameEn: 'Plain yogurt (1 cup)', kcal: 150, proteinG: 8,   carbsG: 11,  fatG: 8.0),
+  // Dairy
+  QuickFood(name: 'حليب كامل (٢٠٠ مل)', nameEn: 'Full milk (200ml)',    kcal: 130, proteinG: 7,   carbsG: 10,  fatG: 7.0),
+  QuickFood(name: 'حليب قليل الدسم',    nameEn: 'Low-fat milk (200ml)',  kcal: 90,  proteinG: 7,   carbsG: 10,  fatG: 2.5),
+  // Fruits
+  QuickFood(name: 'موز (حبة متوسطة)',   nameEn: 'Banana (medium)',        kcal: 105, proteinG: 1,   carbsG: 27,  fatG: 0.3),
+  QuickFood(name: 'تفاح (حبة متوسطة)',  nameEn: 'Apple (medium)',         kcal: 95,  proteinG: 0.5, carbsG: 25,  fatG: 0.3),
+  QuickFood(name: 'برتقال (حبة)',        nameEn: 'Orange',                 kcal: 62,  proteinG: 1,   carbsG: 15,  fatG: 0.2),
+  QuickFood(name: 'عنب (١ كوب)',        nameEn: 'Grapes (1 cup)',         kcal: 104, proteinG: 1,   carbsG: 27,  fatG: 0.2),
+  QuickFood(name: 'بطيخ (٢٠٠ج)',       nameEn: 'Watermelon (200g)',      kcal: 60,  proteinG: 1,   carbsG: 15,  fatG: 0.3),
+  QuickFood(name: 'مانجو (١٠٠ج)',      nameEn: 'Mango (100g)',           kcal: 60,  proteinG: 0.8, carbsG: 15,  fatG: 0.4),
+  QuickFood(name: 'توت (١ كوب)',        nameEn: 'Berries (1 cup)',        kcal: 84,  proteinG: 1,   carbsG: 21,  fatG: 0.5),
+  // Vegetables
+  QuickFood(name: 'طماطم (حبة كبيرة)',  nameEn: 'Tomato (large)',         kcal: 35,  proteinG: 2,   carbsG: 7,   fatG: 0.4),
+  QuickFood(name: 'خيار (حبة)',         nameEn: 'Cucumber',               kcal: 16,  proteinG: 1,   carbsG: 4,   fatG: 0.1),
+  QuickFood(name: 'سبانخ مطبوخة (١ كوب)',nameEn: 'Cooked spinach (1c)', kcal: 41,  proteinG: 5,   carbsG: 7,   fatG: 0.5),
+  QuickFood(name: 'بطاطا مشوية (١٠٠ج)',nameEn: 'Baked potato (100g)',   kcal: 93,  proteinG: 2,   carbsG: 21,  fatG: 0.1),
+  QuickFood(name: 'بطاطا حلوة (١٠٠ج)', nameEn: 'Sweet potato (100g)',   kcal: 86,  proteinG: 2,   carbsG: 20,  fatG: 0.1),
+  // Nuts & seeds
+  QuickFood(name: 'لوز (٣٠ج)',          nameEn: 'Almonds (30g)',          kcal: 173, proteinG: 6,   carbsG: 6,   fatG: 15.0),
+  QuickFood(name: 'جوز (٣٠ج)',          nameEn: 'Walnuts (30g)',          kcal: 196, proteinG: 5,   carbsG: 4,   fatG: 20.0),
+  QuickFood(name: 'فستق (٣٠ج)',         nameEn: 'Pistachios (30g)',       kcal: 159, proteinG: 6,   carbsG: 8,   fatG: 13.0),
+  QuickFood(name: 'سمسم (٢ م.ك)',       nameEn: 'Sesame seeds (2 tbsp)', kcal: 104, proteinG: 3,   carbsG: 4,   fatG: 9.0),
+  // Grains & cereals
+  QuickFood(name: 'شوفان مطبوخ (١ كوب)',nameEn: 'Oatmeal (1 cup)',      kcal: 166, proteinG: 6,   carbsG: 28,  fatG: 4.0),
+  QuickFood(name: 'كينوا مطبوخة (١ كوب)',nameEn: 'Cooked quinoa (1c)',  kcal: 222, proteinG: 8,   carbsG: 39,  fatG: 4.0),
+  QuickFood(name: 'خبز توست (شريحتان)', nameEn: 'Toast (2 slices)',      kcal: 160, proteinG: 6,   carbsG: 30,  fatG: 2.0),
+  // Beverages
+  QuickFood(name: 'عصير برتقال طازج',   nameEn: 'Fresh OJ (200ml)',      kcal: 88,  proteinG: 1,   carbsG: 21,  fatG: 0.4),
+  QuickFood(name: 'لبن (٢٠٠ مل)',       nameEn: 'Lassi/Buttermilk',      kcal: 72,  proteinG: 4,   carbsG: 8,   fatG: 2.5),
+  QuickFood(name: 'شاي بالحليب',        nameEn: 'Tea with milk',          kcal: 45,  proteinG: 1,   carbsG: 6,   fatG: 1.5),
+  // Sweets (Sunnah)
+  QuickFood(name: 'طحينة (١ م.ك)',      nameEn: 'Tahini (1 tbsp)',        kcal: 89,  proteinG: 3,   carbsG: 3,   fatG: 8.0),
+  QuickFood(name: 'حلاوة طحينية (٣٠ج)', nameEn: 'Halawa (30g)',          kcal: 159, proteinG: 3,   carbsG: 14,  fatG: 10.0),
+  QuickFood(name: 'مربى (١ م.ك)',       nameEn: 'Jam (1 tbsp)',           kcal: 56,  proteinG: 0.1, carbsG: 14,  fatG: 0.0),
+  // Meals
+  QuickFood(name: 'شوربة عدس (كوب)',    nameEn: 'Lentil soup (cup)',      kcal: 175, proteinG: 11,  carbsG: 28,  fatG: 3.0),
+  QuickFood(name: 'كشري (طبق متوسط)',   nameEn: 'Koshari (medium plate)', kcal: 430, proteinG: 15,  carbsG: 85,  fatG: 5.0),
+  QuickFood(name: 'فتة بالدجاج',        nameEn: 'Chicken fattah',         kcal: 520, proteinG: 32,  carbsG: 55,  fatG: 18.0),
+  QuickFood(name: 'وجبة خفيفة صحية',   nameEn: 'Healthy snack',          kcal: 150, proteinG: 5,   carbsG: 20,  fatG: 5.0),
 ];
 
-final kProductsDB = [ ScanResult(barcode:'6224000537018', name: 'لبن بيتي', brand: 'بيتي', status: HalalStatus.halal, certs: ['HFCE Egypt']), ScanResult(barcode:'5449000000996', name: 'كوكاكولا', brand: 'Coca-Cola', status: HalalStatus.halal, certs: ['HFCE']), ScanResult(barcode:'6111245141943', name: 'شيبسي', brand: 'PepsiCo', status: HalalStatus.doubtful, notes: 'يحتوي على نكهات يجب التحقق منها'), ScanResult(barcode:'4005900075468', name: 'منتج غير حلال', brand: 'Ritter', status: HalalStatus.haram, notes: 'يحتوي على جيلاتين خنزير'),
+final kProductsDB = [
+  ScanResult(barcode: '6224000537018', name: 'لبن بيتي', brand: 'بيتي', status: HalalStatus.halal, certs: ['HFCE Egypt']),
+  ScanResult(barcode: '5449000000996', name: 'كوكاكولا', brand: 'Coca-Cola', status: HalalStatus.halal, certs: ['HFCE']),
+  ScanResult(barcode: '6111245141943', name: 'شيبسي', brand: 'PepsiCo', status: HalalStatus.doubtful, notes: 'يحتوي على نكهات يجب التحقق منها'),
+  ScanResult(barcode: '4005900075468', name: 'منتج غير حلال', brand: 'Ritter', status: HalalStatus.haram, notes: 'يحتوي على جيلاتين خنزير'),
 ];
