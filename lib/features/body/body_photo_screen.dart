@@ -384,12 +384,12 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
   }
 
   Widget _resultCard(BodyPhotoResult r, bool isAr, bool isDark, Color bg, Color muted, UserProfile? profile) {
-    final confPct  = (r.confidence * 100).toInt();
+    final confPct  = (r.bodyFatPercent * 100).toInt();
     final recs     = isAr ? r.recommendationsAr : r.recommendations;
-    final postureN = isAr ? r.postureNoteAr : r.postureNote;
-    final btype    = isAr ? r.bodyTypeAr : r.bodyType;
-    final bfColor  = r.estimatedBodyFatPct < 20 ? AppColors.halalGreen
-        : r.estimatedBodyFatPct < 30 ? AppColors.doubtOrange : AppColors.haramRed;
+    final postureN = isAr ? r.rawAnalysisAr : r.rawAnalysis;
+    final btype    = isAr ? r.bodyType : r.bodyType;
+    final bfColor  = r.bodyFatPercent < 20 ? AppColors.halalGreen
+        : r.bodyFatPercent < 30 ? AppColors.doubtOrange : AppColors.haramRed;
 
     return Container(
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
@@ -419,13 +419,13 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
           // ── Big metrics ──────────────────────────────────
           Row(children: [
             _bigMetric(
-              '${r.estimatedBodyFatPct.toStringAsFixed(1)}%',
+              '${r.bodyFatPercent.toStringAsFixed(1)}%',
               isAr ? 'نسبة الدهون' : 'Body Fat %',
               bfColor,
             ),
             const SizedBox(width: 12),
             _bigMetric(
-              '${r.estimatedMuscleMassKg.toStringAsFixed(1)} kg',
+              '${r.muscleMassKg.toStringAsFixed(1)} kg',
               isAr ? 'كتلة العضلات' : 'Muscle Mass',
               AppColors.halalGreen,
             ),
@@ -435,7 +435,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
           const SizedBox(height: 16),
 
           // ── Body fat scale ───────────────────────────────
-          _bfScale(r.estimatedBodyFatPct, profile?.isMale ?? true, isAr, muted),
+          _bfScale(r.bodyFatPercent, profile?.isMale ?? true, isAr, muted),
           const SizedBox(height: 16),
 
           // ── Posture note ─────────────────────────────────
@@ -490,7 +490,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
                     style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 12, color: AppColors.sunnahGreen)),
                 const SizedBox(height: 8),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                  _compareRow(isAr ? 'صورة' : 'Photo', '${r.estimatedBodyFatPct.toStringAsFixed(1)}%', AppColors.barakahGold),
+                  _compareRow(isAr ? 'صورة' : 'Photo', '${r.bodyFatPercent.toStringAsFixed(1)}%', AppColors.barakahGold),
                   const Text('vs', style: TextStyle(fontFamily: 'Cairo', color: AppColors.lightMuted, fontSize: 12)),
                   _compareRow(isAr ? 'حساب' : 'Calc.', '${profile.bodyFatPercent.toStringAsFixed(1)}%', AppColors.sunnahGreen),
                 ]),
