@@ -80,7 +80,6 @@ class FoodPhotoResult {
     this.confidence = 0.0,
     this.portionSize = '',
     this.ingredients = const [],
-  String get halalNote => halalExplanation;
   });
 }
 
