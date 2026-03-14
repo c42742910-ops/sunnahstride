@@ -164,6 +164,7 @@ class HomeScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 13),
           ],
+          ],
 
           // ── Quick actions ───────────────────────────────── Text(isAr ?'ابدأ الآن' : 'Start Now', style: TextStyle(fontFamily:'Cairo', fontSize: 15, fontWeight: FontWeight.w700,
               
@@ -195,6 +196,7 @@ class HomeScreen extends ConsumerWidget {
           if (zakat > 50) ...[
               const SizedBox(height: 13),
             _zakatCard(zakat, isDark, cardBg, isAr),
+          ],
           ],
           const SizedBox(height: 16),
         ],
