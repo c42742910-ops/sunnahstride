@@ -157,8 +157,7 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: 13),
 
           // ── Body metrics quick peek ───────────────────────
-          if (profile != null) ...[
-            GestureDetector(
+          if (profile != null) ...,GestureDetector(
               onTap: () => context.go('/body'),
               child: _bodyMiniCard(profile, isDark, cardBg, isAr),
             ),
