@@ -91,7 +91,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
     final textC   = isDark ? AppColors.darkText  : AppColors.lightText;
     String tl(String ar, String en) => isAr ? ar : en;
 
-    final remaining = (profile?.calorieGoalKcal.toInt() ?? 2000) - cals.totalKcal;
+    final remaining = (profile?.calorieGoalKcal.toInt() ?? 2000) - cals.total;
     final calCol = remaining < 0 ? AppColors.haramRed
         : remaining < 200 ? AppColors.barakahGold : AppColors.sunnahGreen;
 
@@ -134,7 +134,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
       CaloriesState cals, UserProfile? profile, Color calCol, bool isPremium) {
     String tl(String ar, String en) => isAr ? ar : en;
     final goal = profile?.calorieGoalKcal.toInt() ?? 2000;
-    final pct  = (cals.totalKcal / goal).clamp(0.0, 1.0);
+    final pct  = (cals.total / goal).clamp(0.0, 1.0);
 
     return ListView(padding: const EdgeInsets.all(14), children: [
       if (profile != null) Container(
@@ -157,7 +157,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(tl('السعرات اليوم', "Today's Calories"),
                   style: TextStyle(fontFamily: 'Cairo', fontSize: 13, color: muted)),
-              Text('${cals.totalKcal}',
+              Text('${cals.total}',
                   style: TextStyle(fontFamily: 'Cairo', fontSize: 36, fontWeight: FontWeight.w900, color: calCol)),
               Text('/ $goal ${tl("سعرة", "kcal")}',
                   style: TextStyle(fontFamily: 'Cairo', fontSize: 11, color: muted)),
@@ -537,7 +537,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          Expanded(child: Text(isAr ? r.nameAr : r.nameEn,
+          Expanded(child: Text(r.nameAr,
               style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 13))),
           Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(color: AppColors.halalGreen.withOpacity(0.15),
