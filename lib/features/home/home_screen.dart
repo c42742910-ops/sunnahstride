@@ -157,7 +157,8 @@ class HomeScreen extends ConsumerWidget {
           const SizedBox(height: 13),
 
           // ── Body metrics quick peek ───────────────────────
-          if (profile != null) ...,GestureDetector(
+          if (profile != null) ...[
+            GestureDetector(
               onTap: () => context.go('/body'),
               child: _bodyMiniCard(profile, isDark, cardBg, isAr),
             ),
@@ -191,7 +192,8 @@ class HomeScreen extends ConsumerWidget {
             isAr ? 'مقالات وحاسبات صحية' : 'Articles & health calculators', const Color(0xFF009688), '/health', cardBg: cardBg, isDark: isDark),
 
           // ── Zakat card ────────────────────────────────────
-          if (zakat > 50) ...,const SizedBox(height: 13),
+          if (zakat > 50) ...[
+              const SizedBox(height: 13),
             _zakatCard(zakat, isDark, cardBg, isAr),
           ],
           const SizedBox(height: 16),
