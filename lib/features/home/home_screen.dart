@@ -167,7 +167,19 @@ class HomeScreen extends ConsumerWidget {
 
           // ── Quick actions ───────────────────────────────── Text(isAr ?'ابدأ الآن' : 'Start Now', style: TextStyle(fontFamily:'Cairo', fontSize: 15, fontWeight: FontWeight.w700,
               color: isDark ? AppColors.darkText : AppColors.lightText)),
-          const SizedBox(height: 10), _quickAction(context,'📸', isAr ? 'صوّر طعامك 🤖' : 'Photo Your Food 🤖', isAr ? 'AI يحلل السعرات والحلال فوراً' : 'AI calculates calories & halal status instantly', AppColors.sunnahGreen, '/food-photo', cardBg: cardBg, isDark: isDark), _quickAction(context,'📷', isAr ? 'امسح باركود' : 'Scan Barcode', isAr ? 'تحقق من الحلال فوراً' : 'Check halal instantly', AppColors.halalGreen, '/scanner', cardBg: cardBg, isDark: isDark), _quickAction(context,'🏃', isAr ? 'ابدأ تمرين سني' : 'Start Sunnah Workout', isAr ? 'مشي ولياقة بدون موسيقى' : 'Walking & fitness without music', AppColors.sunnahGreen, '/fitness', cardBg: cardBg, isDark: isDark), _quickAction(context,'🌿', isAr ? 'وصفات سنية' : 'Sunnah Recipes', isAr ? 'تمر وعسل وزيت زيتون' : 'Dates, honey & olive oil', AppColors.barakahGold, '/nutrition', cardBg: cardBg, isDark: isDark), _quickAction(context,'💪', isAr ? 'مقاييس جسمي' : 'Body Metrics', isAr ? 'BMI، دهون، عضلات، أيض' : 'BMI, fat%, muscle, metabolism', AppColors.sunnahGreen, '/body', cardBg: cardBg, isDark: isDark), _quickAction(context,'🩺', isAr ? 'معلومات صحية' : 'Health Info', isAr ? 'مقالات وحاسبات صحية' : 'Articles & health calculators', const Color(0xFF009688), '/health', cardBg: cardBg, isDark: isDark),
+          const SizedBox(height: 10),
+          _quickAction(context, '📸', isAr ? 'صوّر طعامك' : 'Photo Your Food',
+            isAr ? 'AI يحلل السعرات' : 'AI analyzes calories & halal', AppColors.sunnahGreen, '/food-photo', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '📷', isAr ? 'امسح باركود' : 'Scan Barcode',
+            isAr ? 'تحقق من الحلال فوراً' : 'Check halal instantly', AppColors.halalGreen, '/scanner', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '🏃', isAr ? 'ابدأ تمرين سني' : 'Start Sunnah Workout',
+            isAr ? 'مشي ولياقة بدون موسيقى' : 'Walking & fitness without music', AppColors.sunnahGreen, '/fitness', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '🌿', isAr ? 'وصفات سنية' : 'Sunnah Recipes',
+            isAr ? 'تمر وعسل وزيت زيتون' : 'Dates, honey & olive oil', AppColors.barakahGold, '/nutrition', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '💪', isAr ? 'مقاييس جسمي' : 'Body Metrics',
+            isAr ? 'BMI ودهون وعضلات' : 'BMI, fat%, muscle, metabolism', AppColors.sunnahGreen, '/body', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '🩺', isAr ? 'معلومات صحية' : 'Health Info',
+            isAr ? 'مقالات وحاسبات صحية' : 'Articles & health calculators', const Color(0xFF009688), '/health', cardBg: cardBg, isDark: isDark),
 
           // ── Zakat card ────────────────────────────────────
           if (zakat > 50) ...[
