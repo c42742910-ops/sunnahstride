@@ -121,7 +121,7 @@ class HomeScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: (isSis ? AppColors.barakahGold : AppColors.sunnahGreen).withOpacity(0.2)),
               ),
-              child: Text(isAr ? profile.greetingAr() : profile.greetingEn(), style: TextStyle(fontFamily:'Cairo', fontSize: 13, color: isDark ? AppColors.darkText : AppColors.lightText)),
+              child: Text(isAr ? profile.greetingAr() : profile.greetingEn(), style: TextStyle(fontFamily:'Cairo', fontSize: 13, 
             ),
 
           // ── Prayer card ──────────────────────────────────
@@ -166,10 +166,20 @@ class HomeScreen extends ConsumerWidget {
           ],
 
           // ── Quick actions ───────────────────────────────── Text(isAr ?'ابدأ الآن' : 'Start Now', style: TextStyle(fontFamily:'Cairo', fontSize: 15, fontWeight: FontWeight.w700,
-              color: isDark ? AppColors.darkText : AppColors.lightText)),
-          const SizedBox(height: 10),
+              
+                    const SizedBox(height: 10),
           _quickAction(context, '📸', isAr ? 'صوّر طعامك' : 'Photo Your Food',
             isAr ? 'AI يحلل السعرات' : 'AI analyzes calories & halal', AppColors.sunnahGreen, '/food-photo', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '📷', isAr ? 'امسح باركود' : 'Scan Barcode',
+            isAr ? 'تحقق من الحلال فوراً' : 'Check halal instantly', AppColors.halalGreen, '/scanner', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '🏃', isAr ? 'ابدأ تمرين سني' : 'Start Sunnah Workout',
+            isAr ? 'مشي ولياقة بدون موسيقى' : 'Walking & fitness without music', AppColors.sunnahGreen, '/fitness', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '🌿', isAr ? 'وصفات سنية' : 'Sunnah Recipes',
+            isAr ? 'تمر وعسل وزيت زيتون' : 'Dates, honey & olive oil', AppColors.barakahGold, '/nutrition', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '💪', isAr ? 'مقاييس جسمي' : 'Body Metrics',
+            isAr ? 'BMI ودهون وعضلات' : 'BMI, fat%, muscle, metabolism', AppColors.sunnahGreen, '/body', cardBg: cardBg, isDark: isDark),
+          _quickAction(context, '🩺', isAr ? 'معلومات صحية' : 'Health Info',
+            isAr ? 'مقالات وحاسبات صحية' : 'Articles & health calculators', const Color(0xFF009688), '/health', cardBg: cardBg, isDark: isDark),
           _quickAction(context, '📷', isAr ? 'امسح باركود' : 'Scan Barcode',
             isAr ? 'تحقق من الحلال فوراً' : 'Check halal instantly', AppColors.halalGreen, '/scanner', cardBg: cardBg, isDark: isDark),
           _quickAction(context, '🏃', isAr ? 'ابدأ تمرين سني' : 'Start Sunnah Workout',
@@ -221,7 +231,7 @@ class HomeScreen extends ConsumerWidget {
         const SizedBox(height: 10), Text(isAr ? h['ar']! : h['en']!,
             style: TextStyle( fontFamily:'Cairo', fontSize: isAr ? 13 : 12,
               height: 1.7, fontStyle: FontStyle.italic,
-              color: isDark ? AppColors.darkText : AppColors.lightText,
+              
             ),
             textDirection: isAr ? TextDirection.rtl : TextDirection.ltr),
       ]),
@@ -391,7 +401,7 @@ class HomeScreen extends ConsumerWidget {
   Widget _quickAction(BuildContext ctx, String emoji, String title, String sub, Color color, String route, {Color? cardBg, bool isDark = false}) {
     // Routes outside ShellRoute must be pushed final needsPush = route.startsWith('/food-photo') || route.startsWith('/body-photo') || route.startsWith('/paywall');
     return GestureDetector(
-      onTap: () => needsPush ? ctx.push(route) : ctx.go(route),
+      onTap: () => ctx.push(route),
       child: Container(
         margin: const EdgeInsets.only(bottom: 9),
         padding: const EdgeInsets.all(14),
