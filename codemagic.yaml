@@ -11,6 +11,14 @@ workflows:
           rm -rf android
           flutter create --platforms=android .
           flutter pub get
+          # Enable core library desugaring for flutter_local_notifications
+          cd android
+          sed -i 's/multiDexEnabled true/multiDexEnabled true\n        isCoreLibraryDesugaringEnabled = true/' app/build.gradle || true
+          # Add desugar dependency
+          sed -i 's/dependencies {/dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")/' app/build.gradle || true
+          # Set minSdk to 21
+          sed -i 's/minSdk flutter.minSdkVersion/minSdk 21/' app/build.gradle || true
+          cd ..
       - name: Build APK
         script: flutter build apk --release --no-shrink
     artifacts:
