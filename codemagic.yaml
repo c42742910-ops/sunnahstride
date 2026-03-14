@@ -11,14 +11,32 @@ workflows:
           rm -rf android
           flutter create --platforms=android .
           flutter pub get
-          # Enable core library desugaring for flutter_local_notifications
-          cd android
-          sed -i 's/multiDexEnabled true/multiDexEnabled true\n        isCoreLibraryDesugaringEnabled = true/' app/build.gradle || true
+          python3 - << 'PYEOF'
+          import re
+          path = 'android/app/build.gradle'
+          f = open(path).read()
+          # Add minSdk 21
+          f = f.replace('minSdk flutter.minSdkVersion', 'minSdk 21')
+          f = f.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 21')
+          # Enable desugaring in android block
+          if 'isCoreLibraryDesugaringEnabled' not in f:
+              f = f.replace(
+                  'compileOptions {',
+                  'compileOptions {\n        isCoreLibraryDesugaringEnabled = true'
+              )
           # Add desugar dependency
-          sed -i 's/dependencies {/dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")/' app/build.gradle || true
-          # Set minSdk to 21
-          sed -i 's/minSdk flutter.minSdkVersion/minSdk 21/' app/build.gradle || true
-          cd ..
+          if 'desugar_jdk_libs' not in f:
+              f = f.replace(
+                  'dependencies {',
+                  'dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")',
+                  1
+              )
+          open(path,'w').write(f)
+          print("build.gradle patched")
+          print("minSdk 21:", 'minSdk 21' in f)
+          print("desugaring:", 'isCoreLibraryDesugaringEnabled' in f)
+          print("desugar_jdk_libs:", 'desugar_jdk_libs' in f)
+          PYEOF
       - name: Build APK
         script: flutter build apk --release --no-shrink
     artifacts:
