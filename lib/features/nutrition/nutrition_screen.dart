@@ -468,7 +468,8 @@ class _NutritionState extends ConsumerState<NutritionScreen>
         border: Border.all(color: AppColors.sunnahGreen.withOpacity(0.2)),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [ Text(t('✨ خطتك الشخصية','✨ Your Personalized Plan'), style: TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, fontSize: 15, color: AppColors.sunnahGreen)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(t('✨ خطتك الشخصية','✨ Your Personalized Plan'), style: TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, fontSize: 15, color: AppColors.sunnahGreen)),
         SizedBox(height: 14), _mealPlanRow('🌅', t('الفطور','Breakfast'), isAr ?'شوفان بالعسل والتمر + كوب حليب\nبيضتان مسلوقتان + لبن' : 'Oats with honey & dates + milk\n2 boiled eggs + yogurt',
           bf, isAr),
         SizedBox(height: 12), _mealPlanRow('☀️', t('الغداء','Lunch'), isAr ?'دجاج مشوي حلال + أرز بني + سلطة خضراء\nزيت زيتون + ثوم + ليمون' : 'Halal grilled chicken + brown rice + green salad\nOlive oil + garlic + lemon',
