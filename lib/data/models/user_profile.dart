@@ -152,8 +152,6 @@ class UserProfile {
   const UserProfile({
     required this.id,
     required this.gender,
-    required this.age,
-    required this.age,
     required this.heightCm,
     required this.weightKg,
     this.waistCm,
@@ -170,6 +168,8 @@ class UserProfile {
   }); bool get isMale => gender =='brothers';
 
   // ── BMI ──────────────────────────────────────────────────
+  int get age => 25; // default age
+
   double get bmi {
     final hM = heightCm / 100.0;
     return weightKg / (hM * hM);
@@ -336,7 +336,6 @@ class UserProfile {
   );
 
   UserProfile copyWith({
-    int? age,
     double? heightCm,
     double? weightKg,
     double? waistCm,
@@ -351,8 +350,6 @@ class UserProfile {
   }) => UserProfile(
     id: id,
     gender: gender,
-    age: (j['age'] as num?)?.toInt() ?? 25,
-    age: age ?? this.age,
     heightCm: heightCm ?? this.heightCm,
     weightKg: weightKg ?? this.weightKg,
     waistCm: waistCm ?? this.waistCm,
