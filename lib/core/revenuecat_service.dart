@@ -8,19 +8,28 @@
 //    - Real-time premium status
 // ============================================================
 
-import 'dart:io'; import'package:purchases_flutter/purchases_flutter.dart';
+import 'dart:io';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 // ── Product identifiers ─────────────────────────────────────
 // Must match EXACTLY what you create in App Store Connect &
 // Google Play Console, then link in RevenueCat dashboard.
-class RCProducts { static const monthly  ='sunnahstride_premium_monthly'; static const yearly   ='sunnahstride_premium_yearly'; static const lifetime ='sunnahstride_premium_lifetime';
+class RCProducts {
+  static const monthly  = 'sunnahstride_premium_monthly';
+  static const yearly   = 'sunnahstride_premium_yearly';
+  static const lifetime = 'sunnahstride_premium_lifetime';
 }
 
 // ── Offering / Entitlement identifiers ─────────────────────
 class RCConfig {
   // ══ REPLACE THESE WITH YOUR KEYS FROM REVENUECAT DASHBOARD ══
   // RevenueCat Dashboard → Project Settings → API Keys
-  // Apple: starts with "appl_"  |  Google: starts with "goog_" static const appleApiKey  ='appl_REPLACE_WITH_YOUR_APPLE_KEY'; static const googleApiKey ='goog_REPLACE_WITH_YOUR_GOOGLE_KEY'; static const entitlementId ='premium_access'; static const offeringId    ='default';
+  // Apple: starts with "appl_"  |  Google: starts with "goog_"
+  static const appleApiKey  = 'appl_REPLACE_WITH_YOUR_APPLE_KEY';
+  static const googleApiKey = 'goog_REPLACE_WITH_YOUR_GOOGLE_KEY';
+
+  static const entitlementId = 'premium_access';
+  static const offeringId    = 'default';
 
   // ── Configure RevenueCat (call once from main.dart) ───────
   static Future<void> configure() async {
@@ -104,24 +113,32 @@ class RevenueCatService {
         switch (pkg.packageType) {
           case PackageType.monthly:
             result.add(RCOffering(
-              identifier: RCProducts.monthly, titleAr:'شهري', titleEn: 'Monthly',
-              priceString: product.priceString, periodAr:'/ شهر', periodEn: '/ month',
+              identifier: RCProducts.monthly,
+              titleAr: 'شهري', titleEn: 'Monthly',
+              priceString: product.priceString,
+              periodAr: '/ شهر', periodEn: '/ month',
               isPopular: false,
               package: pkg,
             ));
             break;
           case PackageType.annual:
             result.add(RCOffering(
-              identifier: RCProducts.yearly, titleAr:'سنوي', titleEn: 'Yearly',
-              priceString: product.priceString, periodAr:'/ سنة', periodEn: '/ year', savingsBadgeAr:'وفّر ٣٠٪', savingsBadgeEn:'Save 30%',
+              identifier: RCProducts.yearly,
+              titleAr: 'سنوي', titleEn: 'Yearly',
+              priceString: product.priceString,
+              periodAr: '/ سنة', periodEn: '/ year',
+              savingsBadgeAr: 'وفّر ٣٠٪',
+              savingsBadgeEn: 'Save 30%',
               isPopular: true,
               package: pkg,
             ));
             break;
           case PackageType.lifetime:
             result.add(RCOffering(
-              identifier: RCProducts.lifetime, titleAr:'مدى الحياة', titleEn: 'Lifetime',
-              priceString: product.priceString, periodAr:'مرة واحدة', periodEn: 'one-time',
+              identifier: RCProducts.lifetime,
+              titleAr: 'مدى الحياة', titleEn: 'Lifetime',
+              priceString: product.priceString,
+              periodAr: 'مرة واحدة', periodEn: 'one-time',
               isPopular: false,
               package: pkg,
             ));
@@ -140,14 +157,25 @@ class RevenueCatService {
   // ── Fallback hardcoded offerings (when offline / sandbox) ─
   static List<RCOffering> _fallbackOfferings() => [
     const RCOffering(
-      identifier: RCProducts.monthly, titleAr:'شهري', titleEn: 'Monthly', priceString:'EGP 399', periodAr:'/ شهر', periodEn: '/ month',
+      identifier: RCProducts.monthly,
+      titleAr: 'شهري', titleEn: 'Monthly',
+      priceString: 'EGP 399',
+      periodAr: '/ شهر', periodEn: '/ month',
     ),
     const RCOffering(
-      identifier: RCProducts.yearly, titleAr:'سنوي', titleEn: 'Yearly', priceString:'EGP 3,299', periodAr:'/ سنة', periodEn: '/ year', savingsBadgeAr:'وفّر ٣٠٪', savingsBadgeEn:'Save 30%',
+      identifier: RCProducts.yearly,
+      titleAr: 'سنوي', titleEn: 'Yearly',
+      priceString: 'EGP 3,299',
+      periodAr: '/ سنة', periodEn: '/ year',
+      savingsBadgeAr: 'وفّر ٣٠٪',
+      savingsBadgeEn: 'Save 30%',
       isPopular: true,
     ),
     const RCOffering(
-      identifier: RCProducts.lifetime, titleAr:'مدى الحياة', titleEn: 'Lifetime', priceString:'EGP 7,999', periodAr:'مرة واحدة', periodEn: 'one-time',
+      identifier: RCProducts.lifetime,
+      titleAr: 'مدى الحياة', titleEn: 'Lifetime',
+      priceString: 'EGP 7,999',
+      periodAr: 'مرة واحدة', periodEn: 'one-time',
     ),
   ];
 
@@ -202,8 +230,13 @@ class RevenueCatService {
   static Future<String> getActivePlanId() async {
     try {
       final info   = await Purchases.getCustomerInfo();
-      final active = info.activeSubscriptions; if (active.contains(RCProducts.lifetime)) return'lifetime'; if (active.contains(RCProducts.yearly))   return'yearly'; if (active.contains(RCProducts.monthly))  return'monthly'; return'free';
-    } catch (_) { return'free';
+      final active = info.activeSubscriptions;
+      if (active.contains(RCProducts.lifetime)) return 'lifetime';
+      if (active.contains(RCProducts.yearly))   return 'yearly';
+      if (active.contains(RCProducts.monthly))  return 'monthly';
+      return 'free';
+    } catch (_) {
+      return 'free';
     }
   }
 }

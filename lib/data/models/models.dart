@@ -80,8 +80,9 @@ class FoodPhotoResult {
     this.confidence = 0.0,
     this.portionSize = '',
     this.ingredients = const [],
-  String get halalNote => halalExplanation;
   });
+  // Compatibility getters
+  String get halalNote => halalExplanation;
 }
 
 // ── AI Body Photo Result ─────────────────────────
@@ -96,11 +97,9 @@ class BodyPhotoResult {
     required this.recommendationsAr, required this.recommendationsEn,
     required this.rawAnalysis,
   });
-  // Compatibility
-  String get halalNote => halalExplanation;
+  // Compatibility getters
   List<String> get recommendations => recommendationsEn;
   String get rawAnalysisAr => rawAnalysis;
-
   factory BodyPhotoResult.fromJson(Map<String, dynamic> j, double weightKg) {
     final bf = (j['estimatedBodyFatPct'] as num?)?.toDouble() ?? 20.0;
     final muscle = (j['estimatedMuscleMassKg'] as num?)?.toDouble() ?? weightKg * 0.4;

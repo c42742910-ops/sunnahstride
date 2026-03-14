@@ -4,7 +4,8 @@
 //  All calculations: BMR, TDEE, BMI, body fat %, macros
 // ============================================================
 
-import 'dart:convert'; import'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ── Activity Level Enum ────────────────────────────────────
 enum ActivityLevel {
@@ -28,17 +29,32 @@ extension ActivityLevelExt on ActivityLevel {
   }
 
   String nameAr() {
-    switch (this) { case ActivityLevel.sedentary:       return'خامل (مكتبي)'; case ActivityLevel.lightlyActive:   return'خفيف (1-3 أيام/أسبوع)'; case ActivityLevel.moderatelyActive: return'متوسط (3-5 أيام/أسبوع)'; case ActivityLevel.veryActive:      return'نشيط (6-7 أيام/أسبوع)'; case ActivityLevel.extraActive:     return'رياضي (تمارين شاقة)';
+    switch (this) {
+      case ActivityLevel.sedentary:       return 'خامل (مكتبي)';
+      case ActivityLevel.lightlyActive:   return 'خفيف (1-3 أيام/أسبوع)';
+      case ActivityLevel.moderatelyActive: return 'متوسط (3-5 أيام/أسبوع)';
+      case ActivityLevel.veryActive:      return 'نشيط (6-7 أيام/أسبوع)';
+      case ActivityLevel.extraActive:     return 'رياضي (تمارين شاقة)';
     }
   }
 
   String nameEn() {
-    switch (this) { case ActivityLevel.sedentary:       return'Sedentary (desk job)'; case ActivityLevel.lightlyActive:   return'Lightly Active (1-3 days/wk)'; case ActivityLevel.moderatelyActive: return'Moderately Active (3-5 days/wk)'; case ActivityLevel.veryActive:      return'Very Active (6-7 days/wk)'; case ActivityLevel.extraActive:     return'Athlete (intense exercise)';
+    switch (this) {
+      case ActivityLevel.sedentary:       return 'Sedentary (desk job)';
+      case ActivityLevel.lightlyActive:   return 'Lightly Active (1-3 days/wk)';
+      case ActivityLevel.moderatelyActive: return 'Moderately Active (3-5 days/wk)';
+      case ActivityLevel.veryActive:      return 'Very Active (6-7 days/wk)';
+      case ActivityLevel.extraActive:     return 'Athlete (intense exercise)';
     }
   }
 
   String emoji() {
-    switch (this) { case ActivityLevel.sedentary:       return'🪑'; case ActivityLevel.lightlyActive:   return'🚶'; case ActivityLevel.moderatelyActive: return'🏃'; case ActivityLevel.veryActive:      return'💪'; case ActivityLevel.extraActive:     return'🏋️';
+    switch (this) {
+      case ActivityLevel.sedentary:       return '🪑';
+      case ActivityLevel.lightlyActive:   return '🚶';
+      case ActivityLevel.moderatelyActive: return '🏃';
+      case ActivityLevel.veryActive:      return '💪';
+      case ActivityLevel.extraActive:     return '🏋️';
     }
   }
 }
@@ -54,17 +70,32 @@ enum FitnessGoal {
 
 extension FitnessGoalExt on FitnessGoal {
   String nameAr() {
-    switch (this) { case FitnessGoal.loseWeight:    return'خسارة الوزن'; case FitnessGoal.gainMuscle:    return'بناء العضلات'; case FitnessGoal.maintain:      return'الحفاظ على الوزن'; case FitnessGoal.improveHealth: return'تحسين الصحة العامة'; case FitnessGoal.ramadanPrep:   return'الاستعداد لرمضان';
+    switch (this) {
+      case FitnessGoal.loseWeight:    return 'خسارة الوزن';
+      case FitnessGoal.gainMuscle:    return 'بناء العضلات';
+      case FitnessGoal.maintain:      return 'الحفاظ على الوزن';
+      case FitnessGoal.improveHealth: return 'تحسين الصحة العامة';
+      case FitnessGoal.ramadanPrep:   return 'الاستعداد لرمضان';
     }
   }
 
   String nameEn() {
-    switch (this) { case FitnessGoal.loseWeight:    return'Lose Weight'; case FitnessGoal.gainMuscle:    return'Build Muscle'; case FitnessGoal.maintain:      return'Maintain Weight'; case FitnessGoal.improveHealth: return'Improve Health'; case FitnessGoal.ramadanPrep:   return'Ramadan Preparation';
+    switch (this) {
+      case FitnessGoal.loseWeight:    return 'Lose Weight';
+      case FitnessGoal.gainMuscle:    return 'Build Muscle';
+      case FitnessGoal.maintain:      return 'Maintain Weight';
+      case FitnessGoal.improveHealth: return 'Improve Health';
+      case FitnessGoal.ramadanPrep:   return 'Ramadan Preparation';
     }
   }
 
   String emoji() {
-    switch (this) { case FitnessGoal.loseWeight:    return'⬇️'; case FitnessGoal.gainMuscle:    return'💪'; case FitnessGoal.maintain:      return'⚖️'; case FitnessGoal.improveHealth: return'❤️'; case FitnessGoal.ramadanPrep:   return'🌙';
+    switch (this) {
+      case FitnessGoal.loseWeight:    return '⬇️';
+      case FitnessGoal.gainMuscle:    return '💪';
+      case FitnessGoal.maintain:      return '⚖️';
+      case FitnessGoal.improveHealth: return '❤️';
+      case FitnessGoal.ramadanPrep:   return '🌙';
     }
   }
 
@@ -90,12 +121,20 @@ enum DietPreference {
 
 extension DietPrefExt on DietPreference {
   String nameAr() {
-    switch (this) { case DietPreference.halalOnly:        return'حلال فقط (افتراضي)'; case DietPreference.vegetarianHalal:  return'نباتي + حلال'; case DietPreference.sunnahDiet:       return'سنة نبوية'; case DietPreference.lowCarb:          return'قليل الكربوهيدرات';
+    switch (this) {
+      case DietPreference.halalOnly:        return 'حلال فقط (افتراضي)';
+      case DietPreference.vegetarianHalal:  return 'نباتي + حلال';
+      case DietPreference.sunnahDiet:       return 'سنة نبوية';
+      case DietPreference.lowCarb:          return 'قليل الكربوهيدرات';
     }
   }
 
   String nameEn() {
-    switch (this) { case DietPreference.halalOnly:        return'Halal Only (default)'; case DietPreference.vegetarianHalal:  return'Vegetarian + Halal'; case DietPreference.sunnahDiet:       return'Sunnah Diet'; case DietPreference.lowCarb:          return'Low Carb';
+    switch (this) {
+      case DietPreference.halalOnly:        return 'Halal Only (default)';
+      case DietPreference.vegetarianHalal:  return 'Vegetarian + Halal';
+      case DietPreference.sunnahDiet:       return 'Sunnah Diet';
+      case DietPreference.lowCarb:          return 'Low Carb';
     }
   }
 }
@@ -105,12 +144,18 @@ enum BodyFrame { small, medium, large }
 
 extension BodyFrameExt on BodyFrame {
   String nameAr() {
-    switch (this) { case BodyFrame.small:  return'صغير (< 15 سم)'; case BodyFrame.medium: return'متوسط (15-17 سم)'; case BodyFrame.large:  return'كبير (> 17 سم)';
+    switch (this) {
+      case BodyFrame.small:  return 'صغير (< 15 سم)';
+      case BodyFrame.medium: return 'متوسط (15-17 سم)';
+      case BodyFrame.large:  return 'كبير (> 17 سم)';
     }
   }
 
   String nameEn() {
-    switch (this) { case BodyFrame.small:  return'Small (< 15 cm)'; case BodyFrame.medium: return'Medium (15-17 cm)'; case BodyFrame.large:  return'Large (> 17 cm)';
+    switch (this) {
+      case BodyFrame.small:  return 'Small (< 15 cm)';
+      case BodyFrame.medium: return 'Medium (15-17 cm)';
+      case BodyFrame.large:  return 'Large (> 17 cm)';
     }
   }
 }
@@ -122,19 +167,33 @@ enum HealthCondition {
 
 extension HealthCondExt on HealthCondition {
   String nameAr() {
-    switch (this) { case HealthCondition.none:         return'لا يوجد'; case HealthCondition.diabetes:     return'السكري'; case HealthCondition.hypertension: return'ضغط الدم'; case HealthCondition.heartDisease: return'أمراض القلب'; case HealthCondition.thyroid:      return'الغدة الدرقية'; case HealthCondition.other:        return'أخرى';
+    switch (this) {
+      case HealthCondition.none:         return 'لا يوجد';
+      case HealthCondition.diabetes:     return 'السكري';
+      case HealthCondition.hypertension: return 'ضغط الدم';
+      case HealthCondition.heartDisease: return 'أمراض القلب';
+      case HealthCondition.thyroid:      return 'الغدة الدرقية';
+      case HealthCondition.other:        return 'أخرى';
     }
   }
 
   String nameEn() {
-    switch (this) { case HealthCondition.none:         return'None'; case HealthCondition.diabetes:     return'Diabetes'; case HealthCondition.hypertension: return'Hypertension'; case HealthCondition.heartDisease: return'Heart Disease'; case HealthCondition.thyroid:      return'Thyroid'; case HealthCondition.other:        return'Other';
+    switch (this) {
+      case HealthCondition.none:         return 'None';
+      case HealthCondition.diabetes:     return 'Diabetes';
+      case HealthCondition.hypertension: return 'Hypertension';
+      case HealthCondition.heartDisease: return 'Heart Disease';
+      case HealthCondition.thyroid:      return 'Thyroid';
+      case HealthCondition.other:        return 'Other';
     }
   }
 }
 
 // ── Core User Profile Model ────────────────────────────────
 class UserProfile {
-  final String id; final String gender;          //'brothers' | 'sisters'final int age;                // years
+  final String id;
+  final String gender;          // 'brothers' | 'sisters'
+  final int age;                // years
   final double heightCm;        // cm
   final double weightKg;        // kg
   final double? waistCm;        // optional, for body fat Navy method
@@ -152,6 +211,7 @@ class UserProfile {
   const UserProfile({
     required this.id,
     required this.gender,
+    required this.age,
     required this.heightCm,
     required this.weightKg,
     this.waistCm,
@@ -165,23 +225,35 @@ class UserProfile {
     this.targetWeightKg,
     required this.createdAt,
     required this.updatedAt,
-  }); bool get isMale => gender =='brothers';
+  });
+
+  bool get isMale => gender == 'brothers';
 
   // ── BMI ──────────────────────────────────────────────────
-  int get age => 25; // default age
-
   double get bmi {
     final hM = heightCm / 100.0;
     return weightKg / (hM * hM);
   }
 
-  String get bmiCategory { if (bmi < 18.5) return isMale ?'نقص وزن / Underweight' : 'نقص وزن / Underweight'; if (bmi < 25.0) return'وزن مثالي ✓ / Normal ✓'; if (bmi < 30.0) return'زيادة وزن / Overweight'; return'سمنة / Obese';
+  String get bmiCategory {
+    if (bmi < 18.5) return isMale ? 'نقص وزن / Underweight' : 'نقص وزن / Underweight';
+    if (bmi < 25.0) return 'وزن مثالي ✓ / Normal ✓';
+    if (bmi < 30.0) return 'زيادة وزن / Overweight';
+    return 'سمنة / Obese';
   }
 
-  String get bmiCategoryAr { if (bmi < 18.5) return'نقص وزن'; if (bmi < 25.0) return'وزن مثالي ✓'; if (bmi < 30.0) return'زيادة وزن'; return'سمنة';
+  String get bmiCategoryAr {
+    if (bmi < 18.5) return 'نقص وزن';
+    if (bmi < 25.0) return 'وزن مثالي ✓';
+    if (bmi < 30.0) return 'زيادة وزن';
+    return 'سمنة';
   }
 
-  String get bmiCategoryEn { if (bmi < 18.5) return'Underweight'; if (bmi < 25.0) return'Normal ✓'; if (bmi < 30.0) return'Overweight'; return'Obese';
+  String get bmiCategoryEn {
+    if (bmi < 18.5) return 'Underweight';
+    if (bmi < 25.0) return 'Normal ✓';
+    if (bmi < 30.0) return 'Overweight';
+    return 'Obese';
   }
 
   // ── Body Fat % — Deurenberg Formula ──────────────────────
@@ -217,8 +289,18 @@ class UserProfile {
 
   String get bodyFatCategory {
     final bf = bodyFatPercent;
-    if (isMale) { if (bf < 6)  return'أساسي / Essential'; if (bf < 14) return'رياضي / Athletic'; if (bf < 18) return'لياقة جيدة / Fitness'; if (bf < 25) return'متوسط / Average'; return'زيادة دهون / High';
-    } else { if (bf < 14) return'أساسي / Essential'; if (bf < 21) return'رياضية / Athletic'; if (bf < 25) return'لياقة جيدة / Fitness'; if (bf < 32) return'متوسط / Average'; return'زيادة دهون / High';
+    if (isMale) {
+      if (bf < 6)  return 'أساسي / Essential';
+      if (bf < 14) return 'رياضي / Athletic';
+      if (bf < 18) return 'لياقة جيدة / Fitness';
+      if (bf < 25) return 'متوسط / Average';
+      return 'زيادة دهون / High';
+    } else {
+      if (bf < 14) return 'أساسي / Essential';
+      if (bf < 21) return 'رياضية / Athletic';
+      if (bf < 25) return 'لياقة جيدة / Fitness';
+      if (bf < 32) return 'متوسط / Average';
+      return 'زيادة دهون / High';
     }
   }
 
@@ -311,31 +393,70 @@ class UserProfile {
 
   // ── Personalized Greeting ─────────────────────────────────
   String greetingAr() {
-    if (primaryGoal == FitnessGoal.ramadanPrep) { return'رمضان كريم! جاهز للبركة؟ 🌙';
+    if (primaryGoal == FitnessGoal.ramadanPrep) {
+      return 'رمضان كريم! جاهز للبركة؟ 🌙';
     }
     if (primaryGoal == FitnessGoal.loseWeight) {
-      final remaining = (weightKg - idealWeightKg).abs(); return'هدفك: ${remaining.toStringAsFixed(1)} كجم للوصول للمثالي 💪';
-    } return'السلام عليكم! كل يوم أفضل 🌿';
+      final remaining = (weightKg - idealWeightKg).abs();
+      return 'هدفك: ${remaining.toStringAsFixed(1)} كجم للوصول للمثالي 💪';
+    }
+    return 'السلام عليكم! كل يوم أفضل 🌿';
   }
 
   String greetingEn() {
-    if (primaryGoal == FitnessGoal.ramadanPrep) { return'Ramadan Mubarak! Ready for barakah? 🌙';
+    if (primaryGoal == FitnessGoal.ramadanPrep) {
+      return 'Ramadan Mubarak! Ready for barakah? 🌙';
     }
     if (primaryGoal == FitnessGoal.loseWeight) {
-      final remaining = (weightKg - idealWeightKg).abs(); return'Goal: ${remaining.toStringAsFixed(1)} kg to ideal weight 💪';
-    } return'Peace be upon you! Every day better 🌿';
+      final remaining = (weightKg - idealWeightKg).abs();
+      return 'Goal: ${remaining.toStringAsFixed(1)} kg to ideal weight 💪';
+    }
+    return 'Peace be upon you! Every day better 🌿';
   }
 
   // ── Serialization ─────────────────────────────────────────
-  Map<String, dynamic> toJson() => { 'id': id, 'gender': gender, 'age': age, 'heightCm': heightCm, 'weightKg': weightKg, 'waistCm': waistCm, 'activityLevel': activityLevel.index, 'primaryGoal': primaryGoal.index, 'dietPreference': dietPreference.index, 'healthConditions': healthConditions.map((e) => e.index).toList(), 'mealsPerDay': mealsPerDay, 'sleepHours': sleepHours, 'bodyFrame': bodyFrame.index, 'targetWeightKg': targetWeightKg, 'createdAt': createdAt.toIso8601String(), 'updatedAt': updatedAt.toIso8601String(),
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'gender': gender,
+    'age': age,
+    'heightCm': heightCm,
+    'weightKg': weightKg,
+    'waistCm': waistCm,
+    'activityLevel': activityLevel.index,
+    'primaryGoal': primaryGoal.index,
+    'dietPreference': dietPreference.index,
+    'healthConditions': healthConditions.map((e) => e.index).toList(),
+    'mealsPerDay': mealsPerDay,
+    'sleepHours': sleepHours,
+    'bodyFrame': bodyFrame.index,
+    'targetWeightKg': targetWeightKg,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
   };
 
-  static UserProfile fromJson(Map<String, dynamic> j) => UserProfile( id: j['id'] ?? 'user_1', gender: j['gender'] ?? 'brothers', age: j['age'] ?? 25, heightCm: (j['heightCm'] ?? 170).toDouble(), weightKg: (j['weightKg'] ?? 70).toDouble(), waistCm: j['waistCm']?.toDouble(), activityLevel: ActivityLevel.values[j['activityLevel'] ?? 0], primaryGoal: FitnessGoal.values[j['primaryGoal'] ?? 0], dietPreference: DietPreference.values[j['dietPreference'] ?? 0], healthConditions: (j['healthConditions'] as List?)
+  static UserProfile fromJson(Map<String, dynamic> j) => UserProfile(
+    id: j['id'] ?? 'user_1',
+    gender: j['gender'] ?? 'brothers',
+    age: j['age'] ?? 25,
+    heightCm: (j['heightCm'] ?? 170).toDouble(),
+    weightKg: (j['weightKg'] ?? 70).toDouble(),
+    waistCm: j['waistCm']?.toDouble(),
+    activityLevel: ActivityLevel.values[j['activityLevel'] ?? 0],
+    primaryGoal: FitnessGoal.values[j['primaryGoal'] ?? 0],
+    dietPreference: DietPreference.values[j['dietPreference'] ?? 0],
+    healthConditions: (j['healthConditions'] as List?)
         ?.map((i) => HealthCondition.values[i])
-        .toList() ?? [HealthCondition.none], mealsPerDay: j['mealsPerDay'] ?? 3, sleepHours: (j['sleepHours'] ?? 7).toDouble(), bodyFrame: BodyFrame.values[j['bodyFrame'] ?? 1], targetWeightKg: j['targetWeightKg']?.toDouble(), createdAt: DateTime.tryParse(j['createdAt'] ?? '') ?? DateTime.now(), updatedAt: DateTime.tryParse(j['updatedAt'] ?? '') ?? DateTime.now(),
+        .toList() ?? [HealthCondition.none],
+    mealsPerDay: j['mealsPerDay'] ?? 3,
+    sleepHours: (j['sleepHours'] ?? 7).toDouble(),
+    bodyFrame: BodyFrame.values[j['bodyFrame'] ?? 1],
+    targetWeightKg: j['targetWeightKg']?.toDouble(),
+    createdAt: DateTime.tryParse(j['createdAt'] ?? '') ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(j['updatedAt'] ?? '') ?? DateTime.now(),
   );
 
   UserProfile copyWith({
+    int? age,
     double? heightCm,
     double? weightKg,
     double? waistCm,
@@ -350,6 +471,7 @@ class UserProfile {
   }) => UserProfile(
     id: id,
     gender: gender,
+    age: age ?? this.age,
     heightCm: heightCm ?? this.heightCm,
     weightKg: weightKg ?? this.weightKg,
     waistCm: waistCm ?? this.waistCm,
@@ -367,7 +489,8 @@ class UserProfile {
 }
 
 // ── User Profile Repository ────────────────────────────────
-class UserProfileRepository { static const _key ='user_profile_v2';
+class UserProfileRepository {
+  static const _key = 'user_profile_v2';
 
   static Future<UserProfile?> load() async {
     final p = await SharedPreferences.getInstance();
