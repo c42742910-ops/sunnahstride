@@ -318,8 +318,8 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(name, style: const TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w900, fontSize: 18)),
             Text(r.halalStatus.label, style: TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, fontSize: 13, color: statusColor)),
-            if ((r.halalNote ?? '').isNotEmpty)
-              Text(r.halalNote ?? '', style: TextStyle(fontFamily:'Cairo', fontSize: 11, color: muted, height: 1.4)),
+            if ((r.halalNote ?? "" ?? '').isNotEmpty)
+              Text(r.halalNote ?? "" ?? '', style: TextStyle(fontFamily:'Cairo', fontSize: 11, color: muted, height: 1.4)),
           ])),
           Column(children: [ Text('$confPct%', style: TextStyle(fontFamily: 'Cairo', fontSize: 13, fontWeight: FontWeight.w700, color: muted)), Text(isAr ?'دقة' : 'conf.', style: TextStyle(fontFamily: 'Cairo', fontSize: 9, color: muted)),
           ]),
