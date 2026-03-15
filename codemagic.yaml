@@ -15,21 +15,40 @@ workflows:
         script: |
           python3 - << 'PYEOF'
           import re
+
           path = 'android/app/build.gradle'
           f = open(path).read()
-          print("Original build.gradle preview:")
-          print(f[:500])
-          f = f.replace('minSdk flutter.minSdkVersion', 'minSdk 21')
-          f = f.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 21')
+          print("=== ORIGINAL ===")
+          print(f)
+
+          # Fix minSdk — handle both Groovy and Kotlin DSL variants
+          f = re.sub(r'minSdk\s+flutter\.minSdkVersion', 'minSdk 21', f)
+          f = re.sub(r'minSdkVersion\s+flutter\.minSdkVersion', 'minSdkVersion 21', f)
+
+          # Add isCoreLibraryDesugaringEnabled inside compileOptions block if missing
           if 'isCoreLibraryDesugaringEnabled' not in f:
-              f = f.replace('compileOptions {', 'compileOptions {\n        isCoreLibraryDesugaringEnabled = true')
+              f = re.sub(
+                  r'(compileOptions\s*\{)',
+                  r'\1\n        isCoreLibraryDesugaringEnabled = true',
+                  f
+              )
+
+          # Add coreLibraryDesugaring to the FIRST dependencies block if missing
           if 'desugar_jdk_libs' not in f:
-              f = f.replace('dependencies {', 'dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")', 1)
-          open(path,'w').write(f)
-          print("Patched!")
-          print("minSdk 21:", 'minSdk 21' in f)
-          print("desugaring:", 'isCoreLibraryDesugaringEnabled' in f)
-          print("desugar_jdk_libs:", 'desugar_jdk_libs' in f)
+              f = re.sub(
+                  r'(dependencies\s*\{)',
+                  r'\1\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")',
+                  f,
+                  count=1
+              )
+
+          open(path, 'w').write(f)
+          print("=== PATCHED ===")
+          print(f)
+          assert 'minSdk 21' in f or 'minSdkVersion 21' in f, "minSdk patch FAILED"
+          assert 'isCoreLibraryDesugaringEnabled' in f, "desugaring flag FAILED"
+          assert 'desugar_jdk_libs' in f, "desugar dep FAILED"
+          print("All assertions passed!")
           PYEOF
       - name: Build APK
         script: flutter build apk --release --no-shrink
