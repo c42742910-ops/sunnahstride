@@ -6,26 +6,41 @@ workflows:
       flutter: stable
       java: 17
     scripts:
-      - name: Recreate Android folder
+      - name: Recreate and patch Android folder
         script: |
           rm -rf android
           flutter create --platforms=android .
           flutter pub get
-      - name: Patch build.gradle
-        script: |
-          python3 - << 'PYEOF'
-          import re
 
-          path = 'android/app/build.gradle'
+          echo "=== Listing android/app/ ==="
+          ls -la android/app/
+
+          # Detect Groovy vs Kotlin DSL
+          if [ -f android/app/build.gradle.kts ]; then
+            GRADLE_FILE="android/app/build.gradle.kts"
+            echo "Found Kotlin DSL: $GRADLE_FILE"
+          elif [ -f android/app/build.gradle ]; then
+            GRADLE_FILE="android/app/build.gradle"
+            echo "Found Groovy DSL: $GRADLE_FILE"
+          else
+            echo "ERROR: No build.gradle or build.gradle.kts found!"
+            find android -name "*.gradle*"
+            exit 1
+          fi
+
+          python3 - "$GRADLE_FILE" << 'PYEOF'
+          import sys, re
+
+          path = sys.argv[1]
           f = open(path).read()
           print("=== ORIGINAL ===")
           print(f)
 
-          # Fix minSdk — handle both Groovy and Kotlin DSL variants
-          f = re.sub(r'minSdk\s+flutter\.minSdkVersion', 'minSdk 21', f)
+          # Fix minSdk
+          f = re.sub(r'minSdk\s*=?\s*flutter\.minSdkVersion', 'minSdk = 21', f)
           f = re.sub(r'minSdkVersion\s+flutter\.minSdkVersion', 'minSdkVersion 21', f)
 
-          # Add isCoreLibraryDesugaringEnabled inside compileOptions block if missing
+          # Add isCoreLibraryDesugaringEnabled inside compileOptions
           if 'isCoreLibraryDesugaringEnabled' not in f:
               f = re.sub(
                   r'(compileOptions\s*\{)',
@@ -33,7 +48,7 @@ workflows:
                   f
               )
 
-          # Add coreLibraryDesugaring to the FIRST dependencies block if missing
+          # Add desugar dependency to first dependencies block
           if 'desugar_jdk_libs' not in f:
               f = re.sub(
                   r'(dependencies\s*\{)',
@@ -45,11 +60,11 @@ workflows:
           open(path, 'w').write(f)
           print("=== PATCHED ===")
           print(f)
-          assert 'minSdk 21' in f or 'minSdkVersion 21' in f, "minSdk patch FAILED"
-          assert 'isCoreLibraryDesugaringEnabled' in f, "desugaring flag FAILED"
-          assert 'desugar_jdk_libs' in f, "desugar dep FAILED"
+          assert 'isCoreLibraryDesugaringEnabled' in f, "desugaring flag MISSING"
+          assert 'desugar_jdk_libs' in f, "desugar dep MISSING"
           print("All assertions passed!")
           PYEOF
+
       - name: Build APK
         script: flutter build apk --release --no-shrink
     artifacts:
