@@ -12,41 +12,58 @@ workflows:
           flutter create --platforms=android .
           flutter pub get
 
-          if [ -f android/app/build.gradle.kts ]; then
-            GRADLE_FILE="android/app/build.gradle.kts"
-          elif [ -f android/app/build.gradle ]; then
-            GRADLE_FILE="android/app/build.gradle"
-          else
-            echo "ERROR: no gradle file found"
-            find android -name "*.gradle*"
-            exit 1
-          fi
+          cat > android/app/build.gradle.kts << 'GRADLE'
+          plugins {
+              id("com.android.application")
+              id("kotlin-android")
+              id("dev.flutter.flutter-gradle-plugin")
+          }
 
-          echo "Patching: $GRADLE_FILE"
+          android {
+              namespace = "com.example.sunnahstride"
+              compileSdk = flutter.compileSdkVersion
+              ndkVersion = flutter.ndkVersion
 
-          # Fix minSdk
-          sed -i 's/minSdk = flutter\.minSdkVersion/minSdk = 21/g' "$GRADLE_FILE"
-          sed -i 's/minSdkVersion flutter\.minSdkVersion/minSdkVersion 21/g' "$GRADLE_FILE"
+              compileOptions {
+                  isCoreLibraryDesugaringEnabled = true
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
 
-          # Add isCoreLibraryDesugaringEnabled inside compileOptions
-          if ! grep -q 'isCoreLibraryDesugaringEnabled' "$GRADLE_FILE"; then
-            sed -i 's/compileOptions {/compileOptions {\n        isCoreLibraryDesugaringEnabled = true/' "$GRADLE_FILE"
-          fi
+              kotlinOptions {
+                  jvmTarget = JavaVersion.VERSION_17.toString()
+              }
 
-          # Add desugar dependency
-          if ! grep -q 'desugar_jdk_libs' "$GRADLE_FILE"; then
-            if grep -q 'dependencies {' "$GRADLE_FILE"; then
-              sed -i 's/dependencies {/dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")/' "$GRADLE_FILE"
-            else
-              printf '\ndependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")\n}\n' >> "$GRADLE_FILE"
-            fi
-          fi
+              defaultConfig {
+                  applicationId = "com.example.sunnahstride"
+                  minSdk = 21
+                  targetSdk = flutter.targetSdkVersion
+                  versionCode = flutter.versionCode
+                  versionName = flutter.versionName
+              }
+
+              buildTypes {
+                  release {
+                      signingConfig = signingConfigs.getByName("debug")
+                  }
+              }
+          }
+
+          flutter {
+              source = "../.."
+          }
+
+          dependencies {
+              coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+          }
+          GRADLE
 
           echo "=== FINAL FILE ==="
-          cat "$GRADLE_FILE"
+          cat android/app/build.gradle.kts
 
-          grep -q 'isCoreLibraryDesugaringEnabled' "$GRADLE_FILE" || { echo "FAIL: desugaring flag missing"; exit 1; }
-          grep -q 'desugar_jdk_libs' "$GRADLE_FILE" || { echo "FAIL: desugar dep missing"; exit 1; }
+          grep -q 'isCoreLibraryDesugaringEnabled' android/app/build.gradle.kts || { echo "FAIL: desugaring flag missing"; exit 1; }
+          grep -q 'desugar_jdk_libs' android/app/build.gradle.kts || { echo "FAIL: desugar dep missing"; exit 1; }
+          grep -q 'minSdk = 21' android/app/build.gradle.kts || { echo "FAIL: minSdk missing"; exit 1; }
           echo "All checks passed!"
 
       - name: Build APK
