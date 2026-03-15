@@ -1,5 +1,13 @@
 // main.dart — SunnahStride v1.0
-import 'package:flutter/material.dart'; import'package:flutter/services.dart'; import'package:flutter_riverpod/flutter_riverpod.dart'; import'package:flutter_localizations/flutter_localizations.dart'; import'core/theme.dart'; import'core/providers.dart'; import'core/revenuecat_service.dart'; import'core/notifications.dart'; import'core/database.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'core/theme.dart';
+import 'core/providers.dart';
+import 'core/revenuecat_service.dart';
+import 'core/notifications.dart';
+import 'core/database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,12 +16,36 @@ void main() async {
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,
   ));
-  // Init SQLite
-  await AppDatabase.db;
-  // Init notifications
-  try { await NotificationService.init(); } catch (_) {}
-  // Init RevenueCat
-  try { await RCConfig.configure(); } catch (_) {}
+
+  // Init SQLite with timeout
+  try {
+    await AppDatabase.db.timeout(
+      const Duration(seconds: 5),
+      onTimeout: () => throw Exception('DB timeout'),
+    );
+  } catch (e) {
+    debugPrint('DB init failed: $e');
+  }
+
+  // Init notifications with timeout
+  try {
+    await NotificationService.init().timeout(
+      const Duration(seconds: 5),
+      onTimeout: () => throw Exception('Notifications timeout'),
+    );
+  } catch (e) {
+    debugPrint('Notifications init failed: $e');
+  }
+
+  // Init RevenueCat with timeout
+  try {
+    await RCConfig.configure().timeout(
+      const Duration(seconds: 5),
+      onTimeout: () => throw Exception('RevenueCat timeout'),
+    );
+  } catch (e) {
+    debugPrint('RevenueCat init failed: $e');
+  }
 
   runApp(const ProviderScope(child: SunnahStrideApp()));
 }
@@ -27,12 +59,14 @@ class SunnahStrideApp extends ConsumerWidget {
     final lang   = ref.watch(languageProvider);
     final router = ref.watch(routerProvider);
 
-    return MaterialApp.router( title:'سنة سترايد | SunnahStride',
+    return MaterialApp.router(
+      title: 'سنة سترايد | SunnahStride',
       debugShowCheckedModeBanner: false,
       theme:      AppTheme.lightTheme,
       darkTheme:  AppTheme.darkTheme,
       themeMode:  isDark ? ThemeMode.dark : ThemeMode.light,
-      locale: Locale(lang), supportedLocales: const [Locale('ar'), Locale('en')],
+      locale: Locale(lang),
+      supportedLocales: const [Locale('ar'), Locale('en')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
