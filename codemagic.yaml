@@ -17,45 +17,37 @@ workflows:
           elif [ -f android/app/build.gradle ]; then
             GRADLE_FILE="android/app/build.gradle"
           else
-            echo "ERROR: no gradle file found"; find android -name "*.gradle*"; exit 1
+            echo "ERROR: no gradle file found"
+            find android -name "*.gradle*"
+            exit 1
           fi
 
-          echo "Patching $GRADLE_FILE"
+          echo "Patching: $GRADLE_FILE"
 
-          python3 << PYEOF
-import re
+          # Fix minSdk
+          sed -i 's/minSdk = flutter\.minSdkVersion/minSdk = 21/g' "$GRADLE_FILE"
+          sed -i 's/minSdkVersion flutter\.minSdkVersion/minSdkVersion 21/g' "$GRADLE_FILE"
 
-path = "$GRADLE_FILE"
-f = open(path).read()
+          # Add isCoreLibraryDesugaringEnabled inside compileOptions
+          if ! grep -q 'isCoreLibraryDesugaringEnabled' "$GRADLE_FILE"; then
+            sed -i 's/compileOptions {/compileOptions {\n        isCoreLibraryDesugaringEnabled = true/' "$GRADLE_FILE"
+          fi
 
-# Fix minSdk
-f = re.sub(r'minSdk\s*=\s*flutter\.minSdkVersion', 'minSdk = 21', f)
-f = re.sub(r'minSdkVersion\s+flutter\.minSdkVersion', 'minSdkVersion 21', f)
+          # Add desugar dependency
+          if ! grep -q 'desugar_jdk_libs' "$GRADLE_FILE"; then
+            if grep -q 'dependencies {' "$GRADLE_FILE"; then
+              sed -i 's/dependencies {/dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")/' "$GRADLE_FILE"
+            else
+              printf '\ndependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")\n}\n' >> "$GRADLE_FILE"
+            fi
+          fi
 
-# Add isCoreLibraryDesugaringEnabled if missing
-if 'isCoreLibraryDesugaringEnabled' not in f:
-    f = re.sub(
-        r'(compileOptions\s*\{)',
-        r'\1\n        isCoreLibraryDesugaringEnabled = true',
-        f
-    )
+          echo "=== FINAL FILE ==="
+          cat "$GRADLE_FILE"
 
-# Add dependencies block with desugar dep — append if block missing, inject if present
-if 'desugar_jdk_libs' not in f:
-    desugar_dep = 'coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")'
-    if re.search(r'dependencies\s*\{', f):
-        f = re.sub(r'(dependencies\s*\{)', r'\1\n    ' + desugar_dep, f, count=1)
-    else:
-        f += '\ndependencies {\n    ' + desugar_dep + '\n}\n'
-
-open(path, 'w').write(f)
-print("=== FINAL FILE ===")
-print(f)
-
-assert 'isCoreLibraryDesugaringEnabled = true' in f, "FAIL: desugaring flag missing"
-assert 'desugar_jdk_libs' in f, "FAIL: desugar dep missing"
-print("All checks passed!")
-PYEOF
+          grep -q 'isCoreLibraryDesugaringEnabled' "$GRADLE_FILE" || { echo "FAIL: desugaring flag missing"; exit 1; }
+          grep -q 'desugar_jdk_libs' "$GRADLE_FILE" || { echo "FAIL: desugar dep missing"; exit 1; }
+          echo "All checks passed!"
 
       - name: Build APK
         script: flutter build apk --release --no-shrink
