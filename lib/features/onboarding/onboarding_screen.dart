@@ -323,21 +323,21 @@ class _OnboardingState extends ConsumerState<OnboardingScreen> {
   Widget _stepActivity() => _qWrap(emoji: '🏃', titleAr: 'مستوى نشاطك اليومي؟', titleEn: 'Daily activity level?',
     child: Column(children: ActivityLevel.values.map((lvl) => _radioOption<ActivityLevel>(
       value: lvl, groupValue: _activity, emoji: lvl.emoji(),
-      labelAr: lvl.labelAr(), labelEn: lvl.labelEn(),
+      labelAr: lvl.nameAr(), labelEn: lvl.nameEn(),
       onChanged: (v) => setState(() => _activity = v!))).toList()));
 
   // STEP 7: Goal
   Widget _stepGoal() => _qWrap(emoji: '🎯', titleAr: 'ما هدفك الرئيسي؟', titleEn: 'Main goal?',
     child: Column(children: FitnessGoal.values.map((g) => _radioOption<FitnessGoal>(
       value: g, groupValue: _goal, emoji: g.emoji(),
-      labelAr: g.labelAr(), labelEn: g.labelEn(),
+      labelAr: g.nameAr(), labelEn: g.nameEn(),
       onChanged: (v) => setState(() => _goal = v!))).toList()));
 
   // STEP 8: Diet
   Widget _stepDiet() => _qWrap(emoji: '🥗', titleAr: 'تفضيلك الغذائي؟', titleEn: 'Dietary preference?',
     child: Column(children: DietPreference.values.map((d) => _radioOption<DietPreference>(
-      value: d, groupValue: _diet, emoji: d.emoji(),
-      labelAr: d.labelAr(), labelEn: d.labelEn(),
+      value: d, groupValue: _diet, emoji: d == DietPreference.halalOnly ? "🥩" : d == DietPreference.vegetarianHalal ? "🥗" : d == DietPreference.sunnahDiet ? "🌿" : "🥦",
+      labelAr: d.nameAr(), labelEn: d.nameEn(),
       onChanged: (v) => setState(() => _diet = v!))).toList()));
 
   // STEP 9: Meals & Sleep
@@ -359,8 +359,8 @@ class _OnboardingState extends ConsumerState<OnboardingScreen> {
   // STEP 10: Body Frame
   Widget _stepBodyFrame() => _qWrap(emoji: '💪', titleAr: 'بنية جسمك؟', titleEn: 'Body frame?',
     child: Column(children: BodyFrame.values.map((f) => _radioOption<BodyFrame>(
-      value: f, groupValue: _frame, emoji: f.emoji(),
-      labelAr: f.labelAr(), labelEn: f.labelEn(),
+      value: f, groupValue: _frame, emoji: f == BodyFrame.small ? "🔹" : f == BodyFrame.medium ? "🔷" : "🔶",
+      labelAr: f.nameAr(), labelEn: f.nameEn(),
       onChanged: (v) => setState(() => _frame = v!))).toList()));
 
   // STEP 11: Health Conditions
@@ -381,9 +381,9 @@ class _OnboardingState extends ConsumerState<OnboardingScreen> {
             border: Border.all(color: sel ? AppColors.barakahGold : Colors.white30),
             borderRadius: BorderRadius.circular(12)),
           child: Row(children: [
-            Text(c.emoji(), style: const TextStyle(fontSize: 24)),
+            Text(c == HealthCondition.none ? '✅' : c == HealthCondition.diabetes ? '🩸' : c == HealthCondition.hypertension ? '💊' : c == HealthCondition.heartDisease ? '❤️' : c == HealthCondition.thyroid ? '🦋' : '⚕️', style: const TextStyle(fontSize: 24)),
             const SizedBox(width: 12),
-            Expanded(child: Text(_isAr ? c.labelAr() : c.labelEn(),
+            Expanded(child: Text(_isAr ? c.nameAr() : c.nameEn(),
                 style: const TextStyle(fontFamily: 'Cairo', color: Colors.white, fontSize: 15))),
             if (sel) const Icon(Icons.check, color: Colors.white),
           ]),
