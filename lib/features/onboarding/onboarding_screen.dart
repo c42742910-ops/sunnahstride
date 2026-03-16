@@ -263,7 +263,7 @@ class _OnboardingState extends ConsumerState<OnboardingScreen>
   Widget _langBtn(String flag, String label, String code) {
     final sel = _lang == code;
     return GestureDetector(
-      onTap: () => setState(() { _lang = code; }),
+      onTap: () { setState(() { _lang = code; }); Future.delayed(const Duration(milliseconds: 300), _next); },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 18),
