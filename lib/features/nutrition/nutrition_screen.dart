@@ -103,8 +103,8 @@ class _NutritionState extends ConsumerState<NutritionScreen>
               decoration: BoxDecoration(color: AppColors.sunnahGreen.withOpacity(0.08), borderRadius: BorderRadius.circular(8)),
               child: Text(
                 isAr
-                  ? '🎯 الهدف مخصص لك: ${profile.calorieGoalKcal.toInt()} سعرة (${isAr ? profile.primaryGoal.nameAr() : profile.primaryGoal.nameEn()})'
-                  : '🎯 Personalized goal: ${profile.calorieGoalKcal.toInt()} kcal (${profile.primaryGoal.nameEn()})',
+                  ? '🎯 الهدف مخصص لك: ${profile.calorieGoalKcal.toInt()} سعرة'
+                  : '🎯 Personalized goal: ${profile.calorieGoalKcal.toInt()} kcal',
                 style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: AppColors.sunnahGreen),
               ),
             ),
@@ -462,8 +462,8 @@ class _NutritionState extends ConsumerState<NutritionScreen>
         decoration: BoxDecoration(color: AppColors.sunnahGreen.withOpacity(0.08), borderRadius: BorderRadius.circular(12)),
         child: Text(
           isAr
-            ? '🤖 AI يعرف: وزنك ${profile.weightKg}كجم • هدفك: ${profile.primaryGoal.nameAr()} • سعراتك: ${profile.calorieGoalKcal.toInt()} • نظامك: ${profile.dietPreference.nameAr()}'
-            : '🤖 AI knows: ${profile.weightKg}kg • Goal: ${profile.primaryGoal.nameEn()} • Calories: ${profile.calorieGoalKcal.toInt()} • Diet: ${profile.dietPreference.nameEn()}',
+            ? '🤖 AI يعرف: وزنك ${profile.weightKg}كجم • سعراتك: ${profile.calorieGoalKcal.toInt()}'
+            : '🤖 AI knows: ${profile.weightKg}kg • Calories: ${profile.calorieGoalKcal.toInt()}',
           style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: AppColors.sunnahGreen),
         ),
       ),
