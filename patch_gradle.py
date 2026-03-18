@@ -1,4 +1,4 @@
-import os, sys, shutil
+import os, sys, subprocess
 
 # ── Patch build.gradle ──────────────────────────────────────
 path = 'android/app/build.gradle'
@@ -16,17 +16,12 @@ if 'desugar_jdk_libs' not in f:
         'dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")', 1)
 open(path, 'w').write(f)
 print("build.gradle patched")
+print("minSdk 21:", 'minSdk 21' in f or '21' in f)
+print("desugar:", 'desugar_jdk_libs' in f)
 
-# ── Copy logo to mipmap folders ─────────────────────────────
+# ── Copy logo using sips (macOS built-in) ───────────────────
 logo = 'assets/logo.png'
 if os.path.exists(logo):
-    try:
-        from PIL import Image
-    except ImportError:
-        os.system('pip install Pillow --break-system-packages -q')
-        from PIL import Image
-    
-    img = Image.open(logo).convert('RGBA')
     sizes = {
         'mipmap-mdpi': 48, 'mipmap-hdpi': 72,
         'mipmap-xhdpi': 96, 'mipmap-xxhdpi': 144, 'mipmap-xxxhdpi': 192,
@@ -34,10 +29,19 @@ if os.path.exists(logo):
     for folder, size in sizes.items():
         d = f'android/app/src/main/res/{folder}'
         os.makedirs(d, exist_ok=True)
-        r = img.resize((size, size), Image.LANCZOS)
-        r.save(f'{d}/ic_launcher.png')
-        r.save(f'{d}/ic_launcher_round.png')
-        print(f"Logo {size}x{size} -> {folder}")
+        for name in ['ic_launcher.png', 'ic_launcher_round.png']:
+            out = f'{d}/{name}'
+            result = subprocess.run(
+                ['sips', '-z', str(size), str(size), logo, '--out', out],
+                capture_output=True, text=True
+            )
+            if result.returncode == 0:
+                print(f"Logo {size}x{size} -> {folder}/{name}")
+            else:
+                # Fallback: just copy the file
+                import shutil
+                shutil.copy(logo, out)
+                print(f"Copied (no resize) -> {folder}/{name}")
     print("Logo done!")
 else:
-    print("No assets/logo.png found")
+    print("WARNING: assets/logo.png not found - skipping logo")
