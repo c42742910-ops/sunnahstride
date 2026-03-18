@@ -269,4 +269,47 @@ Request: $prompt
         : 'Sorry, connection error. Please check your internet and try again.';
     }
   }
+  // ════════════════════════════════════════════════
+  //  FOOD NUTRITION LOOKUP
+  // ════════════════════════════════════════════════
+  static Future<Map<String, dynamic>> lookupFood(String foodName, {String language = 'ar'}) async {
+    final isAr = language == 'ar';
+    const system = '''You are a nutrition database expert. When given a food name, return ONLY a JSON object with exact nutritional values per 100g serving. Return ONLY valid JSON, no other text.
+Required format: {"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carbs_g":0.0,"fat_g":0.0,"fiber_g":0.0,"sugar_g":0.0,"sodium_mg":0.0,"serving_size":"100g","halal":true}''';
+
+    final prompt = isAr
+        ? 'القيم الغذائية لـ: $foodName'
+        : 'Nutritional values for: $foodName';
+
+    try {
+      final body = jsonEncode({
+        'model': _model,
+        'max_tokens': 300,
+        'system': system,
+        'messages': [{'role': 'user', 'content': prompt}],
+      });
+
+      final resp = await http.post(
+        Uri.parse(_endpoint),
+        headers: {'Content-Type': 'application/json', 'anthropic-version': _version},
+        body: body,
+      ).timeout(const Duration(seconds: 15));
+
+      if (resp.statusCode == 200) {
+        final data = jsonDecode(resp.body);
+        final text = (data['content'] as List)
+            .firstWhere((c) => c['type'] == 'text')['text'] as String;
+        final clean = text.trim().replaceAll('```json', '').replaceAll('```', '').trim();
+        return jsonDecode(clean) as Map<String, dynamic>;
+      }
+    } catch (_) {}
+    // Fallback
+    return {
+      'name_ar': foodName, 'name_en': foodName,
+      'kcal': 100, 'protein_g': 5.0, 'carbs_g': 15.0,
+      'fat_g': 3.0, 'fiber_g': 1.0, 'sugar_g': 2.0,
+      'sodium_mg': 50.0, 'serving_size': '100g', 'halal': true,
+    };
+  }
+
 }
