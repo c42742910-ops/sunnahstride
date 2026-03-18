@@ -628,12 +628,8 @@ class _NutritionState extends ConsumerState<NutritionScreen>
     final lang    = ref.read(languageProvider);
     final isAr    = lang == 'ar';
     final goal    = profile?.calorieGoalKcal.toInt() ?? 2000;
-    final diet    = profile != null
-        ? (isAr ? profile.dietPreference.nameAr() : profile.dietPreference.nameEn())
-        : (isAr ? 'حلال' : 'Halal');
-    final goalStr = profile != null
-        ? (isAr ? profile.primaryGoal.nameAr() : profile.primaryGoal.nameEn())
-        : (isAr ? 'صحة عامة' : 'General health');
+    final diet    = isAr ? 'حلال' : 'Halal';
+    final goalStr = isAr ? 'صحة عامة' : 'General health';
 
     final prompt = _aiCtrl.text.trim().isNotEmpty
         ? _aiCtrl.text.trim()
