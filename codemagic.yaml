@@ -6,15 +6,12 @@ workflows:
       flutter: stable
       java: 17
     scripts:
-      - name: Recreate Android folder
+      - name: Build
         script: |
           rm -rf android
           flutter create --platforms=android .
           flutter pub get
-      - name: Patch build.gradle
-        script: |
           python3 patch_gradle.py
-      - name: Build APK
-        script: flutter build apk --release --no-shrink
+          flutter build apk --release --no-shrink
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
