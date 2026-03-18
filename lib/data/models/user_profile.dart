@@ -189,7 +189,7 @@ extension HealthCondExt on HealthCondition {
   }
 }
 
-// ── Core User Profile Model ────────────────────────────────
+// ── Core User Profile Model ─────────────────────────────── v2
 class UserProfile {
   final String id;
   final String gender;          // 'brothers' | 'sisters'
