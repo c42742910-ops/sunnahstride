@@ -175,6 +175,9 @@ class CaloriesNotifier extends StateNotifier<CaloriesState> {
   final Ref _ref;
   CaloriesNotifier(this._ref) : super(CaloriesState(goal: 2000, entries: [])) {
     _init();
+    _ref.listen(userProfileProvider, (_, profile) {
+      if (profile != null) syncWithProfile(profile);
+    });
   }
   Future<void> _init() async {
     final p    = _ref.read(userProfileProvider);
