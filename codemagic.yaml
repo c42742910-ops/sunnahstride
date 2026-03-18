@@ -11,62 +11,36 @@ workflows:
           rm -rf android
           flutter create --platforms=android .
           flutter pub get
-      - name: Patch build.gradle and logo
+      - name: Patch build.gradle
         script: |
-          python3 - << 'PYEOF'
-          import re, os, shutil
-
-          # ── Patch build.gradle ──────────────────────────
-          path = 'android/app/build.gradle'
-          f = open(path).read()
-          f = f.replace('minSdk flutter.minSdkVersion', 'minSdk 21')
-          f = f.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 21')
-          if 'isCoreLibraryDesugaringEnabled' not in f:
-              f = f.replace('compileOptions {',
-                  'compileOptions {\n        isCoreLibraryDesugaringEnabled = true')
-          if 'desugar_jdk_libs' not in f:
-              f = f.replace('dependencies {',
-                  'dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")', 1)
-          open(path, 'w').write(f)
-          print("build.gradle patched")
-
-          # ── Copy logo to mipmap folders ─────────────────
-          logo = 'assets/logo.png'
-          if os.path.exists(logo):
-              try:
-                  from PIL import Image
-                  img = Image.open(logo).convert('RGBA')
-                  sizes = {
-                      'mipmap-mdpi': 48, 'mipmap-hdpi': 72,
-                      'mipmap-xhdpi': 96, 'mipmap-xxhdpi': 144,
-                      'mipmap-xxxhdpi': 192,
-                  }
-                  for folder, size in sizes.items():
-                      d = f'android/app/src/main/res/{folder}'
-                      os.makedirs(d, exist_ok=True)
-                      r = img.resize((size, size))
-                      r.save(f'{d}/ic_launcher.png')
-                      r.save(f'{d}/ic_launcher_round.png')
-                  print("Logo icons set!")
-              except ImportError:
-                  os.system('pip install Pillow --break-system-packages -q')
-                  from PIL import Image
-                  img = Image.open(logo).convert('RGBA')
-                  sizes = {
-                      'mipmap-mdpi': 48, 'mipmap-hdpi': 72,
-                      'mipmap-xhdpi': 96, 'mipmap-xxhdpi': 144,
-                      'mipmap-xxxhdpi': 192,
-                  }
-                  for folder, size in sizes.items():
-                      d = f'android/app/src/main/res/{folder}'
-                      os.makedirs(d, exist_ok=True)
-                      r = img.resize((size, size))
-                      r.save(f'{d}/ic_launcher.png')
-                      r.save(f'{d}/ic_launcher_round.png')
-                  print("Logo icons set (after pip install)!")
-          else:
-              print("No logo found in assets - skipping")
-          PYEOF
+          FILE="android/app/build.gradle"
+          echo "Checking: $FILE"
+          ls android/app/
+          sed -i 's/minSdk flutter.minSdkVersion/minSdk 21/g' $FILE
+          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/g' $FILE
+          sed -i 's/compileOptions {/compileOptions {\n        isCoreLibraryDesugaringEnabled = true/' $FILE
+          sed -i '0,/dependencies {/s/dependencies {/dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")/' $FILE
+          echo "build.gradle patched!"
+          grep -n "minSdk\|desugaring\|desugar" $FILE
+      - name: Set app logo
+        script: |
+          if [ -f "assets/logo.png" ]; then
+            pip install Pillow --break-system-packages -q
+            python3 << 'PYEOF'
+import os
+from PIL import Image
+img = Image.open('assets/logo.png').convert('RGBA')
+for folder, size in [('mipmap-mdpi',48),('mipmap-hdpi',72),('mipmap-xhdpi',96),('mipmap-xxhdpi',144),('mipmap-xxxhdpi',192)]:
+    d = f'android/app/src/main/res/{folder}'
+    os.makedirs(d, exist_ok=True)
+    r = img.resize((size,size))
+    r.save(f'{d}/ic_launcher.png')
+    r.save(f'{d}/ic_launcher_round.png')
+print("Logo set!")
+PYEOF
+          else
+            echo "No logo found, skipping"
+          fi
       - name: Build APK
         script: flutter build apk --release --no-shrink
     artifacts:
