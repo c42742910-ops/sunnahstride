@@ -352,11 +352,11 @@ class _NutritionState extends ConsumerState<NutritionScreen>
                   title: Text(e.name, style: const TextStyle(
                       fontFamily: 'Cairo', fontSize: 13)),
                   subtitle: e.proteinG > 0
-                      ? Text('💪 \${e.proteinG.toInt()}g  🍚 \${e.carbsG.toInt()}g  🥑 \${e.fatG.toInt()}g',
+                      ? Text('💪 ${e.proteinG.toInt()}g  🍚 ${e.carbsG.toInt()}g  🥑 ${e.fatG.toInt()}g',
                           style: TextStyle(fontFamily: 'Cairo', fontSize: 10, color: muted))
                       : null,
                   trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Text('\${e.kcal} kcal',
+                    Text('${e.kcal} kcal',
                         style: const TextStyle(fontFamily: 'Cairo',
                             fontWeight: FontWeight.w700, fontSize: 13,
                             color: AppColors.halalGreen)),

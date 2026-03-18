@@ -11,9 +11,9 @@ workflows:
           rm -rf android
           flutter create --platforms=android .
           flutter pub get
-          python3 - << 'PYEOF'
-          import re, os, base64, shutil
-          
+          python3 - << 'PYEOF2'
+          import re, os, shutil, base64
+
           # Patch build.gradle
           path = 'android/app/build.gradle'
           f = open(path).read()
@@ -23,11 +23,28 @@ workflows:
               f = f.replace('compileOptions {', 'compileOptions {\n        isCoreLibraryDesugaringEnabled = true')
           if 'desugar_jdk_libs' not in f:
               f = f.replace('dependencies {', 'dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")', 1)
-          open(path,'w').write(f)
-          print("build.gradle patched")
-          print("minSdk 21:", 'minSdk 21' in f)
-          print("desugaring:", 'isCoreLibraryDesugaringEnabled' in f)
-          PYEOF
+          open(path, 'w').write(f)
+          print("build.gradle patched OK")
+
+          # Copy logo files from repo assets to mipmap folders
+          logo_src = 'assets/logo.png'
+          if os.path.exists(logo_src):
+              from PIL import Image
+              img = Image.open(logo_src).convert('RGBA')
+              sizes = {
+                  'mipmap-mdpi': 48, 'mipmap-hdpi': 72,
+                  'mipmap-xhdpi': 96, 'mipmap-xxhdpi': 144, 'mipmap-xxxhdpi': 192,
+              }
+              for folder, size in sizes.items():
+                  d = f'android/app/src/main/res/{folder}'
+                  os.makedirs(d, exist_ok=True)
+                  r = img.resize((size, size))
+                  r.save(f'{d}/ic_launcher.png', 'PNG')
+                  r.save(f'{d}/ic_launcher_round.png', 'PNG')
+              print("Logo icons set!")
+          else:
+              print("No logo.png in assets - using default")
+          PYEOF2
       - name: Build APK
         script: flutter build apk --release --no-shrink
     artifacts:
