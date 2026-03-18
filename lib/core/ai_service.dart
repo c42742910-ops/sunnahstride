@@ -278,8 +278,8 @@ Request: $prompt
         ? '{"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carbs_g":0.0,"fat_g":0.0,"vitamin_c_mg":0.0,"iron_mg":0.0,"calcium_mg":0.0,"potassium_mg":0.0,"serving_size":"100g","halal":true}'
         : '{"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carbs_g":0.0,"fat_g":0.0,"serving_size":"100g","halal":true}';
 
-    final system = 'You are a nutrition database expert. When given a food name, return ONLY a JSON object with exact nutritional values per 100g serving. Return ONLY valid JSON, no other text.
-Required format: $jsonFmt';
+    final system = '''You are a nutrition database expert. When given a food name, return ONLY a JSON object with exact nutritional values per 100g serving. Return ONLY valid JSON, no other text.
+Required format: $jsonFmt''';
 
     final prompt = isAr
         ? 'القيم الغذائية لـ: $foodName'
