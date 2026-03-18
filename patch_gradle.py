@@ -1,32 +1,43 @@
+import os, sys, shutil
 
-import os, sys
-
+# ── Patch build.gradle ──────────────────────────────────────
 path = 'android/app/build.gradle'
 if not os.path.exists(path):
+    print("ERROR: build.gradle not found")
     sys.exit(1)
 
 f = open(path).read()
-print("=== build.gradle preview ===")
-print(f[:800])
-print("=== end preview ===")
-
-# Replace minSdk
 f = f.replace('flutter.minSdkVersion', '21')
-
-# Add desugaring - append to android block
 if 'isCoreLibraryDesugaringEnabled' not in f:
-    # Add after compileOptions opening or create it
-    if 'compileOptions' in f:
-        f = re.sub(r'compileOptions \{([^}]*)}',
-            lambda m: 'compileOptions {\n        isCoreLibraryDesugaringEnabled = true' + m.group(1) + '}', f)
-    else:
-        f = f.replace('buildTypes {', 'compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n        isCoreLibraryDesugaringEnabled = true\n    }\n    buildTypes {')
-
-# Add desugar dependency
+    f = f.replace('compileOptions {',
+        'compileOptions {\n        isCoreLibraryDesugaringEnabled = true')
 if 'desugar_jdk_libs' not in f:
-    f = f.replace('\ndependencies {', '\ndependencies {\n    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"')
-
+    f = f.replace('dependencies {',
+        'dependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")', 1)
 open(path, 'w').write(f)
-print("minSdk 21:", "minSdkVersion 21" in f or "minSdk 21" in f)
-print("desugar:", "desugar_jdk_libs" in f)
-print("isCoreLibrary:", "isCoreLibraryDesugaringEnabled" in f)
+print("build.gradle patched")
+
+# ── Copy logo to mipmap folders ─────────────────────────────
+logo = 'assets/logo.png'
+if os.path.exists(logo):
+    try:
+        from PIL import Image
+    except ImportError:
+        os.system('pip install Pillow --break-system-packages -q')
+        from PIL import Image
+    
+    img = Image.open(logo).convert('RGBA')
+    sizes = {
+        'mipmap-mdpi': 48, 'mipmap-hdpi': 72,
+        'mipmap-xhdpi': 96, 'mipmap-xxhdpi': 144, 'mipmap-xxxhdpi': 192,
+    }
+    for folder, size in sizes.items():
+        d = f'android/app/src/main/res/{folder}'
+        os.makedirs(d, exist_ok=True)
+        r = img.resize((size, size), Image.LANCZOS)
+        r.save(f'{d}/ic_launcher.png')
+        r.save(f'{d}/ic_launcher_round.png')
+        print(f"Logo {size}x{size} -> {folder}")
+    print("Logo done!")
+else:
+    print("No assets/logo.png found")
