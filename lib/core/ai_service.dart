@@ -272,10 +272,14 @@ Request: $prompt
   // ════════════════════════════════════════════════
   //  FOOD NUTRITION LOOKUP
   // ════════════════════════════════════════════════
-  static Future<Map<String, dynamic>> lookupFood(String foodName, {String language = 'ar'}) async {
+    static Future<Map<String, dynamic>> lookupFood(String foodName, {String language = 'ar', bool isPremium = false}) async {
     final isAr = language == 'ar';
-    const system = '''You are a nutrition database expert. When given a food name, return ONLY a JSON object with exact nutritional values per 100g serving. Return ONLY valid JSON, no other text.
-Required format: {"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carbs_g":0.0,"fat_g":0.0,"fiber_g":0.0,"sugar_g":0.0,"sodium_mg":0.0,"serving_size":"100g","halal":true}''';
+    final jsonFmt = isPremium 
+        ? '{"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carbs_g":0.0,"fat_g":0.0,"vitamin_c_mg":0.0,"iron_mg":0.0,"calcium_mg":0.0,"potassium_mg":0.0,"serving_size":"100g","halal":true}'
+        : '{"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carbs_g":0.0,"fat_g":0.0,"serving_size":"100g","halal":true}';
+
+    final system = 'You are a nutrition database expert. When given a food name, return ONLY a JSON object with exact nutritional values per 100g serving. Return ONLY valid JSON, no other text.
+Required format: $jsonFmt';
 
     final prompt = isAr
         ? 'القيم الغذائية لـ: $foodName'
@@ -284,7 +288,7 @@ Required format: {"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carb
     try {
       final body = jsonEncode({
         'model': _model,
-        'max_tokens': 300,
+        'max_tokens': 400,
         'system': system,
         'messages': [{'role': 'user', 'content': prompt}],
       });
@@ -303,12 +307,10 @@ Required format: {"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carb
         return jsonDecode(clean) as Map<String, dynamic>;
       }
     } catch (_) {}
-    // Fallback
     return {
       'name_ar': foodName, 'name_en': foodName,
       'kcal': 100, 'protein_g': 5.0, 'carbs_g': 15.0,
-      'fat_g': 3.0, 'fiber_g': 1.0, 'sugar_g': 2.0,
-      'sodium_mg': 50.0, 'serving_size': '100g', 'halal': true,
+      'fat_g': 3.0, 'serving_size': '100g', 'halal': true,
     };
   }
 
