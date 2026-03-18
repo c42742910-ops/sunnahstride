@@ -137,21 +137,21 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                 value: _notifWater,
                 onChanged: (v) {
                   setState(() => _notifWater = v); _saveNotifPref('notif_water', v);
-                  if (v) NotificationService.scheduleWaterReminder(isAr: isAr);
+                  if (v) // NotificationService.scheduleWaterReminder(isAr: isAr);
                 },
               ),
               tog( emoji:'🏃', title: t('تذكير التمرين', 'Workout Reminder'), subtitle: t('يومياً في الصباح', 'Daily morning'),
                 value: _notifWorkout,
                 onChanged: (v) {
                   setState(() => _notifWorkout = v); _saveNotifPref('notif_workout', v);
-                  if (v) NotificationService.showWorkoutReminder(isAr: isAr);
+                  if (v) // NotificationService.showWorkoutReminder(isAr: isAr);
                 },
               ),
               tog( emoji:'🌿', title: t('تذكير الوجبة', 'Meal Reminder'), subtitle: t('ثلاث مرات يومياً', 'Three times daily'),
                 value: _notifMeal,
                 onChanged: (v) {
                   setState(() => _notifMeal = v); _saveNotifPref('notif_meal', v);
-                  if (v) NotificationService.showMealReminder(isAr: isAr);
+                  if (v) // NotificationService.showMealReminder(isAr: isAr);
                 },
               ),
             ],
