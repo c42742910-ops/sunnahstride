@@ -100,6 +100,112 @@ class _NutritionState extends ConsumerState<NutritionScreen>
     }
   }
 
+
+  // ── Food detail dialog ────────────────────────────────────
+  void _showFoodDetail(BuildContext ctx, MealEntry e, bool isAr, bool isDark, bool isPremium) {
+    final muted = isDark ? AppColors.darkMuted : AppColors.lightMuted;
+    String tl(String ar, String en) => isAr ? ar : en;
+    showModalBottomSheet(
+      context: ctx,
+      backgroundColor: isDark ? AppColors.darkCard : Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Container(width: 40, height: 4, margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2))),
+          Text(e.name, style: const TextStyle(fontFamily: 'Cairo',
+              fontSize: 20, fontWeight: FontWeight.w800),
+              textAlign: TextAlign.center),
+          const SizedBox(height: 6),
+          Text(tl('القيم الغذائية', 'Nutritional Values'),
+              style: TextStyle(fontFamily: 'Cairo', fontSize: 12, color: muted)),
+          const SizedBox(height: 20),
+          // Main macros
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            _detailBadge('🔥', '${e.kcal}', tl('سعرة', 'kcal'), AppColors.haramRed),
+            _detailBadge('💪', '${e.proteinG.toStringAsFixed(1)}g', tl('بروتين', 'Protein'), AppColors.halalGreen),
+            _detailBadge('🍚', '${e.carbsG.toStringAsFixed(1)}g', tl('كارب', 'Carbs'), AppColors.waterBlue),
+            _detailBadge('🥑', '${e.fatG.toStringAsFixed(1)}g', tl('دهون', 'Fat'), AppColors.barakahGold),
+          ]),
+          const SizedBox(height: 20),
+          // Premium micronutrients
+          if (isPremium) ...[
+            Divider(color: AppColors.barakahGold.withOpacity(0.3)),
+            const SizedBox(height: 12),
+            Row(children: [
+              const Icon(Icons.star, color: AppColors.barakahGold, size: 16),
+              const SizedBox(width: 6),
+              Text(tl('مغذيات دقيقة', 'Micronutrients'),
+                  style: const TextStyle(fontFamily: 'Cairo',
+                      fontSize: 13, fontWeight: FontWeight.w700,
+                      color: AppColors.barakahGold)),
+            ]),
+            const SizedBox(height: 12),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              _detailBadge('🍊', '~${(e.kcal * 0.08).toStringAsFixed(0)}mg', tl('فيت. C', 'Vit. C'), Colors.orange),
+              _detailBadge('🩸', '~${(e.proteinG * 0.15).toStringAsFixed(1)}mg', tl('حديد', 'Iron'), Colors.redAccent),
+              _detailBadge('🥛', '~${(e.kcal * 0.5).toStringAsFixed(0)}mg', tl('كالسيوم', 'Calcium'), Colors.blueGrey),
+              _detailBadge('🍌', '~${(e.kcal * 1.2).toStringAsFixed(0)}mg', tl('بوتاسيوم', 'Potassium'), Colors.amber),
+            ]),
+            const SizedBox(height: 8),
+            Text(tl('* تقديري بناءً على السعرات', '* Estimated based on calories'),
+                style: TextStyle(fontFamily: 'Cairo', fontSize: 9, color: muted)),
+          ] else ...[
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: AppColors.barakahGold.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.barakahGold.withOpacity(0.3))),
+              child: Row(children: [
+                const Text('⭐', style: TextStyle(fontSize: 16)),
+                const SizedBox(width: 8),
+                Expanded(child: Text(
+                    tl('بريميوم: شاهد الفيتامينات والمعادن لكل وجبة',
+                       'Premium: See vitamins & minerals for every meal'),
+                    style: const TextStyle(fontFamily: 'Cairo',
+                        fontSize: 11, color: AppColors.barakahGold))),
+              ]),
+            ),
+          ],
+          const SizedBox(height: 16),
+          Row(children: [
+            Expanded(child: OutlinedButton.icon(
+              onPressed: () {
+                ref.read(caloriesProvider.notifier).removeEntry(e.id);
+                Navigator.pop(ctx);
+              },
+              icon: const Icon(Icons.delete_outline, color: AppColors.haramRed, size: 18),
+              label: Text(tl('حذف', 'Delete'),
+                  style: const TextStyle(fontFamily: 'Cairo', color: AppColors.haramRed)),
+              style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.haramRed)),
+            )),
+            const SizedBox(width: 10),
+            Expanded(child: ElevatedButton(
+              onPressed: () => Navigator.pop(ctx),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.sunnahGreen),
+              child: Text(tl('إغلاق', 'Close'),
+                  style: const TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+            )),
+          ]),
+        ]),
+      ),
+    );
+  }
+
+  Widget _detailBadge(String emoji, String val, String label, Color color) =>
+    Column(mainAxisSize: MainAxisSize.min, children: [
+      Text(emoji, style: const TextStyle(fontSize: 24)),
+      const SizedBox(height: 4),
+      Text(val, style: TextStyle(fontFamily: 'Cairo',
+          fontSize: 15, fontWeight: FontWeight.w900, color: color)),
+      Text(label, style: TextStyle(fontFamily: 'Cairo',
+          fontSize: 9, color: color.withOpacity(0.8))),
+    ]);
+
   @override
   Widget build(BuildContext context) {
     final lang    = ref.watch(languageProvider);
@@ -149,7 +255,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
         body: TabBarView(
           controller: _tab,
           children: [
-            _buildCaloriesTab(isAr, isDark, bg, cardBg, muted, textC, cals, profile),
+            _buildCaloriesTab(isAr, isDark, bg, cardBg, muted, textC, cals, profile, isPremium),
             _buildRecipesTab(isAr, isDark, cardBg, muted),
             _buildAITab(isAr, isDark, bg, cardBg, muted, profile, isPremium),
           ],
@@ -159,7 +265,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
   }
 
   Widget _buildCaloriesTab(bool isAr, bool isDark, Color bg, Color cardBg,
-      Color muted, Color textC, CaloriesState cals, dynamic profile) {
+      Color muted, Color textC, CaloriesState cals, dynamic profile, bool isPremium) {
     String tl(String ar, String en) => isAr ? ar : en;
     final goal = cals.goal;
     final pct  = goal > 0 ? (cals.total / goal).clamp(0.0, 1.0) : 0.0;
@@ -242,16 +348,21 @@ class _NutritionState extends ConsumerState<NutritionScreen>
                 child: ListTile(
                   dense: true,
                   contentPadding: EdgeInsets.zero,
+                  onTap: () => _showFoodDetail(context, e, isAr, isDark, isPremium),
                   title: Text(e.name, style: const TextStyle(
                       fontFamily: 'Cairo', fontSize: 13)),
                   subtitle: e.proteinG > 0
-                      ? Text('💪 ${e.proteinG.toInt()}g  🍚 ${e.carbsG.toInt()}g  🥑 ${e.fatG.toInt()}g',
+                      ? Text('💪 \${e.proteinG.toInt()}g  🍚 \${e.carbsG.toInt()}g  🥑 \${e.fatG.toInt()}g',
                           style: TextStyle(fontFamily: 'Cairo', fontSize: 10, color: muted))
                       : null,
-                  trailing: Text('${e.kcal} kcal',
-                      style: const TextStyle(fontFamily: 'Cairo',
-                          fontWeight: FontWeight.w700, fontSize: 13,
-                          color: AppColors.halalGreen)),
+                  trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                    Text('\${e.kcal} kcal',
+                        style: const TextStyle(fontFamily: 'Cairo',
+                            fontWeight: FontWeight.w700, fontSize: 13,
+                            color: AppColors.halalGreen)),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.chevron_right, size: 16, color: AppColors.lightMuted),
+                  ]),
                 ),
               )),
           ]),
@@ -553,6 +664,112 @@ class _AddFoodSheetState extends ConsumerState<_AddFoodSheet> {
     _fatCtrl.text     = '${(r['fat_g'] ?? 0.0).toStringAsFixed(1)}';
     setState(() => _tab = 1);
   }
+
+
+  // ── Food detail dialog ────────────────────────────────────
+  void _showFoodDetail(BuildContext ctx, MealEntry e, bool isAr, bool isDark, bool isPremium) {
+    final muted = isDark ? AppColors.darkMuted : AppColors.lightMuted;
+    String tl(String ar, String en) => isAr ? ar : en;
+    showModalBottomSheet(
+      context: ctx,
+      backgroundColor: isDark ? AppColors.darkCard : Colors.white,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Container(width: 40, height: 4, margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2))),
+          Text(e.name, style: const TextStyle(fontFamily: 'Cairo',
+              fontSize: 20, fontWeight: FontWeight.w800),
+              textAlign: TextAlign.center),
+          const SizedBox(height: 6),
+          Text(tl('القيم الغذائية', 'Nutritional Values'),
+              style: TextStyle(fontFamily: 'Cairo', fontSize: 12, color: muted)),
+          const SizedBox(height: 20),
+          // Main macros
+          Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            _detailBadge('🔥', '${e.kcal}', tl('سعرة', 'kcal'), AppColors.haramRed),
+            _detailBadge('💪', '${e.proteinG.toStringAsFixed(1)}g', tl('بروتين', 'Protein'), AppColors.halalGreen),
+            _detailBadge('🍚', '${e.carbsG.toStringAsFixed(1)}g', tl('كارب', 'Carbs'), AppColors.waterBlue),
+            _detailBadge('🥑', '${e.fatG.toStringAsFixed(1)}g', tl('دهون', 'Fat'), AppColors.barakahGold),
+          ]),
+          const SizedBox(height: 20),
+          // Premium micronutrients
+          if (isPremium) ...[
+            Divider(color: AppColors.barakahGold.withOpacity(0.3)),
+            const SizedBox(height: 12),
+            Row(children: [
+              const Icon(Icons.star, color: AppColors.barakahGold, size: 16),
+              const SizedBox(width: 6),
+              Text(tl('مغذيات دقيقة', 'Micronutrients'),
+                  style: const TextStyle(fontFamily: 'Cairo',
+                      fontSize: 13, fontWeight: FontWeight.w700,
+                      color: AppColors.barakahGold)),
+            ]),
+            const SizedBox(height: 12),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              _detailBadge('🍊', '~${(e.kcal * 0.08).toStringAsFixed(0)}mg', tl('فيت. C', 'Vit. C'), Colors.orange),
+              _detailBadge('🩸', '~${(e.proteinG * 0.15).toStringAsFixed(1)}mg', tl('حديد', 'Iron'), Colors.redAccent),
+              _detailBadge('🥛', '~${(e.kcal * 0.5).toStringAsFixed(0)}mg', tl('كالسيوم', 'Calcium'), Colors.blueGrey),
+              _detailBadge('🍌', '~${(e.kcal * 1.2).toStringAsFixed(0)}mg', tl('بوتاسيوم', 'Potassium'), Colors.amber),
+            ]),
+            const SizedBox(height: 8),
+            Text(tl('* تقديري بناءً على السعرات', '* Estimated based on calories'),
+                style: TextStyle(fontFamily: 'Cairo', fontSize: 9, color: muted)),
+          ] else ...[
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: AppColors.barakahGold.withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.barakahGold.withOpacity(0.3))),
+              child: Row(children: [
+                const Text('⭐', style: TextStyle(fontSize: 16)),
+                const SizedBox(width: 8),
+                Expanded(child: Text(
+                    tl('بريميوم: شاهد الفيتامينات والمعادن لكل وجبة',
+                       'Premium: See vitamins & minerals for every meal'),
+                    style: const TextStyle(fontFamily: 'Cairo',
+                        fontSize: 11, color: AppColors.barakahGold))),
+              ]),
+            ),
+          ],
+          const SizedBox(height: 16),
+          Row(children: [
+            Expanded(child: OutlinedButton.icon(
+              onPressed: () {
+                ref.read(caloriesProvider.notifier).removeEntry(e.id);
+                Navigator.pop(ctx);
+              },
+              icon: const Icon(Icons.delete_outline, color: AppColors.haramRed, size: 18),
+              label: Text(tl('حذف', 'Delete'),
+                  style: const TextStyle(fontFamily: 'Cairo', color: AppColors.haramRed)),
+              style: OutlinedButton.styleFrom(side: const BorderSide(color: AppColors.haramRed)),
+            )),
+            const SizedBox(width: 10),
+            Expanded(child: ElevatedButton(
+              onPressed: () => Navigator.pop(ctx),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.sunnahGreen),
+              child: Text(tl('إغلاق', 'Close'),
+                  style: const TextStyle(fontFamily: 'Cairo', color: Colors.white)),
+            )),
+          ]),
+        ]),
+      ),
+    );
+  }
+
+  Widget _detailBadge(String emoji, String val, String label, Color color) =>
+    Column(mainAxisSize: MainAxisSize.min, children: [
+      Text(emoji, style: const TextStyle(fontSize: 24)),
+      const SizedBox(height: 4),
+      Text(val, style: TextStyle(fontFamily: 'Cairo',
+          fontSize: 15, fontWeight: FontWeight.w900, color: color)),
+      Text(label, style: TextStyle(fontFamily: 'Cairo',
+          fontSize: 9, color: color.withOpacity(0.8))),
+    ]);
 
   @override
   Widget build(BuildContext context) {
