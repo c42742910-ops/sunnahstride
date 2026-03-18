@@ -30,7 +30,7 @@ class ProfileScreen extends ConsumerWidget {
     final city      = ref.watch(cityProvider);
     final isDark    = ref.watch(themeProvider);
     final profile   = ref.watch(userProfileProvider);
-    final isSis     = gender == 'sisters';
+    final isSis     = gender == 'sisters' || profile?.gender == 'sisters';
     final workoutMin = ref.watch(workoutMinutesProvider);
 
     final bg    = isDark ? AppColors.darkCard  : Colors.white;
