@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:go_router/go_router.dart';
@@ -80,8 +81,12 @@ class _NutritionState extends ConsumerState<NutritionScreen>
         isDark: isDark,
         isPremium: isPremium,
         onAdd: (name, kcal, p, c, ft) async {
-          await ref.read(caloriesProvider.notifier)
-              .addEntry(name, kcal, proteinG: p, carbsG: c, fatG: ft);
+          try {
+            await ref.read(caloriesProvider.notifier)
+                .addEntry(name, kcal, proteinG: p, carbsG: c, fatG: ft);
+          } catch (e) {
+            debugPrint("addEntry error: $e");
+          }
           if (ctx.mounted) Navigator.pop(ctx);
           if (ctx.mounted) {
             ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
@@ -1077,11 +1082,19 @@ class _AddFoodSheetState extends ConsumerState<_AddFoodSheet>
     }
   }
 
-  Future<void> _doAdd(String name, int kcal,
+    Future<void> _doAdd(String name, int kcal,
       double p, double c, double ft) async {
-    if (name.trim().isEmpty || kcal <= 0) return;
+    final n = name.trim();
+    if (n.isEmpty || kcal <= 0) return;
+    if (!mounted) return;
     setState(() => _adding = true);
-    await widget.onAdd(name.trim(), kcal, p, c, ft);
+    try {
+      await widget.onAdd(n, kcal, p, c, ft);
+    } catch (e) {
+      debugPrint('addEntry error: $e');
+    } finally {
+      if (mounted) setState(() => _adding = false);
+    }
   }
 
   @override

@@ -60,7 +60,7 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
     String t(String ar, String en) => isAr ? ar : en;
     return ListView(padding: const EdgeInsets.all(14), children: [
       _healthScoreCard(water, sleep, health, isAr, isDark),
-      const SizedBox(height: 16), _sectionTitle('💧 \${t("الماء اليومي","Daily Water")}', isDark),
+      const SizedBox(height: 16), _sectionTitle('💧 ${t("الماء اليومي","Daily Water")}', isDark),
       _waterCard(water, isAr, isDark),
       const SizedBox(height: 16), _sectionTitle('😴 ${t("النوم","Sleep")}', isDark),
       _sleepCard(sleep, isAr, isDark),

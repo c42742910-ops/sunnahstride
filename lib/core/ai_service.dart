@@ -120,10 +120,10 @@ Rules:
       return FoodPhotoResult(
         foodName: json['foodName'] as String? ?? 'Unknown',
         foodNameEn: json['foodNameEn'] as String? ?? 'Unknown',
-        kcal: (json['kcal'] as num?)?.toInt() ?? 0,
-        proteinG: (json['proteinG'] as num?)?.toDouble() ?? 0,
-        carbsG: (json['carbsG'] as num?)?.toDouble() ?? 0,
-        fatG: (json['fatG'] as num?)?.toDouble() ?? 0,
+        kcal: _safeInt(json['kcal']),
+        proteinG: _safeDouble(json['proteinG']),
+        carbsG: _safeDouble(json['carbsG']),
+        fatG: _safeDouble(json['fatG']),
         halalStatus: HalalStatus.unknown,
         halalExplanation: json['halalNote'] as String? ?? '',
         halalExplanationEn: json['halalNote'] as String? ?? '',
@@ -312,5 +312,26 @@ Request: $prompt
       'fat_g': 3.0, 'serving_size': '100g', 'halal': true,
     };
   }
+
+  // ── Safe type conversion (prevents runtime cast errors) ──
+  static double _safeDouble(dynamic v, [double fb = 0.0]) {
+    if (v == null) return fb;
+    if (v is double) return v;
+    if (v is int) return v.toDouble();
+    return double.tryParse(v.toString()) ?? fb;
+  }
+
+  static int _safeInt(dynamic v, [int fb = 0]) {
+    if (v == null) return fb;
+    if (v is int) return v;
+    if (v is double) return v.round();
+    return int.tryParse(v.toString()) ?? fb;
+  }
+
+  static String _safeStr(dynamic v, [String fb = '']) {
+    if (v == null) return fb;
+    return v.toString();
+  }
+
 
 }
