@@ -272,8 +272,66 @@ Request: $prompt
   // ════════════════════════════════════════════════
   //  FOOD NUTRITION LOOKUP
   // ════════════════════════════════════════════════
-    static Future<Map<String, dynamic>> lookupFood(String foodName, {String language = 'ar', bool isPremium = false}) async {
+  
+  // ── Local food database (works without internet) ────────
+  static Map<String, dynamic>? _localLookup(String name) {
+    final n = name.toLowerCase().trim();
+    // Map common foods to real values
+    const foods = {
+      'honey': {'name_ar': 'عسل', 'name_en': 'Honey', 'kcal': 304, 'protein_g': 0.3, 'carbs_g': 82.0, 'fat_g': 0.0, 'halal': true},
+      'عسل': {'name_ar': 'عسل', 'name_en': 'Honey', 'kcal': 304, 'protein_g': 0.3, 'carbs_g': 82.0, 'fat_g': 0.0, 'halal': true},
+      'date': {'name_ar': 'تمر', 'name_en': 'Dates', 'kcal': 277, 'protein_g': 1.8, 'carbs_g': 75.0, 'fat_g': 0.2, 'halal': true},
+      'dates': {'name_ar': 'تمر', 'name_en': 'Dates', 'kcal': 277, 'protein_g': 1.8, 'carbs_g': 75.0, 'fat_g': 0.2, 'halal': true},
+      'تمر': {'name_ar': 'تمر', 'name_en': 'Dates', 'kcal': 277, 'protein_g': 1.8, 'carbs_g': 75.0, 'fat_g': 0.2, 'halal': true},
+      'chicken': {'name_ar': 'دجاج مشوي', 'name_en': 'Grilled Chicken', 'kcal': 165, 'protein_g': 31.0, 'carbs_g': 0.0, 'fat_g': 4.0, 'halal': true},
+      'دجاج': {'name_ar': 'دجاج مشوي', 'name_en': 'Grilled Chicken', 'kcal': 165, 'protein_g': 31.0, 'carbs_g': 0.0, 'fat_g': 4.0, 'halal': true},
+      'egg': {'name_ar': 'بيضة', 'name_en': 'Egg', 'kcal': 78, 'protein_g': 6.0, 'carbs_g': 1.0, 'fat_g': 5.0, 'halal': true},
+      'eggs': {'name_ar': 'بيضة', 'name_en': 'Egg', 'kcal': 78, 'protein_g': 6.0, 'carbs_g': 1.0, 'fat_g': 5.0, 'halal': true},
+      'بيض': {'name_ar': 'بيضة', 'name_en': 'Egg', 'kcal': 78, 'protein_g': 6.0, 'carbs_g': 1.0, 'fat_g': 5.0, 'halal': true},
+      'rice': {'name_ar': 'أرز أبيض', 'name_en': 'White Rice', 'kcal': 206, 'protein_g': 4.0, 'carbs_g': 45.0, 'fat_g': 0.4, 'halal': true},
+      'أرز': {'name_ar': 'أرز أبيض', 'name_en': 'White Rice', 'kcal': 206, 'protein_g': 4.0, 'carbs_g': 45.0, 'fat_g': 0.4, 'halal': true},
+      'milk': {'name_ar': 'حليب', 'name_en': 'Milk', 'kcal': 130, 'protein_g': 7.0, 'carbs_g': 10.0, 'fat_g': 7.0, 'halal': true},
+      'حليب': {'name_ar': 'حليب', 'name_en': 'Milk', 'kcal': 130, 'protein_g': 7.0, 'carbs_g': 10.0, 'fat_g': 7.0, 'halal': true},
+      'banana': {'name_ar': 'موز', 'name_en': 'Banana', 'kcal': 105, 'protein_g': 1.0, 'carbs_g': 27.0, 'fat_g': 0.3, 'halal': true},
+      'موز': {'name_ar': 'موز', 'name_en': 'Banana', 'kcal': 105, 'protein_g': 1.0, 'carbs_g': 27.0, 'fat_g': 0.3, 'halal': true},
+      'apple': {'name_ar': 'تفاحة', 'name_en': 'Apple', 'kcal': 95, 'protein_g': 0.5, 'carbs_g': 25.0, 'fat_g': 0.3, 'halal': true},
+      'تفاح': {'name_ar': 'تفاحة', 'name_en': 'Apple', 'kcal': 95, 'protein_g': 0.5, 'carbs_g': 25.0, 'fat_g': 0.3, 'halal': true},
+      'olive oil': {'name_ar': 'زيت زيتون', 'name_en': 'Olive Oil', 'kcal': 119, 'protein_g': 0.0, 'carbs_g': 0.0, 'fat_g': 14.0, 'halal': true},
+      'زيت زيتون': {'name_ar': 'زيت زيتون', 'name_en': 'Olive Oil', 'kcal': 119, 'protein_g': 0.0, 'carbs_g': 0.0, 'fat_g': 14.0, 'halal': true},
+      'bread': {'name_ar': 'خبز', 'name_en': 'Bread', 'kcal': 265, 'protein_g': 9.0, 'carbs_g': 49.0, 'fat_g': 3.0, 'halal': true},
+      'خبز': {'name_ar': 'خبز', 'name_en': 'Bread', 'kcal': 265, 'protein_g': 9.0, 'carbs_g': 49.0, 'fat_g': 3.0, 'halal': true},
+      'tuna': {'name_ar': 'تونة', 'name_en': 'Tuna', 'kcal': 116, 'protein_g': 26.0, 'carbs_g': 0.0, 'fat_g': 1.0, 'halal': true},
+      'تونة': {'name_ar': 'تونة', 'name_en': 'Tuna', 'kcal': 116, 'protein_g': 26.0, 'carbs_g': 0.0, 'fat_g': 1.0, 'halal': true},
+      'oats': {'name_ar': 'شوفان', 'name_en': 'Oats', 'kcal': 166, 'protein_g': 6.0, 'carbs_g': 28.0, 'fat_g': 4.0, 'halal': true},
+      'شوفان': {'name_ar': 'شوفان', 'name_en': 'Oats', 'kcal': 166, 'protein_g': 6.0, 'carbs_g': 28.0, 'fat_g': 4.0, 'halal': true},
+      'yogurt': {'name_ar': 'زبادي', 'name_en': 'Yogurt', 'kcal': 150, 'protein_g': 8.0, 'carbs_g': 11.0, 'fat_g': 8.0, 'halal': true},
+      'زبادي': {'name_ar': 'زبادي', 'name_en': 'Yogurt', 'kcal': 150, 'protein_g': 8.0, 'carbs_g': 11.0, 'fat_g': 8.0, 'halal': true},
+      'lentils': {'name_ar': 'عدس', 'name_en': 'Lentils', 'kcal': 230, 'protein_g': 18.0, 'carbs_g': 40.0, 'fat_g': 1.0, 'halal': true},
+      'عدس': {'name_ar': 'عدس', 'name_en': 'Lentils', 'kcal': 230, 'protein_g': 18.0, 'carbs_g': 40.0, 'fat_g': 1.0, 'halal': true},
+      'beef': {'name_ar': 'لحم بقر', 'name_en': 'Beef', 'kcal': 215, 'protein_g': 26.0, 'carbs_g': 0.0, 'fat_g': 12.0, 'halal': true},
+      'لحم': {'name_ar': 'لحم بقر', 'name_en': 'Beef', 'kcal': 215, 'protein_g': 26.0, 'carbs_g': 0.0, 'fat_g': 12.0, 'halal': true},
+      'pork': {'name_ar': 'لحم خنزير', 'name_en': 'Pork', 'kcal': 242, 'protein_g': 27.0, 'carbs_g': 0.0, 'fat_g': 14.0, 'halal': false},
+      'خنزير': {'name_ar': 'لحم خنزير', 'name_en': 'Pork', 'kcal': 242, 'protein_g': 27.0, 'carbs_g': 0.0, 'fat_g': 14.0, 'halal': false},
+    };
+    // Check exact match first
+    if (foods.containsKey(n)) return Map<String, dynamic>.from(foods[n]!);
+    // Check partial match
+    for (final key in foods.keys) {
+      if (n.contains(key) || key.contains(n)) {
+        return Map<String, dynamic>.from(foods[key]!);
+      }
+    }
+    return null;
+  }
+
+  static Future<Map<String, dynamic>> lookupFood(String foodName, {String language = 'ar', bool isPremium = false}) async {
     final isAr = language == 'ar';
+    // Check local database first (works offline, instant)
+    final local = _localLookup(foodName);
+    if (local != null) {
+      local['serving_size'] = '100g';
+      return local;
+    }
     final jsonFmt = isPremium 
         ? '{"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carbs_g":0.0,"fat_g":0.0,"vitamin_c_mg":0.0,"iron_mg":0.0,"calcium_mg":0.0,"potassium_mg":0.0,"serving_size":"100g","halal":true}'
         : '{"name_ar":"...","name_en":"...","kcal":0,"protein_g":0.0,"carbs_g":0.0,"fat_g":0.0,"serving_size":"100g","halal":true}';
