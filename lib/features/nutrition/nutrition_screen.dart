@@ -604,19 +604,6 @@ class _NutritionState extends ConsumerState<NutritionScreen>
                               barGroups: bars,
                               gridData: const FlGridData(show: false),
                               borderData: FlBorderData(show: false),
-                              barTouchData: BarTouchData(
-                                  touchTooltipData:
-                                      BarTouchTooltipData(
-                                tooltipColor: AppColors.sunnahGreen,
-                                getTooltipItem: (g, gi, r, ri) =>
-                                    BarTooltipItem(
-                                  '${r.toY.toInt()} kcal',
-                                  const TextStyle(
-                                      fontFamily: 'Cairo',
-                                      color: Colors.white,
-                                      fontSize: 10),
-                                ),
-                              )),
                               titlesData: FlTitlesData(
                                 bottomTitles: AxisTitles(
                                   sideTitles: SideTitles(
