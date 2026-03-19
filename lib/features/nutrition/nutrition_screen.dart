@@ -63,9 +63,9 @@ class _NutritionState extends ConsumerState<NutritionScreen>
         isAr: isAr,
         isDark: isDark,
         onAdd: (name, kcal, p, c, ft) async {
-          await ref.read(caloriesProvider.notifier)
+          ref.read(caloriesProvider.notifier)
               .addEntry(name, kcal, proteinG: p, carbsG: c, fatG: ft);
-          if (mounted) Navigator.pop(ctx);
+          Navigator.pop(ctx);
           ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(
             content: Text('$name ${isAr ? "أضيف ✓" : "added ✓"}',
                 style: const TextStyle(fontFamily: 'Cairo')),
