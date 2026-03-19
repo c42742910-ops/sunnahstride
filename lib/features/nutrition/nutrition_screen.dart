@@ -607,7 +607,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
                               barTouchData: BarTouchData(
                                   touchTooltipData:
                                       BarTouchTooltipData(
-                                tooltipBgColor: AppColors.sunnahGreen,
+                                tooltipColor: AppColors.sunnahGreen,
                                 getTooltipItem: (g, gi, r, ri) =>
                                     BarTooltipItem(
                                   '${r.toY.toInt()} kcal',
