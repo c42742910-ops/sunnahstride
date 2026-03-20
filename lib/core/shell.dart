@@ -42,18 +42,23 @@ class AppShell extends ConsumerWidget {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: navBg,
-          border: Border(top: BorderSide(color: border, width: 0.8)),
+          border: Border(top: BorderSide(
+              color: isDark
+                  ? AppColors.darkBorder
+                  : AppColors.lightBorder,
+              width: 0.5)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(isDark ? 0.3 : 0.08),
-              blurRadius: 20, offset: const Offset(0, -4),
+              color: Colors.black.withOpacity(isDark ? 0.25 : 0.07),
+              blurRadius: 24, spreadRadius: 0,
+              offset: const Offset(0, -6),
             ),
           ],
         ),
         child: SafeArea(
           top: false,
           child: SizedBox(
-            height: 60,
+            height: 64,
             child: Row(
               children: _navTabs.asMap().entries.map((e) {
                 final active = e.key == idx;
@@ -62,46 +67,55 @@ class AppShell extends ConsumerWidget {
                     onTap: () => context.go(_navTabs[e.key].path),
                     behavior: HitTestBehavior.opaque,
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOutCubic,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 8),
                       padding: const EdgeInsets.symmetric(vertical: 6),
+                      decoration: BoxDecoration(
+                        color: active
+                            ? AppColors.sunnahGreen.withOpacity(0.1)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AnimatedDefaultTextStyle(
-                            duration: const Duration(milliseconds: 180),
-                            style: TextStyle(fontSize: active ? 22 : 19),
-                            child: Stack(clipBehavior: Clip.none, children: [
-                            Text(e.value.emoji), if ((e.value.path =='/nutrition'&& nutritionBadge) || (e.value.path =='/health'&& healthBadge))
+                          Stack(clipBehavior: Clip.none, children: [
+                            AnimatedDefaultTextStyle(
+                              duration: const Duration(milliseconds: 200),
+                              style: TextStyle(fontSize: active ? 22 : 20),
+                              child: Text(e.value.emoji),
+                            ),
+                            if ((e.value.path == '/nutrition' && nutritionBadge) ||
+                                (e.value.path == '/health' && healthBadge))
                               Positioned(
-                                right: -4, top: -4,
-                                child: Container(width: 8, height: 8,
+                                right: -3, top: -3,
+                                child: Container(
+                                  width: 8, height: 8,
                                   decoration: const BoxDecoration(
-                                    color: AppColors.haramRed, shape: BoxShape.circle)),
+                                    color: AppColors.haramRed,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
                               ),
                           ]),
-                          ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 3),
                           AnimatedDefaultTextStyle(
-                            duration: const Duration(milliseconds: 180),
-                            style: TextStyle( fontFamily:'Cairo',
-                              fontSize: active ? 10 : 9,
-                              fontWeight: active ? FontWeight.w700 : FontWeight.w400,
+                            duration: const Duration(milliseconds: 200),
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
+                              fontSize: 9,
+                              fontWeight: active
+                                  ? FontWeight.w800
+                                  : FontWeight.w400,
                               color: active
                                   ? AppColors.sunnahGreen
-                                  : (isDark ? AppColors.darkMuted : AppColors.lightMuted),
+                                  : (isDark
+                                      ? AppColors.darkMuted
+                                      : AppColors.lightMuted),
                             ),
                             child: Text(labels[e.key]),
-                          ),
-                          // Active indicator dot
-                          const SizedBox(height: 2),
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            width: active ? 16 : 0,
-                            height: active ? 3 : 0,
-                            decoration: BoxDecoration(
-                              color: AppColors.sunnahGreen,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
                           ),
                         ],
                       ),
