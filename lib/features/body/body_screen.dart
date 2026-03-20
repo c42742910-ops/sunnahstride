@@ -1,5 +1,5 @@
 // ============================================================
-//  body_screen.dart — SunnahStride v1.0
+//  body_screen.dart — HalalCalorie v1.0
 //  Full body metrics: BMI, body fat%, muscle mass, LBM,
 //  BMR, TDEE, macro targets, ideal weight, water needs
 // ============================================================

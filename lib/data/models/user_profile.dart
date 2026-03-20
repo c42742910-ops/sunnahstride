@@ -1,5 +1,5 @@
 // ============================================================
-//  user_profile.dart — SunnahStride v1.0
+//  user_profile.dart — HalalCalorie v1.0
 //  Complete user profile with body metrics engine
 //  All calculations: BMR, TDEE, BMI, body fat %, macros
 // ============================================================

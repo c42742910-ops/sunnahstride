@@ -1,4 +1,4 @@
-// models.dart — SunnahStride v1.1
+// models.dart — HalalCalorie v1.1
 // Core data models + full content library
 
 // ── Meal Entry ──────────────────────────────────

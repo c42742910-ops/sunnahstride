@@ -1,4 +1,4 @@
-// router.dart — SunnahStride v1.0
+// router.dart — HalalCalorie v1.0
 import 'package:flutter/material.dart'; import'package:flutter_riverpod/flutter_riverpod.dart'; import'package:go_router/go_router.dart'; import'../features/onboarding/onboarding_screen.dart'; import'../features/home/home_screen.dart'; import'../features/scanner/scanner_screen.dart'; import'../features/scanner/food_photo_screen.dart'; import'../features/nutrition/nutrition_screen.dart'; import'../features/fitness/fitness_screen.dart'; import'../features/health/health_screen.dart'; import'../features/body/body_screen.dart'; import'../features/body/body_photo_screen.dart'; import'../features/profile/profile_screen.dart'; import'../features/settings/settings_screen.dart'; import'../features/paywall/paywall_screen.dart'; import'providers.dart'; import'shell.dart';
 
 class AppRouter {

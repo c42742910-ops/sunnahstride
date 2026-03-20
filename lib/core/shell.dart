@@ -1,4 +1,4 @@
-// shell.dart — SunnahStride v1.0
+// shell.dart — HalalCalorie v1.0
 // 5-tab bottom nav (Body merged under Health, accessible via Home quick actions)
 import 'package:flutter/material.dart'; import'package:flutter_riverpod/flutter_riverpod.dart'; import'package:go_router/go_router.dart'; import'theme.dart'; import'providers.dart'; import'../data/models/user_profile.dart';
 

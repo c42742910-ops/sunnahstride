@@ -1,5 +1,5 @@
 // ============================================================
-//  paywall_screen.dart — SunnahStride v1.0
+//  paywall_screen.dart — HalalCalorie v1.0
 //  Full RevenueCat paywall with real Apple Pay / Google Pay
 // ============================================================
 import 'package:flutter/material.dart';
@@ -144,7 +144,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
         child: Column(children: [
           const Text('🌟', style: TextStyle(fontSize: 52)),
           const SizedBox(height: 10),
-          Text(t('سنة سترايد بريميوم', 'SunnahStride Premium'),
+          Text(t('HalalCalorie بريميوم', 'HalalCalorie Premium'),
             style: const TextStyle(fontFamily: 'Cairo', fontSize: 22, fontWeight: FontWeight.w900, color: Colors.white)),
           const SizedBox(height: 6),
           Text(t('حلال في كل لقمة • سنة في كل خطوة', 'Halal in every bite • Sunnah in every step'),

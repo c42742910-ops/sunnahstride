@@ -1,4 +1,4 @@
-// settings_screen.dart — SunnahStride v1.0
+// settings_screen.dart — HalalCalorie v1.0
 import 'package:flutter/material.dart'; import'package:flutter_riverpod/flutter_riverpod.dart'; import'package:go_router/go_router.dart'; import'package:shared_preferences/shared_preferences.dart'; import'../../core/theme.dart'; import'../../core/providers.dart'; import'../../core/notifications.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -192,7 +192,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
             ),
 
             // ── ABOUT ───────────────────────────────────────── section(t('حول التطبيق', 'ABOUT')),
-            tile( emoji:'ℹ️', title: t('إصدار التطبيق', 'App Version'), subtitle:'SunnahStride v1.0.0',
+            tile( emoji:'ℹ️', title: t('إصدار التطبيق', 'App Version'), subtitle:'HalalCalorie v1.0.0',
             ),
             tile( emoji:'🔒', title: t('سياسة الخصوصية', 'Privacy Policy'), subtitle: t('بياناتك خاصة — لا نبيعها أبداً', 'Your data is private — we never sell it'),
               trailing: const Icon(Icons.open_in_new, size: 16),
@@ -204,7 +204,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
             const SizedBox(height: 32),
             Center(child: Column(children: [ const Text('🕌', style: TextStyle(fontSize: 28)),
               const SizedBox(height: 8),
-              Text( t('بسم الله الرحمن الرحيم\nصُنع بحب للأمة الإسلامية ❤️', 'Bismillah Al-Rahman Al-Raheem\nMade with love for the Ummah ❤️'),
+              Text( t('بسم الله الرحمن الرحيم\nصُنع بحب للمسلمين ❤️', 'Bismillah Al-Rahman Al-Raheem\nMade with love for Muslims ❤️'),
                 textAlign: TextAlign.center, style: TextStyle(fontFamily:'Cairo', fontSize: 12,
                     color: muted, height: 1.8),
               ),

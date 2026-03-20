@@ -1,4 +1,4 @@
-// main.dart — SunnahStride v1.0
+// main.dart — HalalCalorie v1.0
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,11 +47,11 @@ void main() async {
     debugPrint('RevenueCat init failed: $e');
   }
 
-  runApp(const ProviderScope(child: SunnahStrideApp()));
+  runApp(const ProviderScope(child: HalalCalorieApp()));
 }
 
-class SunnahStrideApp extends ConsumerWidget {
-  const SunnahStrideApp({super.key});
+class HalalCalorieApp extends ConsumerWidget {
+  const HalalCalorieApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,7 +60,7 @@ class SunnahStrideApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'سنة سترايد | SunnahStride',
+      title: 'HalalCalorie | HalalCalorie',
       debugShowCheckedModeBanner: false,
       theme:      AppTheme.lightTheme,
       darkTheme:  AppTheme.darkTheme,

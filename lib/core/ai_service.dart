@@ -1,5 +1,5 @@
 // ============================================================
-//  ai_service.dart — SunnahStride v1.0
+//  ai_service.dart — HalalCalorie v1.0
 //  Anthropic Claude Vision API for:
 //  1. Food photo → nutrition analysis + halal check
 //  2. Body photo → composition estimate (Premium)

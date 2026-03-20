@@ -1,5 +1,5 @@
 // ============================================================
-//  revenuecat_service.dart — SunnahStride v1.0
+//  revenuecat_service.dart — HalalCalorie v1.0
 //  Full RevenueCat integration:
 //    - Monthly / Yearly / Lifetime products
 //    - Entitlement: premium_access

@@ -1,4 +1,4 @@
-// onboarding_screen.dart — SunnahStride v1.0
+// onboarding_screen.dart — HalalCalorie v1.0
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -164,7 +164,7 @@ class _OnboardingState extends ConsumerState<OnboardingScreen> {
         Image.asset('assets/images/logo.png', height: 120,
             errorBuilder: (_, __, ___) => const Text('🕌', style: TextStyle(fontSize: 72))),
         const SizedBox(height: 16),
-        const Text('سنة سترايد\nSunnahStride', textAlign: TextAlign.center,
+        const Text('HalalCalorie\nHalalCalorie', textAlign: TextAlign.center,
             style: TextStyle(fontFamily: 'Cairo', fontSize: 32, fontWeight: FontWeight.w900, color: Colors.white, height: 1.4)),
         const SizedBox(height: 8),
         const Text('حلال في كل لقمة • Halal in every bite', textAlign: TextAlign.center,
@@ -210,7 +210,7 @@ class _OnboardingState extends ConsumerState<OnboardingScreen> {
       child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         const Text('🌿', style: TextStyle(fontSize: 72), textAlign: TextAlign.center),
         const SizedBox(height: 20),
-        Text(t('بِسْمِ اللَّهِ\nأهلاً بك في سنة سترايد', 'In the name of Allah\nWelcome to SunnahStride'),
+        Text(t('بِسْمِ اللَّهِ\nأهلاً بك في HalalCalorie', 'In the name of Allah\nWelcome to HalalCalorie'),
             textAlign: TextAlign.center,
             style: const TextStyle(fontFamily: 'Cairo', fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white, height: 1.5)),
         const SizedBox(height: 20),
@@ -237,9 +237,9 @@ class _OnboardingState extends ConsumerState<OnboardingScreen> {
             textAlign: TextAlign.center,
             style: const TextStyle(fontFamily: 'Cairo', fontSize: 13, color: Colors.white70)),
         const SizedBox(height: 36),
-        _genderBtn('🧔', t('إخواني — Brothers', 'Brothers — إخواني'), 'brothers', AppColors.sunnahGreen),
+        _genderBtn('🧔', t('للرجال — Brothers', 'Brothers — للرجال'), 'brothers', AppColors.sunnahGreen),
         const SizedBox(height: 16),
-        _genderBtn('🧕', t('أخواتي — Sisters', 'Sisters — أخواتي'), 'sisters', AppColors.barakahGold),
+        _genderBtn('🧕', t('للنساء — Sisters', 'Sisters — للنساء'), 'sisters', AppColors.barakahGold),
         const SizedBox(height: 16),
         Text(t('⚠️ لا يمكن تغيير هذا الاختيار', '⚠️ This choice cannot be changed'),
             textAlign: TextAlign.center,

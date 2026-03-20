@@ -1,5 +1,5 @@
 // ============================================================
-//  home_screen.dart — SunnahStride v1.1 — Bilingual + Profile
+//  home_screen.dart — HalalCalorie v1.1 — Bilingual + Profile
 // ============================================================
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -131,7 +131,7 @@ class HomeScreen extends ConsumerWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              isSis ? (isAr ? '🧕 أخواتي' : '🧕 Sisters') : (isAr ? '🧔 إخواني' : '🧔 Brothers'),
+              isSis ? (isAr ? '🧕 للنساء' : '🧕 Sisters') : (isAr ? '🧔 للرجال' : '🧔 Brothers'),
               style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: Colors.white, fontWeight: FontWeight.w600)),
           ),
           const SizedBox(width: 10),

@@ -1,5 +1,5 @@
 // ============================================================
-//  body_photo_screen.dart — SunnahStride v1.0
+//  body_photo_screen.dart — HalalCalorie v1.0
 //  AI Body Composition Photo Analyzer — Premium Feature
 //  Front photo → Estimated body fat %, muscle, body type
 // ============================================================

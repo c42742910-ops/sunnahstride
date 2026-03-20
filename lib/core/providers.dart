@@ -1,4 +1,4 @@
-// providers.dart — SunnahStride v1.0
+// providers.dart — HalalCalorie v1.0
 // Full SQLite-backed state management
 import 'package:flutter_riverpod/flutter_riverpod.dart'; import'package:shared_preferences/shared_preferences.dart'; import'package:go_router/go_router.dart'; import'../data/models/models.dart'; import'../data/models/user_profile.dart'; import'router.dart'; import'revenuecat_service.dart'; import'database.dart';
 

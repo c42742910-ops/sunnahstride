@@ -1,4 +1,4 @@
-// fitness_screen.dart — SunnahStride v1.0
+// fitness_screen.dart — HalalCalorie v1.0
 // 23 workouts, category tabs, Ramadan mode, step-by-step player
 import 'dart:async'; import'package:flutter/material.dart'; import'package:flutter_riverpod/flutter_riverpod.dart'; import'package:go_router/go_router.dart'; import'../../core/theme.dart'; import'../../core/providers.dart'; import'../../data/models/models.dart';
 
@@ -55,7 +55,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
       child: Scaffold(
         backgroundColor: bg,
         appBar: AppBar(
-          backgroundColor: barCol, title: Text(t('اللياقة السنية 🏃', 'Sunnah Fitness 🏃')),
+          backgroundColor: barCol, title: Text(t('اللياقة الإسلامية 🏃', 'Islamic Fitness 🏃')),
           actions: [
             if (workoutMin > 0)
               Padding(
@@ -85,8 +85,8 @@ class _FitnessState extends ConsumerState<FitnessScreen>
               child: Row(children: [ Text(isSis ?'🧕' : '🌙', style: const TextStyle(fontSize: 16)),
                 const SizedBox(width: 8),
                 Expanded(child: Text(
-                  isSis && isRamadan ? t('وضع الأخوات + رمضان — محتشم وخفيف', 'Sisters + Ramadan — modest & light')
-                      : isRamadan ? t('وضع رمضان — التمارين الخفيفة أولاً', 'Ramadan mode — light workouts first') : t('وضع الأخوات — محتشم دائماً', 'Sisters mode — always modest'), style: TextStyle(fontFamily:'Cairo', fontSize: 11,
+                  isSis && isRamadan ? t('وضع النساء + رمضان — محتشم وخفيف', 'Sisters + Ramadan — modest & light')
+                      : isRamadan ? t('وضع رمضان — التمارين الخفيفة أولاً', 'Ramadan mode — light workouts first') : t('وضع النساء — محتشم دائماً', 'Sisters mode — always modest'), style: TextStyle(fontFamily:'Cairo', fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: isSis ? AppColors.barakahGold : AppColors.sunnahGreen),
                 )),

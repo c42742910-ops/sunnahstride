@@ -1,4 +1,4 @@
-// health_screen.dart — SunnahStride v1.0 — Bilingual
+// health_screen.dart — HalalCalorie v1.0 — Bilingual
 import 'package:flutter/material.dart'; import'package:flutter_riverpod/flutter_riverpod.dart'; import'../../core/theme.dart'; import'../../core/providers.dart'; import'../../data/models/models.dart';
 
 class HealthScreen extends ConsumerStatefulWidget {

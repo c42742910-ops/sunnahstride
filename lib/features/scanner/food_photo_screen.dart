@@ -1,5 +1,5 @@
 // ============================================================
-//  food_photo_screen.dart — SunnahStride v1.0
+//  food_photo_screen.dart — HalalCalorie v1.0
 //  AI-Powered Food Photo Analyzer
 //  Camera / Gallery → Claude Vision → Nutrition + Halal check
 // ============================================================

@@ -1,5 +1,5 @@
 // ============================================================
-//  database.dart — SunnahStride v1.0
+//  database.dart — HalalCalorie v1.0
 //  SQLite persistence for:
 //    • Daily meal entries (calories log)
 //    • Weight history (trend chart)

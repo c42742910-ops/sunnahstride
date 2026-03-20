@@ -1,5 +1,5 @@
 // ============================================================
-//  profile_screen.dart — SunnahStride v1.0
+//  profile_screen.dart — HalalCalorie v1.0
 //  Premium plan display, RevenueCat refresh, manage sub
 // ============================================================
 import 'package:flutter/material.dart';
@@ -73,10 +73,10 @@ class ProfileScreen extends ConsumerWidget {
                 color: isSis ? AppColors.barakahGold.withOpacity(0.15) : AppColors.sunnahGreen.withOpacity(0.12)),
               child: Center(child: Text(isSis ? '🧕' : '🧔', style: const TextStyle(fontSize: 38)))),
             const SizedBox(height: 11),
-            Text(isSis ? t('أخت في الإسلام', 'Sister in Islam') : t('أخ في الإسلام', 'Brother in Islam'),
+            Text(isSis ? t('مسلمة', 'Muslimah') : t('مسلم', 'Muslim'),
                 style: TextStyle(fontFamily: 'Cairo', fontSize: 17, fontWeight: FontWeight.w800, color: textC)),
             const SizedBox(height: 3),
-            Text(isSis ? t('وضع الأخوات', "Sisters' Mode") : t('وضع الإخوة', "Brothers' Mode"),
+            Text(isSis ? t('وضع النساء', "Women Mode") : t('وضع الرجال', "Men Mode"),
                 style: TextStyle(fontFamily: 'Cairo', fontSize: 12, color: muted)),
             if (profile != null) ...[
               const SizedBox(height: 6),
@@ -237,9 +237,9 @@ class ProfileScreen extends ConsumerWidget {
                 () => context.push('/paywall')),
             _settingTile('🔒', t('سياسة الخصوصية','Privacy Policy'), '', () {}),
             _settingTile('ℹ️', t('حول التطبيق','About App'), 'v1.0', () => showAboutDialog(
-              context: context, applicationName: 'سنة سترايد / SunnahStride',
+              context: context, applicationName: 'HalalCalorie / HalalCalorie',
               applicationVersion: '0.6.0',
-              children: [const Text('© 2026 SunnahStride — Halal • Sunnah • Privacy',
+              children: [const Text('© 2026 HalalCalorie — Halal • Sunnah • Privacy',
                   style: TextStyle(fontFamily: 'Cairo'))])),
             ListTile(
               leading: const Text('🚪', style: TextStyle(fontSize: 18)),
