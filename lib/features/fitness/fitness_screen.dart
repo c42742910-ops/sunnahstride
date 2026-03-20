@@ -39,6 +39,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
     final isRamadan = ref.watch(ramadanModeProvider);
     final workoutMin = ref.watch(workoutMinutesProvider); final isSis     = gender =='sisters';
     final barCol    = isSis ? AppColors.barakahGold : AppColors.sunnahGreen;
+    final barGrad   = isSis ? AppColors.gradientGold : AppColors.gradientGreen;
     final bg        = isDark ? AppColors.darkBg   : AppColors.lightBg;
     final card      = isDark ? AppColors.darkCard : Colors.white;
     final muted     = isDark ? AppColors.darkMuted : AppColors.lightMuted;
@@ -114,8 +115,9 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: isRamadan
-                        ? [const Color(0xFF2C1810), const Color(0xFF4A2C1A)]
+                        ? [const Color(0xFF1A0F00), const Color(0xFF3D2000)]
                         : [AppColors.sunnahGreen, AppColors.darkGreen],
+                    begin: Alignment.topLeft, end: Alignment.bottomRight,
                     begin: Alignment.topLeft, end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(14),
@@ -187,10 +189,11 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                         padding: const EdgeInsets.all(13),
                         decoration: BoxDecoration(
                           color: card,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(18),
                           boxShadow: [BoxShadow(
-                              color: Colors.black.withOpacity(isDark ? 0.2 : 0.06),
-                              blurRadius: 10)],
+                              color: Colors.black.withOpacity(isDark ? 0.18 : 0.07),
+                              blurRadius: 12, offset: const Offset(0, 3))],
+                          border: Border.all(color: isDark ? AppColors.darkBorder : AppColors.lightBorder, width: 0.5),
                         ),
                         child: Stack(children: [
                           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

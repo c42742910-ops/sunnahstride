@@ -130,13 +130,13 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
             const SizedBox(height: 2),
             Text(scoreLabel(), style: TextStyle( fontFamily:'Cairo', fontSize: 12, color: scoreColor())),
           ])),
-          SizedBox(width: 72, height: 72, child: Stack(alignment: Alignment.center, children: [
+          SizedBox(width: 80, height: 80, child: Stack(alignment: Alignment.center, children: [
             SizedBox.expand(child: CircularProgressIndicator(
-              value: total / 100, strokeWidth: 8,
+              value: total / 100, strokeWidth: 9,
               backgroundColor: scoreColor().withOpacity(0.12),
               valueColor: AlwaysStoppedAnimation(scoreColor()),
               strokeCap: StrokeCap.round,
-            )), Text('$total', style: TextStyle(fontFamily: 'Cairo', fontSize: 20,
+            )), Text('$total', style: TextStyle(fontFamily: 'Cairo', fontSize: 22,
                 fontWeight: FontWeight.w900, color: scoreColor())),
           ])),
         ]),
@@ -158,7 +158,7 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
       ]),
       const SizedBox(height: 12),
       Wrap(spacing: 4, runSpacing: 4, children: List.generate(water.goal, (i) => GestureDetector(
-        onTap: () => ref.read(waterProvider.notifier).set(i + 1), child: Text('💧', style: TextStyle(fontSize: 22, color: i < water.cups ? null : Colors.grey.withOpacity(0.35))),
+        onTap: () => ref.read(waterProvider.notifier).set(i + 1), child: Text('💧', style: TextStyle(fontSize: 26, color: i < water.cups ? null : Colors.grey.withOpacity(0.35))),
       ))),
       const SizedBox(height: 12),
       LinearProgressIndicator(value: water.percent.clamp(0.0, 1.0), backgroundColor: Colors.grey.shade200,
@@ -196,8 +196,9 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           margin: const EdgeInsets.symmetric(horizontal: 2),
-          height: 34,
+          height: 40,
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
             color: sleep.hours >= h ? AppColors.sleepPurple : Colors.grey.shade200,
             borderRadius: BorderRadius.circular(8),
           ), child: Center(child: Text('$h', style: TextStyle(fontFamily: 'Cairo', fontSize: 11,

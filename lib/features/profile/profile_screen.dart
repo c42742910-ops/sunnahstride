@@ -68,10 +68,10 @@ class ProfileScreen extends ConsumerWidget {
           decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
             boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
           child: Column(children: [
-            Container(width: 76, height: 76,
+            Container(width: 88, height: 88,
               decoration: BoxDecoration(shape: BoxShape.circle,
                 color: isSis ? AppColors.barakahGold.withOpacity(0.15) : AppColors.sunnahGreen.withOpacity(0.12)),
-              child: Center(child: Text(isSis ? '🧕' : '🧔', style: const TextStyle(fontSize: 38)))),
+              child: Center(child: Text(isSis ? '🧕' : '🧔', style: const TextStyle(fontSize: 44)))),
             const SizedBox(height: 11),
             Text(isSis ? t('مسلمة', 'Muslimah') : t('مسلم', 'Muslim'),
                 style: TextStyle(fontFamily: 'Cairo', fontSize: 17, fontWeight: FontWeight.w800, color: textC)),
@@ -273,7 +273,7 @@ class ProfileScreen extends ConsumerWidget {
       child: Column(children: [
         Text(emoji, style: const TextStyle(fontSize: 28)),
         const SizedBox(height: 2),
-        Text(val, style: const TextStyle(fontFamily: 'Cairo', fontSize: 16, fontWeight: FontWeight.w900)),
+        Text(val, style: const TextStyle(fontFamily: 'Cairo', fontSize: 18, fontWeight: FontWeight.w900)),
         Text(label, style: const TextStyle(fontFamily: 'Cairo', fontSize: 10, color: AppColors.lightMuted)),
       ]),
     ));
