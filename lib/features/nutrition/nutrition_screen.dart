@@ -169,7 +169,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: AppColors.barakahGold.withOpacity(0.06),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                     color: AppColors.barakahGold.withOpacity(0.25)),
               ),
@@ -268,7 +268,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: color.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: color.withOpacity(0.2)),
         ),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -690,7 +690,7 @@ class _NutritionState extends ConsumerState<NutritionScreen>
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         child: Center(child: Text(em,
                             style: const TextStyle(fontSize: 26))),
@@ -1154,7 +1154,7 @@ class _AddFoodSheetState extends ConsumerState<_AddFoodSheet>
           margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             color: AppColors.sunnahGreen.withOpacity(0.08),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
           ),
           child: TabBar(
             controller: _tab,
@@ -1208,10 +1208,10 @@ class _AddFoodSheetState extends ConsumerState<_AddFoodSheet>
                       filled: true,
                       fillColor: AppColors.sunnahGreen.withOpacity(0.05),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide.none),
                       focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(16),
                           borderSide: const BorderSide(
                               color: AppColors.sunnahGreen,
                               width: 2)),
@@ -1229,7 +1229,7 @@ class _AddFoodSheetState extends ConsumerState<_AddFoodSheet>
                         color: _searching
                             ? Colors.grey
                             : AppColors.sunnahGreen,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(16),
                         boxShadow: [BoxShadow(
                             color: AppColors.sunnahGreen.withOpacity(0.3),
                             blurRadius: 8, offset: const Offset(0, 3))],
@@ -1476,7 +1476,7 @@ class _AddFoodSheetState extends ConsumerState<_AddFoodSheet>
                       shadowColor:
                           AppColors.sunnahGreen.withOpacity(0.4),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14)),
+                          borderRadius: BorderRadius.circular(16)),
                     ),
                   ),
                 ),
@@ -1522,7 +1522,7 @@ class _AddFoodSheetState extends ConsumerState<_AddFoodSheet>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Center(child: Text(
                 foodEmoji(name.toString()),

@@ -120,7 +120,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                     begin: Alignment.topLeft, end: Alignment.bottomRight,
                     begin: Alignment.topLeft, end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(children: [
                   Text(rec.emoji, style: const TextStyle(fontSize: 28)),
@@ -157,7 +157,7 @@ class _FitnessState extends ConsumerState<FitnessScreen>
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     color: barCol.withOpacity(0.08),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: barCol.withOpacity(0.2)),
                   ),
                   child: Text(
@@ -421,7 +421,7 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
               ]),
               const SizedBox(height: 6),
               ClipRRect(borderRadius: BorderRadius.circular(4), child: LinearProgressIndicator(
-                value: _overallProgress, minHeight: 6,
+                value: _overallProgress, minHeight: 7,
                 backgroundColor: AppColors.sunnahGreen.withOpacity(0.15),
                 valueColor: const AlwaysStoppedAnimation(AppColors.sunnahGreen),
               )),
@@ -528,7 +528,7 @@ class _WorkoutPlayerState extends ConsumerState<WorkoutPlayerScreen>
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: AppColors.barakahGold.withOpacity(isDark ? 0.1 : 0.08),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.barakahGold.withOpacity(0.3)),
               ),
               child: Text( '📖 ${isAr ? w.hadith! : (w.hadithEn ?? w.hadith!)}',

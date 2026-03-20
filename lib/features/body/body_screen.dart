@@ -281,7 +281,7 @@ class _BodyScreenState extends ConsumerState<BodyScreen> with SingleTickerProvid
       _sectionTitle(isAr ? '🔥 توزيع السعرات' : '🔥 Calorie Distribution', textC),
       Container(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+        decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
         child: Column(children: [
           _macroRow(isAr ? '🍚 كربوهيدرات' : '🍚 Carbohydrates', p.carbsGrams, p.calorieGoalKcal / 4, AppColors.waterBlue, isAr),
           const SizedBox(height: 12),
@@ -306,7 +306,7 @@ class _BodyScreenState extends ConsumerState<BodyScreen> with SingleTickerProvid
       _sectionTitle(isAr ? '💧 الترطيب والماء' : '💧 Hydration', textC),
       Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+        decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
         child: Column(children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -329,7 +329,7 @@ class _BodyScreenState extends ConsumerState<BodyScreen> with SingleTickerProvid
       _sectionTitle(isAr ? '🥩 البروتين والعضلات' : '🥩 Protein & Muscle', textC),
       Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+        decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
         child: Column(children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(isAr ? 'البروتين اليومي المُوصى به:' : 'Recommended daily protein:',
@@ -372,7 +372,7 @@ class _BodyScreenState extends ConsumerState<BodyScreen> with SingleTickerProvid
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(14),
+      decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.sunnahGreen, width: 1.5)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(isAr ? '✏️ تحديث بياناتك' : '✏️ Update Your Data',
@@ -436,7 +436,7 @@ class _BodyScreenState extends ConsumerState<BodyScreen> with SingleTickerProvid
   Widget _metricCard(String label, String value, String emoji, Color color, Color bg) {
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(14),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 10)]),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -455,7 +455,7 @@ class _BodyScreenState extends ConsumerState<BodyScreen> with SingleTickerProvid
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(isAr ? 'مؤشر كتلة الجسم' : 'Body Mass Index',
@@ -506,7 +506,7 @@ class _BodyScreenState extends ConsumerState<BodyScreen> with SingleTickerProvid
     final color  = isOver ? AppColors.doubtOrange : AppColors.waterBlue;
     return Container(
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(14),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
         border: Border.all(color: color.withOpacity(0.3))),
       child: Row(children: [
         Text(isOver ? '⬇️' : '⬆️', style: const TextStyle(fontSize: 30)),

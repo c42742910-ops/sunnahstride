@@ -46,8 +46,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
 
     Widget section(String label) => Padding(
       padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
-      child: Text(label, style: const TextStyle( fontFamily:'Cairo', fontSize: 11, fontWeight: FontWeight.w700,
-          color: AppColors.sunnahGreen, letterSpacing: 0.5)),
+      child: Text(label, style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, fontWeight: FontWeight.w800, color: AppColors.sunnahGreen, letterSpacing: 1.2)),
     );
 
     Widget tile({
@@ -65,7 +64,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
             : null,
         trailing: trailing,
         onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       ),
     );
 

@@ -73,7 +73,7 @@ class AppTheme {
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.sunnahGreen,
         foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         padding: const EdgeInsets.symmetric(vertical: 14), textStyle: const TextStyle(fontFamily:'Cairo', fontSize: 16, fontWeight: FontWeight.w700),
         elevation: 4,
         shadowColor: Color(0x550A6B4A),
@@ -145,7 +145,7 @@ class AppTheme {
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.sunnahGreen,
         foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         padding: const EdgeInsets.symmetric(vertical: 14), textStyle: const TextStyle(fontFamily:'Cairo', fontSize: 16, fontWeight: FontWeight.w700),
         elevation: 4,
         shadowColor: Color(0x550A6B4A),

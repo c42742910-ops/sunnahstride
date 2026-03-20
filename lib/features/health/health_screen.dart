@@ -112,7 +112,7 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
             value: (score / max).clamp(0.0, 1.0),
             backgroundColor: col.withOpacity(0.12),
             valueColor: AlwaysStoppedAnimation(col),
-            borderRadius: BorderRadius.circular(4), minHeight: 6,
+            borderRadius: BorderRadius.circular(4), minHeight: 7,
           ),
         ]),
       );
@@ -390,7 +390,7 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
   Widget _card(Color bg, Widget child) => Container(
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
-      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
     child: child,
   );
 

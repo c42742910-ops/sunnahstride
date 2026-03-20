@@ -175,7 +175,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.barakahGold,
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                 )),
 
@@ -190,7 +190,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
                   decoration: BoxDecoration(
                     color: AppColors.haramRed.withOpacity(0.08),
                     border: Border.all(color: AppColors.haramRed.withOpacity(0.3)),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(_error!, style: const TextStyle(fontFamily: 'Cairo', color: AppColors.haramRed, fontSize: 12)),
                 ),

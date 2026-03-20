@@ -132,7 +132,7 @@ class _OnboardingState extends ConsumerState<OnboardingScreen> {
     style: ElevatedButton.styleFrom(
       backgroundColor: AppColors.barakahGold,
       padding: const EdgeInsets.symmetric(vertical: 15),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
     child: Text(label, style: const TextStyle(fontFamily: 'Cairo', fontSize: 17, fontWeight: FontWeight.w700, color: Colors.white)),
   );
@@ -193,7 +193,7 @@ class _OnboardingState extends ConsumerState<OnboardingScreen> {
         decoration: BoxDecoration(
           color: sel ? AppColors.barakahGold : Colors.white.withOpacity(0.15),
           border: Border.all(color: sel ? AppColors.barakahGold : Colors.white38, width: 2),
-          borderRadius: BorderRadius.circular(14)),
+          borderRadius: BorderRadius.circular(16)),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(flag, style: const TextStyle(fontSize: 32)),
           const SizedBox(height: 6),
@@ -426,7 +426,7 @@ class _OnboardingState extends ConsumerState<OnboardingScreen> {
 
   Widget _whiteCard(Widget child) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
     child: child);
 
   Widget _sliderRow({required double value, required double min, required double max,

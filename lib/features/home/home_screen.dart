@@ -362,7 +362,7 @@ class HomeScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Row(children: [
@@ -427,7 +427,7 @@ class HomeScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
       child: Row(children: [
         Text(streak >= 7 ? '🔥' : '⭐', style: const TextStyle(fontSize: 38)),
         const SizedBox(width: 14),
@@ -449,7 +449,7 @@ class HomeScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(isAr ? '💪 مقاييس جسمك' : '💪 Your Body Metrics',
@@ -484,7 +484,7 @@ class HomeScreen extends ConsumerWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 9),
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(14),
+        decoration: BoxDecoration(color: cardBg, borderRadius: BorderRadius.circular(16),
           boxShadow: [BoxShadow(color: Colors.black.withOpacity(isDark ? 0.15 : 0.05), blurRadius: 8)]),
         child: Row(children: [
           Container(width: 44, height: 44,

@@ -142,7 +142,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
           boxShadow: [BoxShadow(color: AppColors.sunnahGreen.withOpacity(0.3), blurRadius: 20, offset: const Offset(0,8))],
         ),
         child: Column(children: [
-          const Text('🌟', style: TextStyle(fontSize: 52)),
+          const Text('🌟', style: TextStyle(fontSize: 64)),
           const SizedBox(height: 10),
           Text(t('HalalCalorie بريميوم', 'HalalCalorie Premium'),
             style: const TextStyle(fontFamily: 'Cairo', fontSize: 22, fontWeight: FontWeight.w900, color: Colors.white)),
@@ -204,8 +204,8 @@ class _PaywallState extends ConsumerState<PaywallScreen>
         onPressed: _loading ? null : () => _purchase(offerings),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.barakahGold,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           elevation: 4, shadowColor: AppColors.barakahGold.withOpacity(0.4),
         ),
         child: _loading
@@ -262,7 +262,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
             padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
               color: isSel ? AppColors.sunnahGreen.withOpacity(0.08) : bg,
-              border: Border.all(color: isSel ? AppColors.sunnahGreen : Colors.grey.shade300, width: isSel ? 2 : 1),
+              border: Border.all(color: isSel ? AppColors.sunnahGreen : Colors.grey.withOpacity(0.25), width: isSel ? 2.5 : 0.8),
               borderRadius: BorderRadius.circular(16),
               boxShadow: isSel ? [BoxShadow(color: AppColors.sunnahGreen.withOpacity(0.12), blurRadius: 12)] : null,
             ),

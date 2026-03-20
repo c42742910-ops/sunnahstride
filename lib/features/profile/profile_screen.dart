@@ -66,7 +66,7 @@ class ProfileScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(22),
           decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
           child: Column(children: [
             Container(width: 88, height: 88,
               decoration: BoxDecoration(shape: BoxShape.circle,
@@ -134,7 +134,7 @@ class ProfileScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
           child: Column(children: [
             Text(t('🏆 إحصائياتك الكلية', '🏆 Lifetime Stats'),
                 style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w700, fontSize: 14)),
@@ -159,7 +159,7 @@ class ProfileScreen extends ConsumerWidget {
             child: Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
               child: Column(children: [
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Text(t('💪 مقاييس جسمك', '💪 Body Metrics'),
@@ -189,7 +189,7 @@ class ProfileScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: AppColors.sunnahGreen.withOpacity(0.06),
                 border: Border.all(color: AppColors.sunnahGreen.withOpacity(0.2)),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Row(children: [
                 const Text('⭐', style: TextStyle(fontSize: 26)),
@@ -211,7 +211,7 @@ class ProfileScreen extends ConsumerWidget {
         // ── Settings list ─────────────────────────────────
         Container(
           decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12)]),
+            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 14, offset: const Offset(0, 3))]),
           child: Column(children: [
             _settingTile('📍', t('المدينة', 'City'), city, () => _showCityPicker(context, ref, isAr)),
             _settingTile('🌐', t('اللغة', 'Language'), isAr ? 'العربية' : 'English',
@@ -268,7 +268,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget _statCard(String emoji, String val, String label, Color bg) {
     return Expanded(child: Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 6),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(14),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
       child: Column(children: [
         Text(emoji, style: const TextStyle(fontSize: 28)),

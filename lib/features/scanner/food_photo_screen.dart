@@ -145,7 +145,7 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.barakahGold,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
               )),
 
@@ -287,7 +287,7 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
       decoration: BoxDecoration(
         color: AppColors.haramRed.withOpacity(0.08),
         border: Border.all(color: AppColors.haramRed.withOpacity(0.3)),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(children: [ const Text('⚠️', style: TextStyle(fontSize: 22)),
         const SizedBox(width: 12),
@@ -442,7 +442,7 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
   Widget _tipsCard(bool isAr, bool isDark, Color bg, Color muted) {
     return Container(
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(14),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)]),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [ Text(isAr ?'💡 نصائح للحصول على نتائج أدق' : '💡 Tips for better results', style: const TextStyle(fontFamily:'Cairo', fontWeight: FontWeight.w700, fontSize: 13)),
         const SizedBox(height: 8),
