@@ -74,3 +74,47 @@ else:
                 f'{out_dir}/ic_launcher_round.png'
             )
         print("Icons generated with sips")
+
+# ── Health permissions in AndroidManifest ─────────────────
+import xml.etree.ElementTree as ET
+
+manifest_path = 'android/app/src/main/AndroidManifest.xml'
+if os.path.exists(manifest_path):
+    with open(manifest_path, 'r') as mf:
+        manifest = mf.read()
+
+    permissions = [
+        '<uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>',
+        '<uses-permission android:name="android.permission.BODY_SENSORS"/>',
+        '<uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>',
+        '<uses-permission android:name="android.permission.health.READ_STEPS"/>',
+        '<uses-permission android:name="android.permission.health.READ_HEART_RATE"/>',
+        '<uses-permission android:name="android.permission.health.READ_SLEEP"/>',
+        '<uses-permission android:name="android.permission.health.WRITE_STEPS"/>',
+    ]
+
+    for perm in permissions:
+        if perm.split('"')[1] not in manifest:
+            manifest = manifest.replace(
+                '<manifest ',
+                perm + '\n    <manifest '
+            )
+
+    # Add Health Connect intent filter
+    health_intent = """
+        <activity android:name="androidx.health.connect.client.HealthConnectClient"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_HEALTH_CONNECT_SETTINGS"/>
+            </intent-filter>
+        </activity>"""
+
+    if 'ACTION_HEALTH_CONNECT_SETTINGS' not in manifest:
+        manifest = manifest.replace('</application>', health_intent + '\n    </application>')
+
+    with open(manifest_path, 'w') as mf:
+        mf.write(manifest)
+    print("Health permissions added to AndroidManifest.xml")
+else:
+    print("Creating AndroidManifest with health permissions")
+    # Will be created by flutter create, then patched
