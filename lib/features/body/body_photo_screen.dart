@@ -318,7 +318,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Stack(fit: StackFit.expand, children: [
-          Image.file(_image!, fit: BoxFit.cover),
+          Image.file(_image!, fit: BoxFit.cover, errorBuilder: (ctx, err, st) => const Icon(Icons.broken_image, color: Colors.grey, size: 48)),
           if (_state == BodyAnalysisState.analyzing)
             Container(color: Colors.black54, child: Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
               AnimatedBuilder(animation: _pulse, builder: (_, __) =>

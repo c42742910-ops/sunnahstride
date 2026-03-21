@@ -214,7 +214,7 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Stack(fit: StackFit.expand, children: [
-          Image.file(_image!, fit: BoxFit.cover),
+          Image.file(_image!, fit: BoxFit.cover, errorBuilder: (ctx, err, st) => const Icon(Icons.broken_image, color: Colors.grey, size: 48)),
           if (_state == AnalysisState.analyzing)
             Container(
               color: Colors.black45,

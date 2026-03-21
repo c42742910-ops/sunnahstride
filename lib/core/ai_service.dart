@@ -70,10 +70,14 @@ class AIService {
     ).timeout(const Duration(seconds: 30));
 
     if (resp.statusCode == 200) {
-      final data = jsonDecode(resp.body);
-      return (data['content'] as List).firstWhere(
-        (c) => c['type'] == 'text', orElse: () => {'text': '{}'},
-      )['text'] as String;
+      final data = jsonDecode(resp.body) as Map<String, dynamic>;
+      final content = data['content'];
+      if (content is! List || content.isEmpty) return '{}';
+      final textBlock = content.firstWhere(
+        (c) => c is Map && c['type'] == 'text',
+        orElse: () => <String, dynamic>{'text': '{}'},
+      );
+      return (textBlock is Map ? textBlock['text'] : null)?.toString() ?? '{}';
     }
     throw Exception('API error ${resp.statusCode}: ${resp.body}');
   }
@@ -256,11 +260,14 @@ Request: $prompt
       ).timeout(const Duration(seconds: 20));
 
       if (resp.statusCode == 200) {
-        final data = jsonDecode(resp.body);
-        return (data['content'] as List).firstWhere(
-          (c) => c != null && c['type'] == 'text',
-          orElse: () => {'type': 'text', 'text': ''},
-        )['text'] as String;
+        final data = jsonDecode(resp.body) as Map<String, dynamic>;
+        final content = data['content'];
+        if (content is! List || content.isEmpty) return '';
+        final block = content.firstWhere(
+          (c) => c is Map && c['type'] == 'text',
+          orElse: () => <String, dynamic>{'text': ''},
+        );
+        return (block is Map ? block['text'] : null)?.toString() ?? '';
       }
       throw Exception('${resp.statusCode}');
     } catch (_) {
@@ -358,8 +365,13 @@ Request: $prompt
 
       if (resp.statusCode == 200) {
         final data = jsonDecode(resp.body);
-        final text = (data['content'] as List)
-            .firstWhere((c) => c['type'] == 'text')['text'] as String;
+        final content = data['content'];
+        if (content is! List || content.isEmpty) throw Exception('empty');
+        final block = content.firstWhere(
+          (c) => c is Map && c['type'] == 'text',
+          orElse: () => <String, dynamic>{'text': '{}'},
+        );
+        final text = (block is Map ? block['text'] : null)?.toString() ?? '{}';
         final clean = text.trim().replaceAll('```json', '').replaceAll('```', '').trim();
         return jsonDecode(clean) as Map<String, dynamic>;
       }

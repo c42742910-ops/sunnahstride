@@ -25,11 +25,11 @@ class HomeScreen extends ConsumerWidget {
     final now = DateTime.now();
     final cur = now.hour * 60 + now.minute;
     for (final p in _prayers) {
-      final t = (p['h'] as int) * 60 + (p['m'] as int);
+      final t = ((p['h'] as num?)?.toInt() ?? 0) * 60 + ((p['m'] as num?)?.toInt() ?? 0);
       if (t > cur) {
         final diff  = t - cur;
-        final name  = isAr ? p['na'] as String : p['ne'] as String;
-        final timeStr = '${(p['h'] as int).toString().padLeft(2,'0')}:${(p['m'] as int).toString().padLeft(2,'0')}';
+        final name  = isAr ? (p['na'] as String? ?? '') : (p['ne'] as String? ?? '');
+        final timeStr = '${((p['h'] as num?)?.toInt() ?? 0).toString().padLeft(2,'0')}:${(p['m'] as int).toString().padLeft(2,'0')}';
         if (diff >= 60) return '$name  $timeStr  (${diff ~/ 60}h ${diff % 60}m)';
         return '$name  $timeStr  (${diff}min)';
       }

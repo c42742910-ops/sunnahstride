@@ -445,7 +445,7 @@ class UserProfile {
     primaryGoal: FitnessGoal.values[j['primaryGoal'] ?? 0],
     dietPreference: DietPreference.values[j['dietPreference'] ?? 0],
     healthConditions: (j['healthConditions'] as List?)
-        ?.map((i) => HealthCondition.values[i])
+        ?.map((i) => HealthCondition.values[(i as num?)?.toInt() ?? 0])
         .toList() ?? [HealthCondition.none],
     mealsPerDay: j['mealsPerDay'] ?? 3,
     sleepHours: (j['sleepHours'] ?? 7).toDouble(),
