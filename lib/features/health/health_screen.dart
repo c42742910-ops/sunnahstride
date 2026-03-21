@@ -56,7 +56,6 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
   Widget _buildTrack(bool isAr, bool isDark) {
     final snapshot   = ref.watch(healthSnapshotProvider);
     final hasPerms   = ref.watch(healthPermissionProvider);
-    String t(String ar, String en) => isAr ? ar : en;
 
     // Auto-sync real data when available
     snapshot.whenData((data) {
