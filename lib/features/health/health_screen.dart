@@ -54,11 +54,106 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
 
   // ── TRACKING ──────────────────────────────────────────────
   Widget _buildTrack(bool isAr, bool isDark) {
+    final snapshot   = ref.watch(healthSnapshotProvider);
+    final hasPerms   = ref.watch(healthPermissionProvider);
+    String t(String ar, String en) => isAr ? ar : en;
+
+    // Auto-sync real data when available
+    snapshot.whenData((data) {
+      if (data.isReal) {
+        if (data.steps > 0)
+          Future.microtask(() =>
+            ref.read(healthProvider.notifier).setSteps(data.steps));
+        if (data.heartRate > 0)
+          Future.microtask(() =>
+            ref.read(healthProvider.notifier).setHeartRate(data.heartRate));
+        if (data.sleepHours > 0)
+          Future.microtask(() =>
+            ref.read(sleepProvider.notifier).set(data.sleepHours));
+      }
+    });
     final water  = ref.watch(waterProvider);
     final sleep  = ref.watch(sleepProvider);
     final health = ref.watch(healthProvider);
     String t(String ar, String en) => isAr ? ar : en;
     return ListView(padding: const EdgeInsets.all(14), children: [
+      // ── Connect to Health banner ──────────────────────
+      if (!hasPerms)
+        GestureDetector(
+          onTap: () async {
+            final granted = await ref.read(healthPermissionProvider.notifier).request();
+            if (granted && context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(isAr
+                    ? 'تم الاتصال بـ Google Fit! ✓'
+                    : 'Connected to Google Fit! ✓',
+                    style: const TextStyle(fontFamily: 'Cairo')),
+                backgroundColor: AppColors.sunnahGreen,
+                behavior: SnackBarBehavior.floating,
+              ));
+              ref.invalidate(healthSnapshotProvider);
+            }
+          },
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 14),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              gradient: AppColors.gradientGreen,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BoxShadow(
+                color: AppColors.sunnahGreen.withOpacity(0.3),
+                blurRadius: 12, offset: const Offset(0, 4),
+              )],
+            ),
+            child: Row(children: [
+              const Text('📱', style: TextStyle(fontSize: 28)),
+              const SizedBox(width: 12),
+              Expanded(child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    isAr ? 'اربط مع Google Fit' : 'Connect to Google Fit',
+                    style: const TextStyle(fontFamily: 'Cairo',
+                        fontWeight: FontWeight.w800, fontSize: 14,
+                        color: Colors.white),
+                  ),
+                  Text(
+                    isAr
+                        ? 'خطوات حقيقية • معدل نبض • نوم تلقائي'
+                        : 'Real steps • Heart rate • Auto sleep tracking',
+                    style: const TextStyle(fontFamily: 'Cairo',
+                        fontSize: 11, color: Colors.white70),
+                  ),
+                ],
+              )),
+              const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+            ]),
+          ),
+        )
+      else
+        Container(
+          margin: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: AppColors.sunnahGreen.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.sunnahGreen.withOpacity(0.3)),
+          ),
+          child: Row(children: [
+            const Text('✅', style: TextStyle(fontSize: 16)),
+            const SizedBox(width: 8),
+            Text(
+              isAr ? 'متصل بـ Google Fit — بيانات حقيقية' : 'Connected to Google Fit — Live data',
+              style: const TextStyle(fontFamily: 'Cairo', fontSize: 12,
+                  color: AppColors.sunnahGreen, fontWeight: FontWeight.w700),
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: () => ref.invalidate(healthSnapshotProvider),
+              child: const Icon(Icons.refresh, color: AppColors.sunnahGreen, size: 18),
+            ),
+          ]),
+        ),
       _healthScoreCard(water, sleep, health, isAr, isDark),
       const SizedBox(height: 16), _sectionTitle('💧 ${t("الماء اليومي","Daily Water")}', isDark),
       _waterCard(water, isAr, isDark),

@@ -456,5 +456,28 @@ class NotifNotifier extends StateNotifier<bool> {
   }
 }
 
+
+// ── Real Health Data (Google Fit / Health Connect) ────────
+final healthSnapshotProvider = FutureProvider<HealthSnapshot>((ref) async {
+  // Auto-refresh every 5 minutes
+  return HealthService.getTodaySnapshot();
+});
+
+final healthPermissionProvider = StateNotifierProvider<HealthPermNotifier, bool>(
+  (ref) => HealthPermNotifier(),
+);
+
+class HealthPermNotifier extends StateNotifier<bool> {
+  HealthPermNotifier() : super(false) { _check(); }
+  Future<void> _check() async {
+    state = await HealthService.isAuthorized();
+  }
+  Future<bool> request() async {
+    final granted = await HealthService.requestPermissions();
+    state = granted;
+    return granted;
+  }
+}
+
 // ── Router ─────────────────────────────────────────────────
 final routerProvider = Provider<GoRouter>((ref) => AppRouter.router(ref));
