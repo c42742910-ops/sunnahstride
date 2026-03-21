@@ -12,9 +12,9 @@ import '../data/models/models.dart';
 
 class AIService {
   static const _endpoint = 'https://api.anthropic.com/v1/messages';
-  static const _apiKey  = '';
-  static const _apiKey  = '';
-  static const _apiKey  = '';
+  static const _apiKey  = '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';
+  static const _apiKey  = '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';
+  static const _apiKey  = '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';
   static const _model    = 'claude-opus-4-5';
   static const _version  = '2023-06-01';
 
