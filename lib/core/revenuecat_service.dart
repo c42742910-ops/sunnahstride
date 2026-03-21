@@ -15,9 +15,9 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 // Must match EXACTLY what you create in App Store Connect &
 // Google Play Console, then link in RevenueCat dashboard.
 class RCProducts {
-  static const monthly  = 'sunnahstride_premium_monthly';
-  static const yearly   = 'sunnahstride_premium_yearly';
-  static const lifetime = 'sunnahstride_premium_lifetime';
+  static const monthly  = 'halalcalorie_premium_monthly';
+  static const yearly   = 'halalcalorie_premium_yearly';
+  static const lifetime = 'halalcalorie_premium_lifetime';
 }
 
 // ── Offering / Entitlement identifiers ─────────────────────

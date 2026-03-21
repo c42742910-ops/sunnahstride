@@ -18,7 +18,7 @@ class AppDatabase {
 
   static Future<Database> _open() async {
     final dbPath = await getDatabasesPath();
-    return openDatabase( p.join(dbPath,'sunnahstride.db'),
+    return openDatabase( p.join(dbPath,'halalcalorie.db'),
       version: 3,
       onCreate: _create,
       onUpgrade: _upgrade,

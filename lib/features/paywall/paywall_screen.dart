@@ -33,7 +33,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
 
   Future<void> _purchase(List<RCOffering> offerings) async {
     if (_loading || offerings.isEmpty) return;
-    setState(() { _loading = true; _errorMsg = null; });
+    if (mounted) setState(() { _loading = true; _errorMsg = null; });
     final offering = offerings[_selected.clamp(0, offerings.length - 1)];
     final result   = await RevenueCatService.purchase(offering);
     if (!mounted) return;
@@ -47,7 +47,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
   }
 
   Future<void> _restore() async {
-    setState(() { _restoring = true; _errorMsg = null; });
+    if (mounted) setState(() { _restoring = true; _errorMsg = null; });
     final result = await RevenueCatService.restore();
     if (!mounted) return;
     setState(() => _restoring = false);
@@ -80,7 +80,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
             style: const TextStyle(fontFamily: 'Cairo', fontSize: 12, color: AppColors.lightMuted, height: 1.5)),
           const SizedBox(height: 20),
           SizedBox(width: double.infinity, child: ElevatedButton(
-            onPressed: () { Navigator.pop(context); Navigator.pop(context); },
+            onPressed: () { if (context.mounted) Navigator.pop(context); if (context.mounted) Navigator.pop(context); },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.sunnahGreen),
             child: Text(isAr ? 'رائع! لنبدأ ⭐' : "Lets go ⭐",
               style: const TextStyle(fontFamily: 'Cairo', color: Colors.white, fontWeight: FontWeight.w700)),
@@ -107,7 +107,7 @@ class _PaywallState extends ConsumerState<PaywallScreen>
           backgroundColor: Colors.transparent, elevation: 0,
           leading: IconButton(
             icon: Icon(Icons.close, color: isDark ? AppColors.darkText : AppColors.lightText),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => if (context.mounted) Navigator.pop(context),
           ),
           actions: [
             TextButton(

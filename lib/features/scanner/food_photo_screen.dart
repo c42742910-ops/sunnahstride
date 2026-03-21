@@ -47,14 +47,14 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
         maxHeight: 1280,
       );
       if (xf == null) return;
-      setState(() {
+      if (mounted) setState(() {
         _image   = File(xf.path);
         _state   = AnalysisState.idle;
         _result  = null;
         _error   = null;
       });
     } catch (e) { final isAr = ref.read(languageProvider) =='ar';
-      setState(() {
+      if (mounted) setState(() {
         _error = isAr ?'تعذّر فتح الكاميرا. تأكد من إذن الكاميرا في الإعدادات.' :'Could not open camera. Check camera permissions in settings.';
         _state = AnalysisState.error;
       });
@@ -65,7 +65,7 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
   Future<void> _analyze() async {
     if (_image == null) return;
     final lang = ref.read(languageProvider);
-    setState(() { _state = AnalysisState.analyzing; _error = null; });
+    if (mounted) setState(() { _state = AnalysisState.analyzing; _error = null; });
 
     try {
       final result = await AIService.analyzeFoodPhoto(
@@ -73,10 +73,10 @@ class _FoodPhotoState extends ConsumerState<FoodPhotoScreen>
         language: lang,
       );
       if (!mounted) return;
-      setState(() { _result = result; _state = AnalysisState.done; });
+      if (mounted) setState(() { _result = result; _state = AnalysisState.done; });
     } catch (e) {
       if (!mounted) return;
-      setState(() { _error = lang =='ar' ?'تعذّر التحليل. تحقق من اتصالك بالإنترنت.' :'Analysis failed. Check your internet connection.';
+      if (mounted) setState(() { _error = lang =='ar' ?'تعذّر التحليل. تحقق من اتصالك بالإنترنت.' :'Analysis failed. Check your internet connection.';
         _state = AnalysisState.error;
       });
     }

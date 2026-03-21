@@ -84,6 +84,8 @@ class _NutritionState extends ConsumerState<NutritionScreen>
           try {
             await ref.read(caloriesProvider.notifier)
                 .addEntry(name, kcal, proteinG: p, carbsG: c, fatG: ft);
+            ref.invalidate(weeklyKcalProvider);
+            ref.invalidate(weeklyKcalProvider);
           } catch (e) {
             debugPrint("addEntry error: $e");
           }
@@ -1146,7 +1148,7 @@ class _AddFoodSheetState extends ConsumerState<_AddFoodSheet>
             IconButton(
                 icon: const Icon(Icons.close_rounded),
                 color: muted,
-                onPressed: () => Navigator.pop(context)),
+                onPressed: () => if (context.mounted) Navigator.pop(context)),
           ]),
         ),
         // Tabs

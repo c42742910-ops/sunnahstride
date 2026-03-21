@@ -314,7 +314,7 @@ class ProfileScreen extends ConsumerWidget {
           color: ref.read(cityProvider) == c ? AppColors.sunnahGreen : null,
           fontWeight: ref.read(cityProvider) == c ? FontWeight.w700 : FontWeight.w400)),
         trailing: ref.read(cityProvider) == c ? const Icon(Icons.check, color: AppColors.sunnahGreen) : null,
-        onTap: () { ref.read(cityProvider.notifier).set(c); Navigator.pop(context); },
+        onTap: () { ref.read(cityProvider.notifier).set(c); if (context.mounted) Navigator.pop(context); },
       )),
     ]));
   }
@@ -351,7 +351,7 @@ class ProfileScreen extends ConsumerWidget {
             subtitle: Text(isAr ? 'من خلال App Store أو Google Play' : 'Via App Store or Google Play',
               style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: AppColors.lightMuted)),
             onTap: () {
-              Navigator.pop(context);
+              if (context.mounted) Navigator.pop(context);
               // Deep link to subscription management
               // iOS: 'https://apps.apple.com/account/subscriptions'
               // Android: 'https://play.google.com/store/account/subscriptions'
@@ -362,7 +362,7 @@ class ProfileScreen extends ConsumerWidget {
             title: Text(isAr ? 'استعادة المشتريات' : 'Restore Purchases',
               style: const TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.w600)),
             onTap: () async {
-              Navigator.pop(context);
+              if (context.mounted) Navigator.pop(context);
               final result = await RevenueCatService.restore();
               if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(result.success

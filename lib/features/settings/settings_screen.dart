@@ -244,12 +244,12 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
         autofocus: true,
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text(isAr ?'إلغاء' : 'Cancel', style: const TextStyle(fontFamily:'Cairo'))),
+        TextButton(onPressed: () => if (context.mounted) Navigator.pop(context), child: Text(isAr ?'إلغاء' : 'Cancel', style: const TextStyle(fontFamily:'Cairo'))),
         ElevatedButton(
           onPressed: () {
             final n = int.tryParse(ctrl.text.trim()) ?? 8;
             ref.read(waterProvider.notifier).setGoal(n.clamp(4, 20));
-            Navigator.pop(context);
+            if (context.mounted) Navigator.pop(context);
           }, child: Text(isAr ?'حفظ' : 'Save', style: const TextStyle(fontFamily:'Cairo')),
         ),
       ],
@@ -268,11 +268,11 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
         autofocus: true,
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text(isAr ?'إلغاء' : 'Cancel', style: const TextStyle(fontFamily:'Cairo'))),
+        TextButton(onPressed: () => if (context.mounted) Navigator.pop(context), child: Text(isAr ?'إلغاء' : 'Cancel', style: const TextStyle(fontFamily:'Cairo'))),
         ElevatedButton(
           onPressed: () { final h = double.tryParse(ctrl.text.trim().replaceAll(',', '.')) ?? 8.0;
             ref.read(sleepProvider.notifier).set(h.clamp(4.0, 12.0));
-            Navigator.pop(context);
+            if (context.mounted) Navigator.pop(context);
           }, child: Text(isAr ?'حفظ' : 'Save', style: const TextStyle(fontFamily:'Cairo')),
         ),
       ],
@@ -284,11 +284,11 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
       content: Text(
         isAr ?'سيُمسح سجل الوجبات والخطوات والماء لليوم فقط. لا يمكن التراجع.' :'Today\'s meals, steps, and water will be cleared. Cannot be undone.', style: const TextStyle(fontFamily:'Cairo', fontSize: 13, height: 1.5)),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text(isAr ?'إلغاء' : 'Cancel', style: const TextStyle(fontFamily:'Cairo'))),
+        TextButton(onPressed: () => if (context.mounted) Navigator.pop(context), child: Text(isAr ?'إلغاء' : 'Cancel', style: const TextStyle(fontFamily:'Cairo'))),
         ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: AppColors.haramRed),
           onPressed: () async {
-            Navigator.pop(context);
+            if (context.mounted) Navigator.pop(context);
             await ref.read(waterProvider.notifier).set(0);
             await ref.read(healthProvider.notifier).setSteps(0);
             if (context.mounted) {

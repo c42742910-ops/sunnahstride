@@ -203,6 +203,20 @@ class CaloriesNotifier extends StateNotifier<CaloriesState> {
     );
     state = CaloriesState(goal: state.goal, entries: [...state.entries, entry]);
   }
+  Future<void> reloadFromDb() async {
+    final rows = await AppDatabase.getTodayMeals();
+    final entries = rows.map((e) => MealEntry(
+      id:       e['id'] as int,
+      name:     e['name'] as String,
+      kcal:     e['kcal'] as int,
+      proteinG: (e['protein_g'] as num?)?.toDouble() ?? 0,
+      carbsG:   (e['carbs_g'] as num?)?.toDouble() ?? 0,
+      fatG:     (e['fat_g'] as num?)?.toDouble() ?? 0,
+      time:     DateTime.tryParse(e['created'] as String? ?? '') ?? DateTime.now(),
+    )).toList();
+    state = CaloriesState(goal: state.goal, entries: entries);
+  }
+
   Future<void> removeEntry(int id) async {
     await AppDatabase.deleteMeal(id);
     state = CaloriesState(goal: state.goal,

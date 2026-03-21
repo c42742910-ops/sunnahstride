@@ -49,7 +49,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
         maxWidth: 1024, maxHeight: 1024,
       );
       if (xf == null) return;
-      setState(() {
+      if (mounted) setState(() {
         _image  = File(xf.path);
         _state  = BodyAnalysisState.idle;
         _result = null;
@@ -57,7 +57,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
       });
     } catch (e) {
       final isAr = ref.read(languageProvider) == 'ar';
-      setState(() {
+      if (mounted) setState(() {
         _error = isAr ? 'تعذّر فتح الكاميرا.' : 'Could not open camera.';
         _state = BodyAnalysisState.error;
       });
@@ -69,7 +69,7 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
     final profile = ref.read(userProfileProvider);
     final lang    = ref.read(languageProvider);
 
-    setState(() { _state = BodyAnalysisState.analyzing; _error = null; });
+    if (mounted) setState(() { _state = BodyAnalysisState.analyzing; _error = null; });
 
     try {
       final result = await AIService.analyzeBodyPhoto(
@@ -81,10 +81,10 @@ class _BodyPhotoState extends ConsumerState<BodyPhotoScreen>
         language:   lang,
       );
       if (!mounted) return;
-      setState(() { _result = result; _state = BodyAnalysisState.done; });
+      if (mounted) setState(() { _result = result; _state = BodyAnalysisState.done; });
     } catch (e) {
       if (!mounted) return;
-      setState(() {
+      if (mounted) setState(() {
         _error = lang == 'ar'
           ? 'تعذّر التحليل. تحقق من اتصالك بالإنترنت.'
           : 'Analysis failed. Check your internet connection.';
