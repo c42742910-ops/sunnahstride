@@ -8,6 +8,7 @@ import 'core/providers.dart';
 import 'core/revenuecat_service.dart';
 import 'core/notifications.dart';
 import 'core/database.dart';
+import 'core/health_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

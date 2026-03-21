@@ -274,6 +274,8 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
   }
 
   Widget _sleepCard(SleepState sleep, bool isAr, bool isDark) {
+    // Show real sleep data indicator
+    final snapshot = ref.watch(healthSnapshotProvider);
     final bg    = isDark ? AppColors.darkCard : Colors.white;
     final muted = isDark ? AppColors.darkMuted : AppColors.lightMuted;
     String t(String ar, String en) => isAr ? ar : en;
@@ -313,7 +315,29 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
     String t(String ar, String en) => isAr ? ar : en;
     return _card(bg, Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [ Text('${health.steps}', style: const TextStyle(fontFamily: 'Cairo', fontSize: 28, fontWeight: FontWeight.w900, color: AppColors.halalGreen)), Text('${t("خطوة من","steps of")} ${health.stepsGoal}', style: const TextStyle(fontFamily: 'Cairo', fontSize: 12, color: AppColors.lightMuted)),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [ Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Text('${health.steps}', style: const TextStyle(
+              fontFamily: 'Cairo', fontSize: 28,
+              fontWeight: FontWeight.w900, color: AppColors.halalGreen)),
+          const SizedBox(width: 6),
+          ref.watch(healthSnapshotProvider).maybeWhen(
+            data: (snap) => snap.isReal && snap.steps > 0
+                ? Container(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: AppColors.halalGreen,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text('LIVE',
+                        style: TextStyle(fontFamily: 'Cairo',
+                            fontSize: 8, color: Colors.white,
+                            fontWeight: FontWeight.w800)),
+                  )
+                : const SizedBox.shrink(),
+            orElse: () => const SizedBox.shrink(),
+          ),
+        ]), Text('${t("خطوة من","steps of")} ${health.stepsGoal}', style: const TextStyle(fontFamily: 'Cairo', fontSize: 12, color: AppColors.lightMuted)),
         ]), Text(pct >= 1 ?'🏆' : pct >= 0.7 ? '💪' : '🚶', style: const TextStyle(fontSize: 36)),
       ]),
       const SizedBox(height: 10),
@@ -362,7 +386,29 @@ class _HealthScreenState extends ConsumerState<HealthScreen> with SingleTickerPr
     final hrLbl  = isAr ? (health.heartRate > 100 ?'مرتفع' : health.heartRate < 60 ? 'منخفض' : 'طبيعي ✓') : (health.heartRate > 100 ?'High' : health.heartRate < 60 ? 'Low' : 'Normal ✓');
     return _card(bg, Column(children: [
       Row(children: [
-        Column(children: [ Text('${health.heartRate}', style: const TextStyle(fontFamily: 'Cairo', fontSize: 32, fontWeight: FontWeight.w900, color: AppColors.haramRed)), Text(isAr ?'نبضة/دقيقة' : 'bpm', style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: AppColors.lightMuted)),
+        Column(children: [ Column(children: [
+            Text('${health.heartRate}',
+                style: const TextStyle(fontFamily: 'Cairo', fontSize: 32,
+                    fontWeight: FontWeight.w900, color: AppColors.haramRed)),
+            ref.watch(healthSnapshotProvider).maybeWhen(
+              data: (snap) => snap.isReal && snap.heartRate > 0
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.haramRed.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text('LIVE',
+                          style: TextStyle(fontFamily: 'Cairo',
+                              fontSize: 8, color: AppColors.haramRed,
+                              fontWeight: FontWeight.w800)),
+                    )
+                  : const Text('manual',
+                      style: TextStyle(fontFamily: 'Cairo',
+                          fontSize: 8, color: AppColors.lightMuted)),
+              orElse: () => const SizedBox.shrink(),
+            ),
+          ]), Text(isAr ?'نبضة/دقيقة' : 'bpm', style: const TextStyle(fontFamily: 'Cairo', fontSize: 11, color: AppColors.lightMuted)),
         ]),
         const SizedBox(width: 20),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [ Text(isAr ?'المعدل الطبيعي: 60-100' : 'Normal: 60-100 bpm', style: const TextStyle(fontFamily: 'Cairo', fontSize: 12)),
