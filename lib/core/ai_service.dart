@@ -13,6 +13,7 @@ import '../data/models/models.dart';
 class AIService {
   static const _endpoint = 'https://api.anthropic.com/v1/messages';
   static const _apiKey  = '';
+  static const _apiKey  = '';
   static const _model    = 'claude-opus-4-5';
   static const _version  = '2023-06-01';
 
