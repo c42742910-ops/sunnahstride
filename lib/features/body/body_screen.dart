@@ -414,7 +414,7 @@ class _BodyScreenState extends ConsumerState<BodyScreen> with SingleTickerProvid
     await ref.read(userProfileProvider.notifier).save(updated);
     ref.read(caloriesProvider.notifier).syncWithProfile(updated);
     ref.read(weightLogProvider.notifier).add(w);
-    setState(() => _editing = false);
+    if (mounted) setState(() => _editing = false);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(ref.read(languageProvider) == 'ar' ? 'تم تحديث البيانات ✓' : 'Data Updated ✓',

@@ -37,12 +37,12 @@ class _PaywallState extends ConsumerState<PaywallScreen>
     final offering = offerings[_selected.clamp(0, offerings.length - 1)];
     final result   = await RevenueCatService.purchase(offering);
     if (!mounted) return;
-    setState(() => _loading = false);
+    if (mounted) setState(() => _loading = false);
     if (result.success) {
       await ref.read(premiumProvider.notifier).onPurchaseSuccess();
       _showSuccess();
     } else if (!result.cancelled) {
-      setState(() => _errorMsg = result.error ?? (_isAr ? 'حدث خطأ. حاول مجدداً.' : 'Purchase failed. Please try again.'));
+      if (mounted) setState(() => _errorMsg = result.error ?? (_isAr ? 'حدث خطأ. حاول مجدداً.' : 'Purchase failed. Please try again.'));
     }
   }
 
@@ -50,12 +50,12 @@ class _PaywallState extends ConsumerState<PaywallScreen>
     if (mounted) setState(() { _restoring = true; _errorMsg = null; });
     final result = await RevenueCatService.restore();
     if (!mounted) return;
-    setState(() => _restoring = false);
+    if (mounted) setState(() => _restoring = false);
     if (result.success) {
       await ref.read(premiumProvider.notifier).onPurchaseSuccess();
       _showSuccess();
     } else {
-      setState(() => _errorMsg = _isAr
+      if (mounted) setState(() => _errorMsg = _isAr
         ? 'لم نجد مشتريات سابقة لهذا الحساب.'
         : 'No previous purchases found for this account.');
     }
