@@ -12,6 +12,7 @@ import '../data/models/models.dart';
 
 class AIService {
   static const _endpoint = 'https://api.anthropic.com/v1/messages';
+  static const _apiKey  = '';
   static const _model    = 'claude-opus-4-5';
   static const _version  = '2023-06-01';
 
@@ -64,7 +65,7 @@ class AIService {
       headers: {
         'Content-Type': 'application/json',
         'anthropic-version': _version,
-        // API key is injected via the proxy — no key needed in app
+        'x-api-key': _apiKey,
       },
       body: body,
     ).timeout(const Duration(seconds: 30));
@@ -255,7 +256,7 @@ Request: $prompt
     try {
       final resp = await http.post(
         Uri.parse(_endpoint),
-        headers: {'Content-Type': 'application/json', 'anthropic-version': _version},
+        headers: {'Content-Type': 'application/json', 'anthropic-version': _version, 'x-api-key': _apiKey},
         body: body,
       ).timeout(const Duration(seconds: 20));
 
@@ -359,7 +360,7 @@ Request: $prompt
 
       final resp = await http.post(
         Uri.parse(_endpoint),
-        headers: {'Content-Type': 'application/json', 'anthropic-version': _version},
+        headers: {'Content-Type': 'application/json', 'anthropic-version': _version, 'x-api-key': _apiKey},
         body: body,
       ).timeout(const Duration(seconds: 15));
 
