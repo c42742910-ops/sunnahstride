@@ -153,11 +153,11 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
             ],
 
             // ── HEALTH GOALS ────────────────────────────────── section(t('الأهداف الصحية 🎯', 'HEALTH GOALS 🎯')),
-            tile( emoji:'💧', title: t('هدف الماء اليومي', 'Daily Water Goal'), subtitle:'${ref.read(waterProvider).goal} ${t("كوب", "cups")}',
+            tile( emoji:'💧', title: t('هدف الماء اليومي', 'Daily Water Goal'), subtitle:'${ref.watch(waterProvider).goal} ${t("كوب", "cups")}',
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _editWaterGoal(context, isAr),
             ),
-            tile( emoji:'😴', title: t('هدف النوم', 'Sleep Goal'), subtitle:'${ref.read(sleepProvider).goal.toStringAsFixed(1)} ${t("ساعة", "hrs")}',
+            tile( emoji:'😴', title: t('هدف النوم', 'Sleep Goal'), subtitle:'${ref.watch(sleepProvider).goal.toStringAsFixed(1)} ${t("ساعة", "hrs")}',
               trailing: const Icon(Icons.chevron_right),
               onTap: () => _editSleepGoal(context, isAr),
             ),
